@@ -1,7 +1,5 @@
 ﻿using MvvmHelpers.Commands;
-using Rg.Plugins.Popup.Services;
-using SSDIWMS_android.Views.PopUpPages;
-using SSDIWMS_android.Views.StockMovementPages;
+using SSDIWMS_android.Views.StockMovementPages.ImcomingPages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +23,7 @@ namespace SSDIWMS_android.ViewModels
         }
         private async Task Navigation()
         {
-            var route = $"{nameof(HeaderPage)}";
+            var route = $"{nameof(IncomingHeaderPage)}";
             await Shell.Current.GoToAsync(route);
         }
         private async Task PageRefresh()

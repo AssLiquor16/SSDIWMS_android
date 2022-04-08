@@ -5,6 +5,7 @@ using SSDIWMS_android.Services.ServerDbServices.Users;
 using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
+using SSDIWMS_android.Views.StockMovementPages.ImcomingPages;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -24,7 +25,7 @@ namespace SSDIWMS_android
             notifService = DependencyService.Get<IToastNotifService>();
             mainService = DependencyService.Get<IMainServices>();
 
-            Routing.RegisterRoute(nameof(HeaderPage), typeof(HeaderPage));
+            Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

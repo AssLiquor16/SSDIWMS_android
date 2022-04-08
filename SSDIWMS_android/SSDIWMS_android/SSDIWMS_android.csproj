@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Db\LocalDbServices\SMLTransaction\LIncoming\LIncomingDetail\" />
     <Folder Include="Services\StockMovementServices\" />
   </ItemGroup>
 
@@ -51,9 +52,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\HeaderPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\ImcomingPages\IncomingHeaderPage.xaml">

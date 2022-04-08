@@ -27,15 +27,13 @@
                     <StackLayout>
                         <Frame>
                             <StackLayout Padding="0,5">
-                                <Entry Text="{Binding SearchText}" 
-                                       Placeholder="Search P.O." Margin="5,2"/>
                                 <RefreshView IsRefreshing="{Binding IsRefreshing}" 
-                                             Command="{Binding CVRefreshCommand}" RefreshColor="Red">
+                                             Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                                     <CollectionView 
-                                        ItemsSource="{Binding FilterPalletMasterList}"
+                                        ItemsSource="{Binding IncomingHeaderList}"
                                         SelectionMode="Single"
                                         x:Name="PalletMasterColView"
-                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectedItem="{Binding SelectedHeader}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
                                         RemainingItemsThreshold="1"
 
@@ -62,11 +60,11 @@
                                                     <ColumnDefinition Width="70*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="Code" FontSize="Large" Grid.Column="0" 
+                                                <Label Text="ID" FontSize="Large" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                <Label Text="Description" FontSize="Large" Grid.Column="1"
+                                                <Label Text="Customer" FontSize="Large" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                <Label Text="Status" FontSize="Large" Grid.Column="2"
+                                                <Label Text="PONumber" FontSize="Large" Grid.Column="2"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
                                             </Grid>
@@ -89,9 +87,9 @@
                                                             <ColumnDefinition Width="70*"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <Label Text="{Binding PalletCode}" Grid.Column="0"/>
-                                                        <Label Text="{Binding PalletDescription}" Grid.Column="1"/>
-                                                        <Label Text="{Binding PalletStatus}" Grid.Column="2"/>
+                                                        <Label Text="{Binding INCId}" Grid.Column="0"/>
+                                                        <Label Text="{Binding CstmrName}" Grid.Column="1"/>
+                                                        <Label Text="{Binding PONumber}" Grid.Column="2"/>
 
                                                     </Grid>
 
