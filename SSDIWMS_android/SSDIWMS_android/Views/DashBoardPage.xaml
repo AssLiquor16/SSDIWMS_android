@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels"
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             x:Class="SSDIWMS_android.Views.DashBoardPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:DashBoardVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                        <Label Text="{Binding LiveDate}" FontSize="Subtitle"/>
+
+                    </StackLayout>
+                    <BoxView/>
+                    <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Margin="0,2">
+                        <Label Text="About Us" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+                        <Label>
+                            Sonic Sales And Distribution Inc is an enterprise located in Philippines, with the main office in Davao City. It operates in the Merchant Wholesalers, Durable Goods industry.
+                        </Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="End" HorizontalOptions="StartAndExpand" Margin="0,2">
+                        <Label Text="Contact Details" FontSize="Subtitle" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
+                        <Label>
+                            Purchase the Sonic Sales And Distribution Inc report to view the information.
+                        </Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="End" HorizontalOptions="StartAndExpand" Margin="0,2">
+                        <Label Text="Headquarters" FontSize="Subtitle" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
+                        <Label>
+                            888 Mintrade Building, R. Castillo Street, Agdao, Davao City Davao City; Davao del Sur; Postal Code: 1103
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

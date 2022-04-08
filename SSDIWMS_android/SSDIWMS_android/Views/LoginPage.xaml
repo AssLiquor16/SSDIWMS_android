@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             BackgroundColor="{StaticResource BackgroundColor}"
+             x:Class="SSDIWMS_android.Views.LoginPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:LoginVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="10" Padding="20">
+                <Frame Padding="10">
+                    <StackLayout>
+
+                        <Image Source="user.png"/>
+                        <Label Text="Welcome" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="Title"/>
+                        <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="StartAndExpand"/>
+                        <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand"/>
+                        <Button Text="Login" Command="{Binding LoginCommand}"/>
+                        <Label HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="New device? "/>
+                                    <Span Text="Register" FontAttributes="Bold" TextColor="Blue" TextDecorations="Underline"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                    </StackLayout>
+                </Frame>
+                
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

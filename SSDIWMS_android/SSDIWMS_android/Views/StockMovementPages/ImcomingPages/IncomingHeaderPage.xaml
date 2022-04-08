@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.ImcomingPages.IncomingHeaderPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:IncomingHeaderVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                        <Label Text="{Binding LiveDate}" FontSize="Subtitle"/>
+
+                    </StackLayout>
+                    <BoxView/>
+
+                    <StackLayout>
+                        <Frame>
+                            <StackLayout Padding="0,5">
+                                <Entry Text="{Binding SearchText}" 
+                                       Placeholder="Search P.O." Margin="5,2"/>
+                                <RefreshView IsRefreshing="{Binding IsRefreshing}" 
+                                             Command="{Binding CVRefreshCommand}" RefreshColor="Red">
+                                    <CollectionView 
+                                        ItemsSource="{Binding FilterPalletMasterList}"
+                                        SelectionMode="Single"
+                                        x:Name="PalletMasterColView"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+
+                                        Margin="15">
+                                        <CollectionView.EmptyView>
+                                            <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                                <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                                            </StackLayout>
+                                        </CollectionView.EmptyView>
+                                        <CollectionView.Header>
+                                            <Grid Padding="0" VerticalOptions="CenterAndExpand">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="70*"/>
+                                                    <ColumnDefinition Width="120*"/>
+                                                    <ColumnDefinition Width="70*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="Code" FontSize="Large" Grid.Column="0" 
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                                <Label Text="Description" FontSize="Large" Grid.Column="1"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                                <Label Text="Status" FontSize="Large" Grid.Column="2"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+
+                                            </Grid>
+                                        </CollectionView.Header>
+                                        <CollectionView.Footer>
+                                            <StackLayout>
+                                                <Label Text="Nothing to follow." 
+                                                       HorizontalOptions="CenterAndExpand"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            </StackLayout>
+                                        </CollectionView.Footer>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout Margin="5,10" Padding="0,5">
+
+                                                    <Grid Padding="5" VerticalOptions="CenterAndExpand">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="70*"/>
+                                                            <ColumnDefinition Width="120*"/>
+                                                            <ColumnDefinition Width="70*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Label Text="{Binding PalletCode}" Grid.Column="0"/>
+                                                        <Label Text="{Binding PalletDescription}" Grid.Column="1"/>
+                                                        <Label Text="{Binding PalletStatus}" Grid.Column="2"/>
+
+                                                    </Grid>
+
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+
+                                </RefreshView>
+
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

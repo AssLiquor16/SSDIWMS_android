@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="http://rotorgames.com" 
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.PopUpVMs" 
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                  x:Class="SSDIWMS_android.Views.PopUpPages.FormPopupPage">
+    
+    <popup:PopupPage.BindingContext>
+        <viewmodels:FormPopupVM/>
+    </popup:PopupPage.BindingContext>
+    <popup:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding RefreshCommand}"/>
+    </popup:PopupPage.Behaviors>
+
+    <Frame HeightRequest="300" 
+           WidthRequest="300" 
+           VerticalOptions="CenterAndExpand" 
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="White"
+           CornerRadius="10"
+           >
+
+        <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand">
+            <StackLayout HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand">
+                <Image Source="adminuser.png"/>
+                <Label Text="Admin Login" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
+                <Entry Text="{Binding Username}" Placeholder="Username" WidthRequest="250"/>
+                <Entry Text="{Binding Password}" Placeholder="Password" WidthRequest="250"/>
+                <Button Text="Login" Command="{Binding LoginCommand}"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

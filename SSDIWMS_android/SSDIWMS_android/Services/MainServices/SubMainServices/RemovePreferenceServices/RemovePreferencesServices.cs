@@ -1,0 +1,24 @@
+﻿using SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreferenceServices;
+using SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceServices;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+
+[assembly: Dependency(typeof(RemovePreferencesServices))]
+namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreferenceServices
+{
+    public class RemovePreferencesServices : IRemovePreferenceServices
+    {
+        public async Task RemovePreference()
+        {
+            Preferences.Remove("PrefUserId");
+            Preferences.Remove("PrefUserRole");
+            Preferences.Remove("PrefUserWarehouseAssignedId");
+            Preferences.Set("PrefLoggedIn", false);
+            await Task.CompletedTask;
+        }
+    }
+}

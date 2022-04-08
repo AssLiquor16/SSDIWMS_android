@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels"
+             x:Class="SSDIWMS_android.Views.SettingPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:SettingVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
+                        <Label Text="{Binding LiveDate}" FontSize="Subtitle"/>
+                    </StackLayout>
+                    <BoxView/>
+                    <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">
+                        <Label Text="Setting" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Bell}" 
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="Start"/>
+                                
+                                <Label Text="Notification" 
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="StartAndExpand"/>
+                                
+                                <Switch IsToggled="{Binding NotifyIO}"  
+                                        HorizontalOptions="EndAndExpand">
+                                    <Switch.Behaviors>
+                                        <xct:EventToCommandBehavior 
+                                                    EventName="Toggled"  
+                                                    Command="{Binding NotifCommand}"
+                                                    />
+                                    </Switch.Behaviors>
+                                </Switch>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Archive}" 
+                                               VerticalOptions="CenterAndExpand"/>
+                                <Label Text="Article master" 
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding ArticleMasterUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
+                                               VerticalOptions="CenterAndExpand"/>
+                                <Label Text="Pallet master" 
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding PalletMasterUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Clear transactions" 
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
+                                                FontFamily="FAS" Command="{Binding ClearTransactionCommand}" 
+                                                CornerRadius="5" Margin="0" 
+                                                BackgroundColor="Red"
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
