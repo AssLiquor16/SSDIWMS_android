@@ -17,5 +17,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int UserId { get; set; }
         public decimal Amount { get; set; }
         public int TimesUpdated { get; set; }
+        public string POHeaderNumber { get; set; }
     }
 }

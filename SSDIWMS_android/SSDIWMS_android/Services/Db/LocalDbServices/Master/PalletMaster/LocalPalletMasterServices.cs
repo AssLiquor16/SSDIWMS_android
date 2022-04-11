@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using SSDIWMS_android.Models.TransactionModels;
+using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using System;
 using System.Collections.Generic;

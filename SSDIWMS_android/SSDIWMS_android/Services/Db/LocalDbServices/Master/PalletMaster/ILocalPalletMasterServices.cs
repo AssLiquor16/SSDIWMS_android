@@ -1,4 +1,4 @@
-﻿using SSDIWMS_android.Models.TransactionModels;
+﻿using SSDIWMS_android.Models.MasterListModel;
 using System;
 using System.Collections.Generic;
 using System.Text;

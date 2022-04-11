@@ -22,6 +22,7 @@ namespace SSDIWMS_android
         protected override async void OnStart()
         {
             await mainService.OnstartSetDefaulPreferences();
+            await mainService.CheckUser();
         }
 
         protected override void OnSleep()

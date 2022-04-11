@@ -18,8 +18,9 @@
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout Padding="15">
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand">
-                        <Label Text="{Binding LiveDate}" FontSize="Subtitle"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
+                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
                     </StackLayout>
                     <BoxView/>
                     <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">

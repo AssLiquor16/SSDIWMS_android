@@ -27,12 +27,14 @@ namespace SSDIWMS_android.ViewModels
                 await Shell.Current.GoToAsync(route);
             }
             await LiveTimer();
+            UserFullName = Preferences.Get("PrefUserFullname", "");
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt");
+        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
+        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
         private async Task LiveTimer()
         {
             await Task.Delay(1);

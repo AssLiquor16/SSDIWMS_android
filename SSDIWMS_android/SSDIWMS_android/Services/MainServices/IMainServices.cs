@@ -9,6 +9,8 @@ namespace SSDIWMS_android.Services.MainServices
     {
         Task OnstartSetDefaulPreferences();
         Task RemovePreferences();
+        Task CheckUser();
+        Task<string> GetPercentage(string type, decimal[] decimalarray);
     }
 
 }

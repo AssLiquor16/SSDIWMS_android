@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Views.StockMovementPages.ImcomingPages
+namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class IncomingHeaderPage : ContentPage

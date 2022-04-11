@@ -1,5 +1,7 @@
 ﻿using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
+using SSDIWMS_android.Updater.UpdateArticleMaster;
 using SSDIWMS_android.Views.PopUpPages;
 using System;
 using System.Collections.Generic;
@@ -60,11 +62,11 @@ namespace SSDIWMS_android.ViewModels
         
         private async Task ArticleMasterUpdate()
         {
-            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("UpdateArticleMaster"));
+            await PopupNavigation.Instance.PushAsync(new ArticleMasterUpdaterPopupPage());
         }
         private async Task PalletMasterUpdate()
         {
-            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("UpdatePalletMaster"));
+            await PopupNavigation.Instance.PushAsync(new PalletMasterUpdaterPopupPage());
         }
         private async Task ClearTransaction()
         {
@@ -73,12 +75,14 @@ namespace SSDIWMS_android.ViewModels
         private async Task PageRefresh()
         {
             await LiveTimer();
+            UserFullName = Preferences.Get("PrefUserFullname", "");
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt");
+        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
+        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
         private async Task LiveTimer()
         {
             await Task.Delay(1);

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SSDIWMS_android.Models.TransactionModels
+namespace SSDIWMS_android.Models.MasterListModel
 {
     public class PalletMasterModel 
     {

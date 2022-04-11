@@ -43,12 +43,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     return Allcontents;
                 case "WhId,CurDate,OngoingIncStat":
                     var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
-                    var datenow = DateTime.Now.Date;
+                    var datenow = DateTime.Today;
                     var retcontents = await db_.Table<IncomingHeaderModel>().ToListAsync();
-                    foreach(var item in retcontents)
-                    {
-                        item.ActRecDate = item.ActRecDate.Date;
-                    }
                     var filtercontents = retcontents.Where(x =>x.WarehouseId == WhId && x.ActRecDate == datenow).ToList();
                     return filtercontents;
                 default: return null;

@@ -63,6 +63,7 @@ namespace SSDIWMS_android.ViewModels
                             {
                                 await serverDbUserService.Update("Login", strignarray, null, returnval);
                                 Preferences.Set("PrefUserId", returnval.UserId);
+                                Preferences.Set("PrefUserFullname", returnval.UserFullName);
                                 Preferences.Set("PrefUserRole", returnval.UserRole);
                                 Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
                                 Preferences.Set("PrefLoggedIn", true);

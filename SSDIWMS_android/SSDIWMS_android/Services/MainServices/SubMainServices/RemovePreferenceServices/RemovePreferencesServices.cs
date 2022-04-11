@@ -15,8 +15,10 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreference
         public async Task RemovePreference()
         {
             Preferences.Remove("PrefUserId");
+            Preferences.Remove("PrefUserFullname");
             Preferences.Remove("PrefUserRole");
             Preferences.Remove("PrefUserWarehouseAssignedId");
+            Preferences.Remove("PrefPONumber");
             Preferences.Set("PrefLoggedIn", false);
             await Task.CompletedTask;
         }

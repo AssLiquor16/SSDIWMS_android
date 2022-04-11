@@ -5,7 +5,8 @@ using SSDIWMS_android.Services.ServerDbServices.Users;
 using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
-using SSDIWMS_android.Views.StockMovementPages.ImcomingPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingSubPages;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -26,6 +27,8 @@ namespace SSDIWMS_android
             mainService = DependencyService.Get<IMainServices>();
 
             Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
+            Routing.RegisterRoute(nameof(IncomingDetailListPage), typeof(IncomingDetailListPage));
+            Routing.RegisterRoute(nameof(IncomingDetailAddPage), typeof(IncomingDetailAddPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

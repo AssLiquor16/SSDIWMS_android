@@ -38,9 +38,15 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
             switch (type)
             {
                 case "All":
-                    break;
+                    var items = await db_.Table<ItemMasterModel>().ToListAsync();
+                    return items;
+                case "CaseCode":
+                    var caseCodeFilter = stringarray[0];
+                    var count = await db_.Table<ItemMasterModel>().CountAsync();
+                    var items2 = await db_.Table<ItemMasterModel>().Where(x=>x.CaseCode == caseCodeFilter).ToListAsync();
+                    return items2;
+                default: return null;
             }
-            return null;
         }
 
         public async Task<ItemMasterModel> GetModel(string type, string[] stringfilter, int[] intfilter)
