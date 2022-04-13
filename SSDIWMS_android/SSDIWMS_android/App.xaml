@@ -40,6 +40,7 @@
             
             <Style TargetType="Entry">
                 <Setter Property="ClearButtonVisibility" Value="WhileEditing"/>
+                <Setter Property="Margin" Value="0"/>
                 <Setter Property="FontFamily" Value="FAS"/>
                 <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
                 <Setter Property="PlaceholderColor" Value="{StaticResource SecondaryTextColor}"/>
@@ -86,7 +87,13 @@
                 <Setter Property="Margin" Value="0,0"></Setter>
                 <Setter Property="HeightRequest" Value="2"></Setter>
             </Style>
-            
+
+            <Style x:Key="ColViewitemViewDefaultFormat" TargetType="StackLayout">
+                <Setter Property="Margin" Value="0,10"/>
+                <Setter Property="Padding" Value="0,5"/>
+                <Setter Property="BackgroundColor" Value="#f0e9d5"/>
+            </Style>
+
         </ResourceDictionary>        
     </Application.Resources>
 </Application>

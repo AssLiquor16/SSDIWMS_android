@@ -1,7 +1,11 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
+using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingPopUpSubPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingSubPages;
 using System;
 using System.Collections.Generic;
@@ -15,9 +19,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
     public class IncomingDetailListVM : ViewModelBase
     {
         ISMLIncomingDetailServices localDbIncomingDetailService;
+        IUpdateAllIncomingtransaction transactionUpdateService;
+        IToastNotifService notifService;
 
+        string _trigger;
         bool _isRefreshing;
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
+
 
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
         public AsyncCommand AddNavigationCommand { get;  }
@@ -26,14 +34,24 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         public IncomingDetailListVM()
         {
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
-
+            transactionUpdateService = DependencyService.Get<IUpdateAllIncomingtransaction>();
+            notifService = DependencyService.Get<IToastNotifService>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
 
             AddNavigationCommand = new AsyncCommand(AddNavigation);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-        private async Task PageRefresh()
+        public async Task ScannedPopupDetails(string[] caseCode)
+        {
+            await PopupNavigation.Instance.PushAsync(new IncomingDetailAddPopupPage(caseCode));
+        }
+        private async Task AddNavigation()
+        {
+            var route = $"{nameof(IncomingDetailAddPage)}";
+            await Shell.Current.GoToAsync(route);
+        }
+        public async Task PageRefresh()
         {
             IncomingDetailList.Clear();
             var detailList = await localDbIncomingDetailService.GetList("PONumber,TimesUpdated", null, null);
@@ -42,15 +60,21 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             UserFullName = Preferences.Get("PrefUserFullname", "");
             PONumber = Preferences.Get("PrefPONumber", "");
         }
-        private async Task AddNavigation()
+        public async Task ColViewRefresh()
         {
-            var route = $"{nameof(IncomingDetailAddPage)}";
-            await Shell.Current.GoToAsync(route);
-        }
-        private async Task ColViewRefresh()
-        {
+            IncomingDetailList.Clear();
             IsRefreshing = true;
-
+            try
+            {
+                await transactionUpdateService.UpdateAllIncomingTrans();
+                await notifService.StaticToastNotif("Success", "Items updated succesfully.");
+            }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+            }
+            var detailList = await localDbIncomingDetailService.GetList("PONumber,TimesUpdated", null, null);
+            IncomingDetailList.AddRange(detailList);
             IsRefreshing = false;
         }
 

@@ -14,6 +14,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public string ItemDesc { get; set; }
         public int Qty { get; set; }
         public int Cqty { get; set; }
+        public string PalletCode{ get; set; }
         public int UserId { get; set; }
         public decimal Amount { get; set; }
         public int TimesUpdated { get; set; }

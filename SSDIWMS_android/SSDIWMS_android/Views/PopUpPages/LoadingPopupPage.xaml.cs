@@ -13,6 +13,7 @@ namespace SSDIWMS_android.Views.PopUpPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoadingPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
+
         public LoadingPopupPage(string type)
         {
             

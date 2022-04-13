@@ -36,19 +36,36 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100*"/>
+                                        <ColumnDefinition Width="5*"/>
                                         <ColumnDefinition Width="170*"/>
                                     </Grid.ColumnDefinitions>
                                     
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     
                                     <Label Grid.Column="0" Grid.Row="0" Text="P.O Number"/>
-                                    <Label Grid.Column="1" Grid.Row="0" Text="{Binding PONumber}"/>
+                                    <Label Grid.Column="1" Grid.Row="0" Text=":"/>
+                                    <Label Grid.Column="2" Grid.Row="0" Text="{Binding PONumber}"/>
 
-                                    <Label Grid.Column="0" Grid.Row="1" Text="P.O Number"/>
-                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding ItemCode}"/>
+                                    <Label Grid.Column="0" Grid.Row="1" Text="Item Code"/>
+                                    <Label Grid.Column="1" Grid.Row="1" Text=":"/>
+                                    <Label Grid.Column="2" Grid.Row="1" Text="{Binding ItemCode}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="2" Text="Item Desc"/>
+                                    <Label Grid.Column="1" Grid.Row="2" Text=":"/>
+                                    <Label Grid.Column="2" Grid.Row="2" Text="{Binding ItemDesc}"/>
+
+                                    <Label Grid.Column="0" Grid.Row="3" Text="Amount"/>
+                                    <Label Grid.Column="1" Grid.Row="3" Text=":"/>
+                                    <Label Grid.Column="2" Grid.Row="3" Text="{Binding Amount}"/>
+                                    
                                 </Grid>
                             </StackLayout>
                         </Frame>

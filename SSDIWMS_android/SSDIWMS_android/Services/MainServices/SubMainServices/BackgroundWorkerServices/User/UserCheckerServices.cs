@@ -48,7 +48,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                         if(user.LoginStatus != deviceSerial)
                         {
                             await removePrefServices.RemovePreference();
-                            await notifServices.StaticToastNotif("Error", "Admin forced logout this user.");
+                            await notifServices.StaticToastNotif("Error", "Admin forced logout this account.");
                             await Task.Delay(3000);
                             System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
                         }

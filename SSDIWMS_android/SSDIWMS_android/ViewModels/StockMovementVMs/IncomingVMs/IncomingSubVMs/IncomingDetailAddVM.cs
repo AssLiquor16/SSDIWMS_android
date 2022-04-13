@@ -14,12 +14,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingSubVMs
 {
     public class IncomingDetailAddVM : ViewModelBase
     {
-        ILocalArticleMasterServices localDbItemMasterServie;
-        ISMLIncomingDetailServices localDBIncomingDetailService;
+        readonly ILocalArticleMasterServices localDbItemMasterServie;
+        readonly ISMLIncomingDetailServices localDBIncomingDetailService;
 
-        string _barcodeVal,_itemCode;
+        string _barcodeVal,_itemCode,_itemDesc,_amount;
         public string BarcodeVal { get => _barcodeVal; set => SetProperty(ref _barcodeVal, value); }
         public string ItemCode { get => _itemCode; set => SetProperty(ref _itemCode, value); }
+        public string ItemDesc { get => _itemDesc; set => SetProperty(ref _itemDesc, value); }
+        public string Amount { get => _amount; set => SetProperty(ref _amount, value); }
         public ObservableRangeCollection<ItemMasterModel> ItemList { get; set; }
         public AsyncCommand PageRefreshCommand { get; }
         public IncomingDetailAddVM()
@@ -66,16 +68,28 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingSubVMs
         {
             ItemList.Clear();
             string[] stringarray = { barcode };
+
+            // query to itemmaster
             var initialfilterlist = await localDbItemMasterServie.GetList("CaseCode", stringarray, null);
             ItemList.AddRange(initialfilterlist);
-            foreach(var item in ItemList)
+            if(ItemList.Count > 0)
             {
-                string[] filterarray = { PONumber, item.ItemCode };
-                var retval = await localDBIncomingDetailService.GetModel("PO,ItemCode", filterarray, null);
-                if(retval != null)
+                // query to incomingdetails
+                foreach (var item in ItemList)
                 {
-                    ItemCode = retval.ItemCode;
+                    string[] filterarray = { PONumber, item.ItemCode };
+                    var retval = await localDBIncomingDetailService.GetModel("PO,ItemCode", filterarray, null);
+                    if (retval != null)
+                    {
+                        ItemCode = retval.ItemCode;
+                        ItemDesc = retval.ItemDesc;
+                        Amount = "\u20b1" + " " + retval.Amount;
+                    }
                 }
+            }
+            else
+            {
+                // item not found
             }
         }
     }
