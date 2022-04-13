@@ -61,7 +61,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         }
         public async Task Refresh()
         {
-
+            await Task.Delay(1);
         }
 
 

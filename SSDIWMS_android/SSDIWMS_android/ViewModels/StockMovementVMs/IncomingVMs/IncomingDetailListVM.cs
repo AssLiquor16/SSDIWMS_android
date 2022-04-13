@@ -1,12 +1,11 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
-using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingPopUpSubPages;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingSubPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailSubPages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,14 +20,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         ISMLIncomingDetailServices localDbIncomingDetailService;
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
-
-        string _trigger;
+        
         bool _isRefreshing;
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
 
 
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
-        public AsyncCommand AddNavigationCommand { get;  }
+        public AsyncCommand GotoAddNavigationCommand { get;  }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public IncomingDetailListVM()
@@ -36,17 +34,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             transactionUpdateService = DependencyService.Get<IUpdateAllIncomingtransaction>();
             notifService = DependencyService.Get<IToastNotifService>();
-            IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
 
-            AddNavigationCommand = new AsyncCommand(AddNavigation);
+
+            IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
+            GotoAddNavigationCommand = new AsyncCommand(GotoAddNavigation);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
+
         }
-        public async Task ScannedPopupDetails(string[] caseCode)
-        {
-            await PopupNavigation.Instance.PushAsync(new IncomingDetailAddPopupPage(caseCode));
-        }
-        private async Task AddNavigation()
+
+        private async Task GotoAddNavigation()
         {
             var route = $"{nameof(IncomingDetailAddPage)}";
             await Shell.Current.GoToAsync(route);
@@ -97,5 +94,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
             });
         }
+
     }
 }

@@ -6,7 +6,7 @@ using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingSubPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailSubPages;
 using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;

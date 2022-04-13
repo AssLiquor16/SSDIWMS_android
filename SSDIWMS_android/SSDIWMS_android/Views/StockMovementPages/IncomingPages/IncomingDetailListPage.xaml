@@ -11,7 +11,7 @@
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Scan" Clicked="ToolbarItem_Clicked">
+        <ToolbarItem Text="Add" Command="{Binding GotoAddNavigationCommand}">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
@@ -35,7 +35,7 @@
                             <Label Text="{Binding PONumber}" FontSize="Title"/>
                         </StackLayout>
                         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
-                                             Command="{Binding ColViewRefreshCommand , Mode=TwoWay}" RefreshColor="Red">
+                                             Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                             <CollectionView 
                                         ItemsSource="{Binding IncomingDetailList}"
                                         SelectionMode="Single"
@@ -107,8 +107,6 @@
                             </CollectionView>
 
                         </RefreshView>
-
-                        <Button Text="Add" Command="{Binding AddNavigationCommand}"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>
