@@ -4,6 +4,7 @@
              xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs" 
              xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
              x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailListPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
@@ -11,7 +12,10 @@
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding GotoAddNavigationCommand}">
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.PlusCircle}"/>
+            </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
@@ -37,9 +41,8 @@
                         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                             <CollectionView 
-                                        ItemsSource="{Binding IncomingDetailList}"
+                                        ItemsSource="{Binding IncomingParDetailList}"
                                         SelectionMode="Single"
-                                        x:Name="PalletMasterColView"
                                         SelectedItem="{Binding SelectedDetail}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
                                         RemainingItemsThreshold="1"
@@ -95,7 +98,7 @@
                                                     <Label Text="{Binding ItemDesc}"/>
                                                     <StackLayout Orientation="Horizontal">
                                                         <Label Text="CQTY:" FontSize="Micro"/>
-                                                        <Label Text="{Binding Cqty}" FontSize="Micro"/>
+                                                        <Label Text="{Binding PartialCQTY}" FontSize="Micro"/>
                                                     </StackLayout>
                                                 </StackLayout>
 
@@ -107,6 +110,7 @@
                             </CollectionView>
 
                         </RefreshView>
+                        <Button Text="Overview" Command="{Binding ShowOverViewCommand}"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>

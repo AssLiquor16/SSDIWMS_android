@@ -22,21 +22,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbItemMasterService = DependencyService.Get<ILocalArticleMasterServices>();
-
-            PageRefrehCommand = new AsyncCommand(PageRefresh);
-        }
-        private async Task PageRefresh()
-        {
-            if (!string.IsNullOrWhiteSpace(ScannedCode))
-            {
-                await SearchItem();
-            }
-
         }
 
-        private async Task SearchItem()
-        {
-           
-        }
     }
 }

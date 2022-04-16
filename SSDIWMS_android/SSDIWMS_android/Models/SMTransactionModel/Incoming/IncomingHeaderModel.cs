@@ -32,5 +32,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int FinalUserId { get; set; }
         public int RecUserId { get; set; }
         public int TimesUpdated { get; set; }
+        public string StatusColor { get; set; }
     }
 }

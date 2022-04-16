@@ -1,11 +1,13 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
-using SSDIWMS_android.Models.MasterListModel;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailSubPages;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,60 +20,80 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
     public class IncomingDetailListVM : ViewModelBase
     {
         ISMLIncomingDetailServices localDbIncomingDetailService;
+        ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
-        
+
         bool _isRefreshing;
+        IncomingPartialDetailModel _selectedDetail;
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
+        public IncomingPartialDetailModel SelectedDetail { get => _selectedDetail; set => SetProperty(ref _selectedDetail, value); }
 
 
-        public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
-        public AsyncCommand GotoAddNavigationCommand { get;  }
+        public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
+        public AsyncCommand TappedCommand { get; }
+        public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public IncomingDetailListVM()
         {
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
+            localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             transactionUpdateService = DependencyService.Get<IUpdateAllIncomingtransaction>();
             notifService = DependencyService.Get<IToastNotifService>();
 
 
-            IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
-            GotoAddNavigationCommand = new AsyncCommand(GotoAddNavigation);
+            IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
+            ShowOverViewCommand = new AsyncCommand(ShowOverView);
+            TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
-        }
 
-        private async Task GotoAddNavigation()
+            MessagingCenter.Subscribe<EditDetailPopupVM, string>(this, "FromDetailsEditMSG", async (page, e) => 
+            {
+                await ColViewRefresh();
+            });
+            MessagingCenter.Subscribe<AddDetailPopupVM, string>(this, "FromDetailsAddMSG", async (page, e) =>
+            {
+                await ColViewRefresh();
+            });
+
+        }
+        private async Task Tapped()
         {
-            var route = $"{nameof(IncomingDetailAddPage)}";
-            await Shell.Current.GoToAsync(route);
+            if(SelectedDetail != null)
+            {
+                await PopupNavigation.Instance.PushAsync(new EditDetailPopupPage(SelectedDetail));
+                SelectedDetail = null;
+            }
+        }
+        private async Task ShowOverView()
+        {
+            await PopupNavigation.Instance.PushAsync(new OverviewDetailPopupPage(PONumber));
+        }
+        public async Task AddPopupNav(string scannedCode)
+        {
+            string[] datas = { PONumber, scannedCode };
+            await PopupNavigation.Instance.PushAsync(new AddDetailPopupPage(datas));
         }
         public async Task PageRefresh()
         {
-            IncomingDetailList.Clear();
-            var detailList = await localDbIncomingDetailService.GetList("PONumber,TimesUpdated", null, null);
-            IncomingDetailList.AddRange(detailList);
+            IncomingParDetailList.Clear();
+            var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);
+            IncomingParDetailList.AddRange(detailList);
             await LiveTimer();
             UserFullName = Preferences.Get("PrefUserFullname", "");
             PONumber = Preferences.Get("PrefPONumber", "");
         }
         public async Task ColViewRefresh()
         {
-            IncomingDetailList.Clear();
+            
             IsRefreshing = true;
-            try
-            {
-                await transactionUpdateService.UpdateAllIncomingTrans();
-                await notifService.StaticToastNotif("Success", "Items updated succesfully.");
-            }
-            catch
-            {
-                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-            }
-            var detailList = await localDbIncomingDetailService.GetList("PONumber,TimesUpdated", null, null);
-            IncomingDetailList.AddRange(detailList);
+            IncomingParDetailList.Clear();
+            var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);
+            IncomingParDetailList.Clear();
+            IncomingParDetailList.AddRange(detailList);
             IsRefreshing = false;
         }
 

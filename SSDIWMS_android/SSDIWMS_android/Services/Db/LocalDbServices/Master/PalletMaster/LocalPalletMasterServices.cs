@@ -40,6 +40,10 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster
                 case "All":
                     var contents = await db_.Table<PalletMasterModel>().ToListAsync();
                     return contents;
+                case "WhIdFilter":
+                    var whIdFilter = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+                    var filter1contents = await db_.Table<PalletMasterModel>().Where(x => x.WarehouseId == whIdFilter).ToListAsync();
+                    return filter1contents;
                 default: return null;
             }
         }

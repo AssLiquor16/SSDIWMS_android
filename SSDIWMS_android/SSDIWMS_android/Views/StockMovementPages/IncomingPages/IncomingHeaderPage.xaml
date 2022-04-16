@@ -83,8 +83,14 @@
                                                             <ColumnDefinition Width="160*"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <Label Text="{Binding BillDoc}" Grid.Column="0" FontSize="Small"/>
-                                                        
+                                                        <StackLayout Grid.Column="0" >
+                                                            <StackLayout>
+                                                                <Label Text="{Binding BillDoc}" FontSize="Small"/>
+                                                            </StackLayout>
+                                                            <StackLayout Orientation="Horizontal">
+                                                                <Label Text="{Binding INCstatus}" FontSize="Micro" TextColor="{Binding StatusColor}"/>
+                                                            </StackLayout>
+                                                        </StackLayout>
                                                         <StackLayout Grid.Column="1">
                                                             <Label Text="{Binding PONumber}" FontSize="Small"/>
                                                             <StackLayout Orientation="Horizontal">

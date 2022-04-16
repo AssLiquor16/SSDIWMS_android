@@ -77,10 +77,36 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             {
                 case "Check":
                     var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                    foreach (var e in checkerContents)
+                    {
+                        switch (e.INCstatus)
+                        {
+                            case "Ongoing":
+                                e.StatusColor = "Orange";
+                                break;
+                            case "Finalized":
+                                e.StatusColor = "Green";
+                                break;
+                            default: e.StatusColor = null; break;
+                        }
+                    }
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
                     var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    foreach (var e in pickerContents)
+                    {
+                        switch (e.INCstatus)
+                        {
+                            case "Ongoing":
+                                e.StatusColor = "Orange";
+                                break;
+                            case "Finalized":
+                                e.StatusColor = "Green";
+                                break;
+                            default: e.StatusColor = null; break;
+                        }
+                    }
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
                 default: break;
@@ -93,6 +119,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             await LiveTimer();
             IncomingHeaderList.Clear();
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
+            foreach(var e in listItems)
+            {
+                switch (e.INCstatus)
+                {
+                    case "Ongoing":
+                        e.StatusColor = "Orange";
+                        break;
+                    case "Finalized":
+                        e.StatusColor = "Green";
+                        break;
+                    default: e.StatusColor = null; break;
+                }
+            }
             var filter = Preferences.Get("PrefUserRole", "");
             switch (filter)
             {

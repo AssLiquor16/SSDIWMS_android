@@ -62,24 +62,24 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster
                     var localDataCheck = await localDbPalletMasterService.GetModel("PId", null, intfilterarray);
                     if (localDataCheck == null)
                     {
-                        await localDbPalletMasterService.Insert("Common", localDataCheck);
+                        await localDbPalletMasterService.Insert("Common", item);
                     }
                     else
                     {
-                        await localDbPalletMasterService.Update("Common", localDataCheck);
+                        await localDbPalletMasterService.Update("Common", item);
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
                     LoadingText = await mainServices.GetPercentage("PalletMaster", decArray);
                     await Task.Delay(50);
                 }
-                await notifService.StaticToastNotif("Success", "Article master downloaded succesfully.");
+                await notifService.StaticToastNotif("Success", "Pallet master downloaded succesfully.");
             }
             catch
             {
                 await notifService.StaticToastNotif("Error", ErrorText);
             }
-            await PopupNavigation.Instance.PopAllAsync(true);
+            await PopupNavigation.Instance.PopAsync(true);
         }
 
     }
