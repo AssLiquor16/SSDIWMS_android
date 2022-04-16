@@ -13,8 +13,8 @@
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-    <Frame HeightRequest="280" 
-           WidthRequest="320" 
+    <Frame HeightRequest="260" 
+           WidthRequest="330" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
            BackgroundColor="White"
@@ -26,53 +26,55 @@
             <StackLayout HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
                 <StackLayout>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="170"/>
-                            <ColumnDefinition Width="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="18"/>
-                            <RowDefinition Height="18"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="18"/>
-                            <RowDefinition Height="50"/>
-                        </Grid.RowDefinitions>
+                    <StackLayout Padding="5" Margin="5" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="18"/>
+                                <RowDefinition Height="18"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="18"/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
 
-                        <Label Text="PO Number" Grid.Column="0" Grid.Row="0"/>
-                        <Label Text=":" Grid.Column="1" Grid.Row="0"/>
-                        <Label Text="{Binding PONumber}" Grid.Column="2" Grid.Row="0"/>
+                            <Label Text="PO Number" Grid.Column="0" Grid.Row="0"/>
+                            <Label Text=":" Grid.Column="1" Grid.Row="0"/>
+                            <Label Text="{Binding PONumber}" Grid.Column="2" Grid.Row="0"/>
 
-                        <Label Text="Item Code" Grid.Column="0" Grid.Row="1"/>
-                        <Label Text=":" Grid.Column="1" Grid.Row="1"/>
-                        <Label Text="{Binding ItemCode}" Grid.Column="2" Grid.Row="1"/>
+                            <Label Text="Item Code" Grid.Column="0" Grid.Row="1"/>
+                            <Label Text=":" Grid.Column="1" Grid.Row="1"/>
+                            <Label Text="{Binding ItemCode}" Grid.Column="2" Grid.Row="1"/>
 
-                        <Label Text="Item Desc" Grid.Column="0" Grid.Row="2" VerticalOptions="StartAndExpand"/>
-                        <Label Text=":" Grid.Column="1" Grid.Row="2" VerticalOptions="StartAndExpand"/>
-                        <Label Text="{Binding ItemDesc}" Grid.Column="2" Grid.Row="2" VerticalOptions="StartAndExpand"/>
+                            <Label Text="Item Desc" Grid.Column="0" Grid.Row="2" VerticalOptions="StartAndExpand"/>
+                            <Label Text=":" Grid.Column="1" Grid.Row="2" VerticalOptions="StartAndExpand"/>
+                            <Label Text="{Binding ItemDesc}" Grid.Column="2" Grid.Row="2" VerticalOptions="StartAndExpand"/>
 
-                        <Label Text="Pallet Code" Grid.Column="0" Grid.Row="3" VerticalOptions="StartAndExpand"/>
-                        <Label Text=":" Grid.Column="1" Grid.Row="3" VerticalOptions="StartAndExpand"/>
-                        <Label Text="{Binding PalletCode}" Grid.Column="2" Grid.Row="3"/>
-                        <Label Grid.Column="3" Grid.Row="3" VerticalOptions="StartAndExpand">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="Edit" FontAttributes="Bold" TextColor="Blue" TextDecorations="Underline"/>
-                                </FormattedString>
-                            </Label.FormattedText>
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NavPalletListCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
+                            <Label Text="Pallet Code" Grid.Column="0" Grid.Row="3" VerticalOptions="StartAndExpand"/>
+                            <Label Text=":" Grid.Column="1" Grid.Row="3" VerticalOptions="StartAndExpand"/>
+                            <Label Text="{Binding PalletCode}" Grid.Column="2" Grid.Row="3"/>
+                            <Label Grid.Column="3" Grid.Row="3" VerticalOptions="StartAndExpand">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Edit" FontAttributes="Bold" TextColor="Blue" TextDecorations="Underline"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavPalletListCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
 
-                        <Label Text="CQTY" Grid.Column="0" Grid.Row="4" VerticalOptions="CenterAndExpand"/>
-                        <Label Text=":" Grid.Column="1" Grid.Row="4" VerticalOptions="CenterAndExpand"/>
-                        <Entry Text="{Binding PartialCQTY}" Grid.Column="2" Grid.Row="4"/>
+                            <Label Text="CQTY" Grid.Column="0" Grid.Row="4" VerticalOptions="CenterAndExpand"/>
+                            <Label Text=":" Grid.Column="1" Grid.Row="4" VerticalOptions="CenterAndExpand"/>
+                            <Entry Text="{Binding PartialCQTY}" Grid.Column="2" Grid.Row="4"/>
 
-                    </Grid>
-                    <Button Text="Add" Command="{Binding EditDetailCommand}" Margin="10"/>
+                        </Grid>
+                        <Button Text="Edit" Command="{Binding EditDetailCommand}" Margin="10"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

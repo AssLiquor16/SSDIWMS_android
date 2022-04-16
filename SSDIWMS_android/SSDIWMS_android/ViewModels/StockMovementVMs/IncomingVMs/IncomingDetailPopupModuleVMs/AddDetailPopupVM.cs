@@ -162,24 +162,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 }
                 if (IncomingDetailList.Count == 1)
                 {
-                    if(IncomingDetailList[0].TimesUpdated == 0)
-                    {
-                        PONumber = IncomingDetailList[0].POHeaderNumber;
-                        ItemCode = IncomingDetailList[0].ItemCode;
-                        ItemDesc = IncomingDetailList[0].ItemDesc;
-                        Amount = "Pesos :" + IncomingDetailList[0].Amount; ;
-                        E = IncomingDetailList[0];
-                        await notifyService.StaticToastNotif("Success", "Item found");
-                        ErrorView = false;
-                        SuccessView = true;
-                    }
-                    else
-                    {
-                        //item already registered
-                        ErrorText = "Item already added";
-                        ErrorView = true;
-                        SuccessView = false;
-                    }
+                    PONumber = IncomingDetailList[0].POHeaderNumber;
+                    ItemCode = IncomingDetailList[0].ItemCode;
+                    ItemDesc = IncomingDetailList[0].ItemDesc;
+                    Amount = "Pesos :" + IncomingDetailList[0].Amount; ;
+                    E = IncomingDetailList[0];
+                    await notifyService.StaticToastNotif("Success", "Item found");
+                    ErrorView = false;
+                    SuccessView = true;
                 }
                 else if (IncomingDetailList.Count > 1)
                 {
