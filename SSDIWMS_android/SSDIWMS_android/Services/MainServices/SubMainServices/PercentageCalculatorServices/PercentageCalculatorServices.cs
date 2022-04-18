@@ -26,6 +26,9 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalcul
                 case "PalletMaster":
                     msg = "PalletMaster  " + g + "% out of 100%";
                     break;
+                case "IncomingDetail":
+                    msg = "Acuracy: " + g + " %";
+                    break;
                 default: return null;
             }
             return msg;

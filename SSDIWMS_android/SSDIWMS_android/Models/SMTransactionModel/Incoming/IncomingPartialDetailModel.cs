@@ -7,6 +7,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
 {
     public class IncomingPartialDetailModel
     {
+        public int INCServerId { get; set; }
         [PrimaryKey,AutoIncrement]
         public int INCParDetId { get; set; }
         public DateTime DateCreated { get; set; }

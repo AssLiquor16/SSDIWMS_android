@@ -46,6 +46,32 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                         var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
                         return datas;
                     }
+                case "GetFinalize": 
+                    using (client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(40);
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var intf = intfilter[0];
+                        var json = await client.GetStringAsync($"api/incomingHeaders/GetFinalize/{intf}");
+                        var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
+                        return datas;
+                    }
+                case "GetOngoing":
+                    using (client = new HttpClient())
+                    {
+                        client.Timeout = TimeSpan.FromSeconds(40);
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var intf = intfilter[0];
+                        var json = await client.GetStringAsync($"api/incomingHeaders/GetOngoing/{intf}");
+                        var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
+                        return datas;
+                    }
                 default: return null;
             }
         }

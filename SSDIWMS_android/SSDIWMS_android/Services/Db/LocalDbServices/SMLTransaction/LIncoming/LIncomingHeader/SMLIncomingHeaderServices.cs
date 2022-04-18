@@ -61,6 +61,15 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var filter = intfilter[0];
                     var content = await db_.Table<IncomingHeaderModel>().Where(x => x.INCId == filter).FirstOrDefaultAsync();
                     return content;
+                case "PONumber":
+                    var stringfilterPo = stringfilter[0];
+                    var conts = await db_.Table<IncomingHeaderModel>().Where(x => x.PONumber == stringfilterPo).FirstOrDefaultAsync();
+                    return conts;
+                case "INCId&PO":
+                    var sfilter = stringfilter[0];
+                    var ifilter = intfilter[0];
+                    var cont = await db_.Table<IncomingHeaderModel>().Where(x => x.INCId == ifilter && x.PONumber == sfilter).FirstOrDefaultAsync();
+                    return cont;
                 default: return null;
             }
         }
@@ -85,6 +94,14 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var content = await db_.Table<IncomingHeaderModel>().Where(x=>x.INCId == data.INCId).FirstOrDefaultAsync();
                     content = data;
                     await db_.UpdateAsync(content);
+                    break;
+                case "PONumber":
+                    var n = await db_.Table<IncomingHeaderModel>().Where(x => x.PONumber == data.PONumber).FirstOrDefaultAsync();
+                    n.FinalDate = DateTime.Now;
+                    n.INCstatus = data.INCstatus;
+                    n.FinalUserId = data.FinalUserId;
+                    n.TimesUpdated = n.TimesUpdated + 10;
+                    await db_.UpdateAsync(n);
                     break;
             }
         }

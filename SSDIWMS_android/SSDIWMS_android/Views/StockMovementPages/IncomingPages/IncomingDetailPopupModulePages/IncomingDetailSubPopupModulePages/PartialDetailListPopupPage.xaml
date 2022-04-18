@@ -28,90 +28,75 @@
                 <StackLayout Padding="5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Frame>
                         <StackLayout>
-                            <StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="PO    :"/>
-                                    <Label Text="{Binding PONumber}"/>
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Total:"/>
-                                    <Label Text="{Binding TotalPOItems}"/>
-                                </StackLayout>
-                                <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
-                                <BoxView/>
-                            </StackLayout>
-                            <RefreshView IsRefreshing="{Binding IsRefreshing}" 
-                                             Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
-                                <CollectionView 
-                                        ItemsSource="{Binding IncomingDetailList}"
-                                        SelectionMode="Single"
-                                        SelectedItem="{Binding SeletedItem}"
-                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                            <CollectionView 
+                                        ItemsSource="{Binding PartialDetailList}"
                                         RemainingItemsThreshold="1"
 
                                         Margin="7,15">
-                                    <CollectionView.EmptyView>
-                                        <StackLayout VerticalOptions="CenterAndExpand" 
+                                <CollectionView.EmptyView>
+                                    <StackLayout VerticalOptions="CenterAndExpand" 
                                                          HorizontalOptions="CenterAndExpand"
                                                          Padding="0,100"
                                                          >
 
-                                            <Label Text="Nothing to show." 
+                                        <Label Text="Nothing to show." 
                                                        VerticalOptions="CenterAndExpand" 
                                                        HorizontalOptions="CenterAndExpand" 
                                                        FontAttributes="Bold"
                                                        FontSize="Subtitle"/>
 
-                                        </StackLayout>
-                                    </CollectionView.EmptyView>
-                                    <CollectionView.Header>
-                                        <Grid Padding="0" VerticalOptions="CenterAndExpand">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="90*"/>
-                                                <ColumnDefinition Width="160*"/>
-                                            </Grid.ColumnDefinitions>
+                                    </StackLayout>
+                                </CollectionView.EmptyView>
+                                <CollectionView.Header>
+                                    <Grid Padding="0" VerticalOptions="CenterAndExpand">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90*"/>
+                                            <ColumnDefinition Width="160*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                            <Label Text="Item Code" FontSize="Subtitle" Grid.Column="0" 
+                                        <Label Text="Item Code" FontSize="Subtitle" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                            <Label Text="Item Desc" FontSize="Subtitle" Grid.Column="1"
+                                        <Label Text="Item Desc" FontSize="Subtitle" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
-                                        </Grid>
-                                    </CollectionView.Header>
-                                    <CollectionView.Footer>
-                                        <StackLayout>
-                                            <Label Text="Nothing to follow." 
+                                    </Grid>
+                                </CollectionView.Header>
+                                <CollectionView.Footer>
+                                    <StackLayout>
+                                        <Label Text="Nothing to follow." 
                                                        HorizontalOptions="CenterAndExpand"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        </StackLayout>
-                                    </CollectionView.Footer>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackLayout Style="{StaticResource ColViewitemViewDefaultFormat}">
+                                    </StackLayout>
+                                </CollectionView.Footer>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Style="{StaticResource ColViewitemViewDefaultFormat}">
 
-                                                <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="90*"/>
-                                                        <ColumnDefinition Width="160*"/>
-                                                    </Grid.ColumnDefinitions>
+                                            <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="160*"/>
+                                                </Grid.ColumnDefinitions>
 
-                                                    <Label Text="{Binding ItemCode}" Grid.Column="0"/>
-                                                    <StackLayout Grid.Column="1">
-                                                        <Label Text="{Binding ItemDesc}"/>
-                                                        <StackLayout Orientation="Horizontal">
-                                                            <Label Text="QTY:" FontSize="Micro"/>
-                                                            <Label Text="{Binding Cqty}" FontSize="Micro"/>
-                                                        </StackLayout>
+                                                <Label Text="{Binding ItemCode}" Grid.Column="0"/>
+                                                <StackLayout Grid.Column="1">
+                                                    <Label Text="{Binding ItemDesc}"/>
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="QTY:" FontSize="Micro"/>
+                                                        <Label Text="{Binding PartialCQTY}" FontSize="Micro"/>
                                                     </StackLayout>
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="Pallet" FontSize="Micro"/>
+                                                        <Label Text="{Binding PalletCode}" FontSize="Micro"/>
+                                                    </StackLayout>
+                                                </StackLayout>
 
-                                                </Grid>
+                                            </Grid>
 
-                                            </StackLayout>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-
-                            </RefreshView>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </StackLayout>
                     </Frame>
                 </StackLayout>

@@ -45,7 +45,7 @@
                                 <CollectionView 
                                         ItemsSource="{Binding IncomingDetailList}"
                                         SelectionMode="Single"
-                                        SelectedItem="{Binding SeletedItem}"
+                                        SelectedItem="{Binding SelectedItem}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
                                         RemainingItemsThreshold="1"
 
@@ -99,8 +99,7 @@
                                                     <StackLayout Grid.Column="1">
                                                         <Label Text="{Binding ItemDesc}"/>
                                                         <StackLayout Orientation="Horizontal">
-                                                            <Label Text="QTY:" FontSize="Micro"/>
-                                                            <Label Text="{Binding Cqty}" FontSize="Micro"/>
+                                                            <Label Text="{Binding QTYStatus}" FontSize="Micro"/>
                                                         </StackLayout>
                                                     </StackLayout>
 

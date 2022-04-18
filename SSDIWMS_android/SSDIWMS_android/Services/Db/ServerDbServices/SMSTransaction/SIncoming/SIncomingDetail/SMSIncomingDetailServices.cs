@@ -62,18 +62,54 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "Common":
                     using (client = new HttpClient())
                     {
-
+                        var e = new serverIncomingDet
+                        {
+                            INCDetId = data.INCDetId,
+                            INCHeaderId = data.INCHeaderId,
+                            ItemCode = data.ItemCode,
+                            ItemDesc = data.ItemDesc,
+                            Qty = data.Qty,
+                            Cqty = data.Cqty,
+                            UserId = data.UserId,
+                            Amount = data.Amount,
+                            TimesUpdated = data.TimesUpdated,
+                            POHeaderNumber = data.POHeaderNumber
+                        };
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = JsonConvert.SerializeObject(data);
+                        var json = JsonConvert.SerializeObject(e);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        var res = await client.PutAsync($"api/IncomingDetails/{data.INCDetId}", content);
+                        var res = await client.PutAsync($"api/IncomingDetails/{e.INCDetId}", content);
                         var sult = res.StatusCode.ToString();
                     }
                     break;
             }
         }
+    }
+    public partial class serverIncomingDet
+    {
+        public int INCDetId { get; set; }
+
+        public int INCHeaderId { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string ItemDesc { get; set; }
+
+        public int Qty { get; set; }
+
+        public int Cqty { get; set; }
+
+        public int UserId { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public int TimesUpdated { get; set; }
+
+        public string POHeaderNumber { get; set; }
+
+
     }
 }

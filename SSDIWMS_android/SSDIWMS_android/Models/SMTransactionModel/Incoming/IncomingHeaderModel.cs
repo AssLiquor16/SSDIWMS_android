@@ -23,8 +23,8 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public string ReferenceDoc { get; set; }
         public string DelStatus { get; set; }
         public DateTime PlanDelSched { get; set; }
-        public DateTime ActRecDate { get; set; }
-        public DateTime FinalDate { get; set; }
+        public DateTime ActRecDate { get; set; }  //Default DateTime.min
+        public DateTime FinalDate { get; set; }   //Default Datetime.min
         public DateTime RecDate { get; set; }
         public string INCstatus { get; set; }
         public DateTime DateUploaded { get; set; }
@@ -32,6 +32,5 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int FinalUserId { get; set; }
         public int RecUserId { get; set; }
         public int TimesUpdated { get; set; }
-        public string StatusColor { get; set; }
     }
 }

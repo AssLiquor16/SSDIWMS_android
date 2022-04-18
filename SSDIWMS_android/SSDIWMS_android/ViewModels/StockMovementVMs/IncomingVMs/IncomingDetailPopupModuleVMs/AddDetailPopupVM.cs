@@ -117,23 +117,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await notifyService.StaticToastNotif("Error", "Missing entry");
             }
         }
-        private async Task AddDetail2()
-        {
-            if (!string.IsNullOrWhiteSpace(PalletCode) && PartialCQTY != 0)
-            {
-                E.TimesUpdated++;
-                E.PalletCode = PalletCode;
-                E.Cqty = PartialCQTY;
-                await localDbIncomingDetailService.Update("Common", E);
-                await notifyService.StaticToastNotif("Success", "Item added.");
-                MessagingCenter.Send(this, "FromDetailsAddMSG", "AddRefresh");
-                await PopupNavigation.Instance.PopAllAsync(true);
-            }
-            else
-            {
-                await notifyService.StaticToastNotif("Error", "Missing entry");
-            }
-        }
         private async Task PageRefresh()
         {
             PalletCode = Preferences.Get("PrefSelectedPallet", string.Empty);

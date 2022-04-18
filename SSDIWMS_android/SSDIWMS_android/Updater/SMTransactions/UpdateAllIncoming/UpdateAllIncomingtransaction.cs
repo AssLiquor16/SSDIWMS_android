@@ -1,10 +1,13 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingDetail;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingHeader;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingPartialDetail;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -21,6 +24,8 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
         ISMLIncomingDetailServices localDbIncomingDetailService;
         ISMSIncomingDetailServices serverDbIncomingDetailService;
 
+        ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
+        ISMSIncomingPartialDetailServices serverDbIncomingParDetailService;
 
         public UpdateAllIncomingtransaction()
         {
@@ -29,62 +34,122 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             serverDbIncomingDetailService = DependencyService.Get<ISMSIncomingDetailServices>();
+
+            localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
+            serverDbIncomingParDetailService = DependencyService.Get<ISMSIncomingPartialDetailServices>();
         }
 
         public async Task UpdateAllIncomingTrans()
         {
             var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+            var role = Preferences.Get("PrefUserRole", string.Empty);
             int[] WhIdFilter = { WhId };
-            var sIncomingHeader = await serverDbIncomingHeaderService.GetList("WhId", null, WhIdFilter, null);
+            var method = "";
+            switch (role)
+            {
+                case "Check":
+                    method = "GetOngoing";
+                    break;
+                case "Pick":
+                    method = "GetFinalize";
+                    break;
+                default: method = ""; break;
+            }
+
+            var sIncomingHeader = await serverDbIncomingHeaderService.GetList(method, null, WhIdFilter, null);
             foreach(var sHeader in sIncomingHeader)
             {
-                var INCId = sHeader.INCId;
-                int[] INCIdFilter = { INCId };
-                var lHeader = await localDbIncomingHeaderService.GetModel("INCId", null, INCIdFilter, null);
-                if (lHeader == null)
+                int[] x = { sHeader.INCId };
+                string[] y = { sHeader.PONumber };
+                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                if(lHeader == null)
                 {
+                    // insert to local
                     await localDbIncomingHeaderService.Insert("Common", sHeader);
+
                 }
                 else
                 {
-                    if (lHeader.TimesUpdated > sHeader.TimesUpdated)
+                    if(lHeader.TimesUpdated > sHeader.TimesUpdated)
                     {
-                        // update server
+                        //update server
                         await serverDbIncomingHeaderService.Update("Common", lHeader);
                     }
-                    else if (lHeader.TimesUpdated < sHeader.TimesUpdated)
+                    else if(lHeader.TimesUpdated < sHeader.TimesUpdated)
                     {
                         // update local
                         await localDbIncomingHeaderService.Update("Common", sHeader);
                     }
                 }
+                string[] sfilter = { sHeader.PONumber };
+                await UpdateDetail(sfilter);
 
-                string[] poFilter = { sHeader.PONumber };
-                var sIncomingDetail = await serverDbIncomingDetailService.GetList("PONumber", poFilter, null);
-                if(sIncomingDetail != null)
+            }
+            
+            
+        }
+        public async Task UpdateDetail(string[] poFilter)
+        {
+
+            var sDetails = await serverDbIncomingDetailService.GetList("PONumber", poFilter, null);
+            foreach(var sDetail in sDetails)
+            {
+                int[] vs = { sDetail.INCDetId};
+                var lDetail = await localDbIncomingDetailService.GetModel("INCDetId", null, vs);
+                if(lDetail == null)
                 {
-                    foreach(var sDetail in sIncomingDetail)
+                    await localDbIncomingDetailService.Insert("Common", sDetail);
+                }
+                else
+                {
+                    if(lDetail.TimesUpdated > sDetail.TimesUpdated)
                     {
-                        int[] INCDetIdFilter = { sDetail.INCDetId };
-                        var lDetail = await localDbIncomingDetailService.GetModel("INCDetId", null, INCDetIdFilter);
-                        if(lDetail == null)
-                        {
-                            await localDbIncomingDetailService.Insert("Common", sDetail);
-                        }
-                        else
-                        {
-                            if(lDetail.TimesUpdated > sDetail.TimesUpdated)
-                            {
-                                // update server
-                                await serverDbIncomingDetailService.Update("Common", lDetail);
-                            }
-                            else if(lDetail.TimesUpdated < sDetail.TimesUpdated)
-                            {
-                                // update local
-                                await localDbIncomingDetailService.Update("Common", sDetail);
-                            }
-                        }
+                        //update server
+                        await serverDbIncomingDetailService.Update("Common", lDetail);
                     }
+                    else if(lDetail.TimesUpdated < sDetail.TimesUpdated)
+                    {
+                        //update local
+                        await localDbIncomingDetailService.Update("Comon", sDetail);
+                    }
+                }
+                string[] PoIcFilter = { sDetail.POHeaderNumber, sDetail.ItemCode };
+                await UpdatePartialDetail(PoIcFilter);
+            }
+        }
+        public async Task UpdatePartialDetail(string[] PoIcFilter)
+        {
+            var spardetails = await serverDbIncomingParDetailService.GetList("GetItemCodePO",PoIcFilter, null);
+            foreach(var spardetail in spardetails)
+            {
+                string[] b = { spardetail.RefId };
+                var lpardetail = await localDbIncomingParDetailService.GetModel("RefId", b, null);
+                if(lpardetail == null)
+                {
+                    await localDbIncomingParDetailService.Insert("Common", spardetail);
+                }
+                else
+                {
+                    if(lpardetail.TimesUpdated > spardetail.TimesUpdated)
+                    {
+                        //update server
+                        await serverDbIncomingParDetailService.Update("Common", lpardetail);
+                    }
+                    else if(lpardetail.TimesUpdated < spardetail.TimesUpdated)
+                    {
+                        // update local
+                        await localDbIncomingParDetailService.Update("RefId", spardetail);
+                    }
+                }
+            }
+            var lpardetails = await localDbIncomingParDetailService.GetList("PoIc", PoIcFilter,null);
+            foreach(var lpDet in lpardetails)
+            {
+                var spDet = spardetails.Where(x => x.RefId == lpDet.RefId).FirstOrDefault();
+                if(spDet == null)
+                {
+                    var retsval = await serverDbIncomingParDetailService.SpecialCaseInsert("ReturnInsertedItem", lpDet);
+                    await localDbIncomingParDetailService.Update("RefId", retsval);
                 }
             }
         }
