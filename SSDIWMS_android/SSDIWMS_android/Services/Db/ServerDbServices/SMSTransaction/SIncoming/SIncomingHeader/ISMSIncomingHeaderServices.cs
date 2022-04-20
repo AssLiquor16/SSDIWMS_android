@@ -10,5 +10,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
     {
         Task<IEnumerable<IncomingHeaderModel>> GetList(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter);
         Task Update(string type, IncomingHeaderModel data);
+        Task<string> GetString(string type, string[] stringfilter, int[] intfilter);
     }
 }

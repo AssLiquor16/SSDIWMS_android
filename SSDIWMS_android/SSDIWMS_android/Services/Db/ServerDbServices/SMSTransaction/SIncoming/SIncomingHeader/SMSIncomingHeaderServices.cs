@@ -72,6 +72,25 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
             }
         }
 
+        public async Task<string> GetString(string type, string[] stringfilter, int[] intfilter)
+        {
+            switch (type)
+            {
+                case "ReturnStatus":
+                    using (client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var json = await client.GetStringAsync($"api/incomingHeaders/GetPOStatus/{stringfilter[0]}");
+                        var datas = JsonConvert.DeserializeObject<string>(json);
+                        return datas;
+                    }
+                default: return null;
+            }
+        }
+
         public async Task Update(string type, IncomingHeaderModel data)
         {
             switch (type)

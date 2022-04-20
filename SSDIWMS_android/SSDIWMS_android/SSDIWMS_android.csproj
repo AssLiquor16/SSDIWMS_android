@@ -35,6 +35,9 @@
   <ItemGroup>
     <Folder Include="Services\StockMovementServices\" />
     <Folder Include="ViewModels\StockMovementVMs\IncomingVMs\CheckerVMs\" />
+    <Folder Include="ViewModels\StockMovementVMs\IncomingVMs\PickerPages\" />
+    <Folder Include="Views\StockMovementPages\IncomingPages\CheckerPages\" />
+    <Folder Include="Views\StockMovementPages\IncomingPages\PickerPages\" />
   </ItemGroup>
 
   <ItemGroup>

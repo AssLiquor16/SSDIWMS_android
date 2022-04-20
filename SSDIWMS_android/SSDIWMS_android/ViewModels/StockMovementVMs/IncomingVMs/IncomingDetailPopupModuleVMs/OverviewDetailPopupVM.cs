@@ -5,6 +5,7 @@ using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingHeader;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
@@ -27,7 +28,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
         ISMLIncomingDetailServices localDbIncomingDetailService;
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
-        
+        ISMSIncomingHeaderServices serverDbIncomingHeaderService;
+
         IncomingDetailModel _selectedItem;
         string _poNumber,_totalPOItems;
         bool _isrefreshing;
@@ -49,6 +51,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
+            serverDbIncomingHeaderService = DependencyService.Get<ISMSIncomingHeaderServices>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
             TappedCommand = new AsyncCommand(Tapped);
             FinalizeCommand = new AsyncCommand(Finalize);
@@ -110,57 +113,68 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
         private async Task Finalize()
         {
-            try
+            bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the item?", "Yes", "No");
+            if (proceed == true)
             {
-                await notifService.LoadingProcess("Begin", "Processing...");
-                var userId = Preferences.Get("PrefUserId", 0);
-                IncomingHeaderModel e = new IncomingHeaderModel
+
+                try
                 {
-                    FinalUserId = userId,
-                    INCstatus = "Finalized",
-                    PONumber = PONumber,
-
-                };
-                await localDbIncomingHeaderService.Update("PONumber", e);
-                foreach (var item in IncomingDetailList)
-                {
-                    item.TimesUpdated += 1;
-                    item.UserId = userId;
-                    await localDbIncomingDetailService.Update("Common", item);
-
-                    string[] s = { item.ItemCode };
-                    int[] i = { item.INCDetId };
-
-                    var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
-                    foreach (var paritem in retpardet)
+                    await notifService.LoadingProcess("Begin", "Processing...");
+                    var userId = Preferences.Get("PrefUserId", 0);
+                    IncomingHeaderModel e = new IncomingHeaderModel
                     {
-                        paritem.TimesUpdated += 1;
-                        paritem.UserId = userId;
-                        paritem.Status = "Finalized";
-                        paritem.DateFinalized = DateTime.Now;
-                        await localDbIncomingParDetailService.Update("RefId", paritem);
+                        FinalUserId = userId,
+                        INCstatus = "Finalized",
+                        PONumber = PONumber,
+
+                    };
+                    await localDbIncomingHeaderService.Update("PONumber", e);
+                    foreach (var item in IncomingDetailList)
+                    {
+                        item.TimesUpdated += 1;
+                        item.UserId = userId;
+                        await localDbIncomingDetailService.Update("Common", item);
+
+                        string[] s = { item.ItemCode };
+                        int[] i = { item.INCDetId };
+
+                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                        foreach (var paritem in retpardet)
+                        {
+                            paritem.TimesUpdated += 1;
+                            paritem.UserId = userId;
+                            paritem.Status = "Finalized";
+                            paritem.DateFinalized = DateTime.Now;
+                            await localDbIncomingParDetailService.Update("RefId", paritem);
+                        }
+                    }
+                    Preferences.Remove("PrefPONumber");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Something went wrong");
+                }
+                try
+                {
+                    string[] strinfilter = { PONumber };
+                    var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
+                    if(poStatus == "Ongoing")
+                    {
+                        await updaterservice.UpdateAllIncomingTrans();
+                        await notifService.StaticToastNotif("Success", "Item sync successfully.");
                     }
                 }
-                Preferences.Remove("PrefPONumber");
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+                await PopupNavigation.Instance.PopAllAsync(true);
+                await notifService.LoadingProcess("End", "");
+                var route = $"..";
+                await Shell.Current.GoToAsync(route);
+
             }
-            catch
-            {
-                await notifService.StaticToastNotif("Error", "Something went wrong");
-            }
-            try
-            {
-                await updaterservice.UpdateAllIncomingTrans();
-                await notifService.StaticToastNotif("Success", "Item sync successfully.");
-            }
-            catch
-            {
-                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-            }
-            await PopupNavigation.Instance.PopAllAsync(true);
-            await notifService.LoadingProcess("End", "");
-            var route = $"..";
-            await Shell.Current.GoToAsync(route);
-            
+
         }
     }
 }

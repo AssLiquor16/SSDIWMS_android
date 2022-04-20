@@ -52,10 +52,21 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         {
             if(SelectedHeader != null)
             {
-                Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
-                var route = $"{nameof(IncomingDetailListPage)}";
-                await Shell.Current.GoToAsync(route);
-                SelectedHeader = null;
+                var filter = Preferences.Get("PrefUserRole", "");
+                switch (filter)
+                {
+                    case "Check":
+                        Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
+                        var route = $"{nameof(IncomingDetailListPage)}";
+                        await Shell.Current.GoToAsync(route);
+                        SelectedHeader = null;
+                        break;
+                    case "Pick":
+
+                        break;
+                }
+
+                
             }
         }
         private async Task ColViewRefresh()
@@ -87,12 +98,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" && x.ActRecDate == DateTime.Now.Date).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" && x.ActRecDate == DateTime.Now.Date).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
@@ -110,12 +121,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" && x.ActRecDate == DateTime.Now.Date).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" && x.ActRecDate == DateTime.Now.Date).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
