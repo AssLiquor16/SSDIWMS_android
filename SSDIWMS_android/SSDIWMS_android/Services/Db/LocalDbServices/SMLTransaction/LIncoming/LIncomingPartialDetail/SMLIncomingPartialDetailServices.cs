@@ -45,6 +45,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var POFilter = Preferences.Get("PrefPONumber", "");
                     var PO = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.POHeaderNumber == POFilter).ToListAsync();
                     return PO;
+                case "PONumber&UserId":
+                    var POFilter3 = Preferences.Get("PrefPONumber", "");
+                    var UserFilter1 = Preferences.Get("PrefUserId", 0);
+                    var pritm = await db_.Table<IncomingPartialDetailModel>().Where(x => x.POHeaderNumber == POFilter3 && x.UserId == UserFilter1).ToListAsync();
+                    return pritm;
                 case "PONumber&INCId":
                     var POFilter1 = Preferences.Get("PrefPONumber", "");
                     var iNCDetId = intfilter[0];

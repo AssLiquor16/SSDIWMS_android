@@ -98,7 +98,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             ItemDesc = E.ItemDesc,
                             PartialCQTY = PartialCQTY,
                             PalletCode = PalletCode,
-                            UserId = loggedInUser,
                             TimesUpdated = 0,
                             POHeaderNumber = E.POHeaderNumber,
                             Status = "Pending",

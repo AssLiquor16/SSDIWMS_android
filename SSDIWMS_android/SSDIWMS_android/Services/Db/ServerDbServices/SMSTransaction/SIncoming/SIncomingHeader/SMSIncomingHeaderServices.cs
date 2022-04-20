@@ -25,7 +25,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -37,7 +36,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "WhId":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -49,7 +47,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetFinalize": 
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -62,12 +59,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetOngoing":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var intf = intfilter[0];
+                        int intf = intfilter[0];
                         var json = await client.GetStringAsync($"api/incomingHeaders/GetOngoing/{intf}");
                         var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
                         return datas;

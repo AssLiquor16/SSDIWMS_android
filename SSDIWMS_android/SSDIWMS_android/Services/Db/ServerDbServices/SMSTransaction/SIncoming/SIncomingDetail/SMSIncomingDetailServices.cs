@@ -25,7 +25,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
+                        //client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -37,7 +37,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "PONumber":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;

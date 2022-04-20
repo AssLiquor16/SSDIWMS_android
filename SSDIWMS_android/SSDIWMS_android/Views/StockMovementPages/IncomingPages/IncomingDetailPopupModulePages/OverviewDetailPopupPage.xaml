@@ -37,7 +37,6 @@
                                     <Label Text="Total:"/>
                                     <Label Text="{Binding TotalPOItems}"/>
                                 </StackLayout>
-                                <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
                                 <BoxView/>
                             </StackLayout>
                             <RefreshView IsRefreshing="{Binding IsRefreshing}" 
@@ -111,6 +110,7 @@
                                 </CollectionView>
 
                             </RefreshView>
+                            <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
                         </StackLayout>
                     </Frame>
                 </StackLayout>

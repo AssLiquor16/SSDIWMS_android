@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <Folder Include="Services\StockMovementServices\" />
+    <Folder Include="ViewModels\StockMovementVMs\IncomingVMs\CheckerVMs\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,9 +81,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\OverviewDetailPopupPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailSubPages\IncomingDetailAddPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingHeaderPage.xaml">

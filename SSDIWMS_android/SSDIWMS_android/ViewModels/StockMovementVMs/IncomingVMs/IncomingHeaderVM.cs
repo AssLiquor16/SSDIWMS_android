@@ -4,6 +4,7 @@ using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
+
         }
         private async Task Tapped()
         {
@@ -59,28 +61,39 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         private async Task ColViewRefresh()
         {
             IsRefreshing = true;
-
             IncomingHeaderList.Clear();
-            try
+            var syncing = Preferences.Get("PrefISMSyncing", false);
+            if (syncing == false)
             {
-                await transactionUpdateService.UpdateAllIncomingTrans();
-                await notifService.StaticToastNotif("Success", "Header updated succesfully.");
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await transactionUpdateService.UpdateAllIncomingTrans();
+                    await notifService.StaticToastNotif("Success", "Header updated succesfully.");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+                
+                Preferences.Set("PrefISMSyncing", false);
             }
-            catch
+            else
             {
-                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
             }
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
-
             var filter = Preferences.Get("PrefUserRole", "");
             switch (filter)
             {
                 case "Check":
                     var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                    IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
                     var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
                 default: break;
@@ -93,16 +106,17 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             await LiveTimer();
             IncomingHeaderList.Clear();
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
-           
             var filter = Preferences.Get("PrefUserRole", "");
             switch (filter)
             {
                 case "Check":
                     var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                    IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
                     var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
                 default: break;

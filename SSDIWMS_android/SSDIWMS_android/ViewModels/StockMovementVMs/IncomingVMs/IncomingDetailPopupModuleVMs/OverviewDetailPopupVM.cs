@@ -6,6 +6,9 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.MainServices;
+using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
 using System;
 using System.Collections.Generic;
@@ -19,6 +22,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
     public class OverviewDetailPopupVM : ViewModelBase
     {
         IMainServices mainServices;
+        IToastNotifService notifService;
+        IUpdateAllIncomingtransaction updaterservice;
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
         ISMLIncomingDetailServices localDbIncomingDetailService;
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
@@ -33,16 +38,20 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
         public AsyncCommand TappedCommand { get; }
+        public AsyncCommand FinalizeCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get;  }
         public OverviewDetailPopupVM()
         {
             mainServices = DependencyService.Get<IMainServices>();
+            notifService = DependencyService.Get<IToastNotifService>();
+            updaterservice = DependencyService.Get<IUpdateAllIncomingtransaction>();
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
             TappedCommand = new AsyncCommand(Tapped);
+            FinalizeCommand = new AsyncCommand(Finalize);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
@@ -101,17 +110,57 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
         private async Task Finalize()
         {
-            var userId = Preferences.Get("PrefUserId", 0);
-            IncomingHeaderModel e = new IncomingHeaderModel
+            try
             {
-                FinalUserId = userId,
-                PONumber = PONumber,
-            };
-            await localDbIncomingHeaderService.Update("PONumber",e);
-            foreach(var item in IncomingDetailList)
-            {
-                await localDbIncomingDetailService // to be continue;
+                await notifService.LoadingProcess("Begin", "Processing...");
+                var userId = Preferences.Get("PrefUserId", 0);
+                IncomingHeaderModel e = new IncomingHeaderModel
+                {
+                    FinalUserId = userId,
+                    INCstatus = "Finalized",
+                    PONumber = PONumber,
+
+                };
+                await localDbIncomingHeaderService.Update("PONumber", e);
+                foreach (var item in IncomingDetailList)
+                {
+                    item.TimesUpdated += 1;
+                    item.UserId = userId;
+                    await localDbIncomingDetailService.Update("Common", item);
+
+                    string[] s = { item.ItemCode };
+                    int[] i = { item.INCDetId };
+
+                    var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                    foreach (var paritem in retpardet)
+                    {
+                        paritem.TimesUpdated += 1;
+                        paritem.UserId = userId;
+                        paritem.Status = "Finalized";
+                        paritem.DateFinalized = DateTime.Now;
+                        await localDbIncomingParDetailService.Update("RefId", paritem);
+                    }
+                }
+                Preferences.Remove("PrefPONumber");
             }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", "Something went wrong");
+            }
+            try
+            {
+                await updaterservice.UpdateAllIncomingTrans();
+                await notifService.StaticToastNotif("Success", "Item sync successfully.");
+            }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+            }
+            await PopupNavigation.Instance.PopAllAsync(true);
+            await notifService.LoadingProcess("End", "");
+            var route = $"..";
+            await Shell.Current.GoToAsync(route);
+            
         }
     }
 }

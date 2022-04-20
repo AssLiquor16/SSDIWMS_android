@@ -25,7 +25,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -37,7 +36,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetItemCodePO":
                     using (client = new HttpClient())
                     {
-                        client.Timeout = TimeSpan.FromSeconds(40);
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
@@ -65,17 +63,20 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
             switch (type)
             {
                 case "ReturnInsertedItem":
-                    client.BaseAddress = new Uri(BaseUrl);
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.MaxResponseContentBufferSize = 10000000;
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var json = JsonConvert.SerializeObject(item);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var r = await client.PostAsync("api/IncomingPartialDetails/", content);
-                    var ret = r.Content.ReadAsStringAsync().Result;
-                    var res = r.StatusCode.ToString();
-                    var n = JsonConvert.DeserializeObject<IncomingPartialDetailModel>(ret);
-                    return n;
+                    using (client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var json = JsonConvert.SerializeObject(item);
+                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+                        var r = await client.PostAsync("api/IncomingPartialDetails/", content);
+                        var ret = r.Content.ReadAsStringAsync().Result;
+                        var res = r.StatusCode.ToString();
+                        var n = JsonConvert.DeserializeObject<IncomingPartialDetailModel>(ret);
+                        return n;
+                    }
                 default: return null;
             }
         }

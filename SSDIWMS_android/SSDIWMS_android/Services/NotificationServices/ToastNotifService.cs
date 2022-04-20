@@ -61,5 +61,21 @@ namespace SSDIWMS_android.Services.NotificationServices
             UserDialogs.Instance.Toast(toastcon);
             await Task.CompletedTask;
         }
+
+        public Task LoadingProcess(string type, string msg)
+        {
+            var load = UserDialogs.Instance.Loading(msg);
+            switch (type)
+            {
+                case "Begin":
+                    
+                    load.Show();
+                    break;
+                case "End":
+                    load.Dispose();
+                    break;
+            }
+            return Task.CompletedTask;
+        }
     }
 }
