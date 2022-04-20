@@ -2,6 +2,7 @@
 using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Services.Db.ServerDbServices.Devices;
 using SSDIWMS_android.Services.DeviceServices;
+using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Services.ServerDbServices.Users;
 using SSDIWMS_android.Views.PopUpPages;
@@ -15,6 +16,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
 {
     public class FormPopupVM : ViewModelBase
     {
+        IMainServices mainService;
         IToastNotifService notifService;
         IDroidDeviceServices deviceService;
         IServerUserServices serverDbUserService;
@@ -33,6 +35,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             deviceService = DependencyService.Get<IDroidDeviceServices>();
             serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
             serverDbUserService = DependencyService.Get<IServerUserServices>();
+            mainService = DependencyService.Get<IMainServices>();
 
 
             LoginCommand = new AsyncCommand(Login);
@@ -49,6 +52,8 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         break;
                     case "AdminClearTrans":
                         await ClearTransaction();
+                        break;
+                    case "ClearAll":
                         break;
                     default:
                         break;
@@ -121,9 +126,11 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         public async Task ClearTransaction()
         {
             var con = new LoadingPopupVM();
-            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(""));
+            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
+                await Task.Delay(10000);
+
                 try
                 {
                     string[] uandp = { Username, Password };
@@ -133,6 +140,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         if (returnval.UserStatus == "Active" && returnval.UserRole == "Admin")
                         {
                             // clear transaction
+                            await mainService.ClearTransactionData();
                             await notifService.StaticToastNotif("Success", "Transaction cleared");
                         }
                         else

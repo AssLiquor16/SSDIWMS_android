@@ -12,5 +12,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
         Task<ItemMasterModel> GetModel(string type, string[] stringfilter, int[] intfilter);
         Task Insert(string type, ItemMasterModel item);
         Task Update(string type, ItemMasterModel item);
+        Task Clear();
     }
 }

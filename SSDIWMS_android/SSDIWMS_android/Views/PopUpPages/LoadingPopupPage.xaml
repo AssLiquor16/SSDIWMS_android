@@ -35,7 +35,7 @@
 
                 <StackLayout HorizontalOptions="CenterAndExpand" Grid.Row="0"
                          VerticalOptions="CenterAndExpand">
-                    <Image Source="cog.gif" IsAnimationPlaying="True"/>
+                    <Image Source="{Binding IconName}" IsAnimationPlaying="True"/>
                     <Label Text="{Binding StaticLoadingText}" 
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand"/>

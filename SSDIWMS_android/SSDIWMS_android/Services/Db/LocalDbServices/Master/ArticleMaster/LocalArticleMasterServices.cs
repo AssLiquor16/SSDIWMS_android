@@ -89,5 +89,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
                     break;
             }
         }
+
+        public async Task Clear()
+        {
+            await Init();
+            await db_.DeleteAllAsync<ItemMasterModel>();
+        }
     }
 }

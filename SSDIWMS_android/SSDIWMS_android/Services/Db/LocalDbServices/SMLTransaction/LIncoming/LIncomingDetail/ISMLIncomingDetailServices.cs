@@ -12,5 +12,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
         Task<IncomingDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter);
         Task Insert(string type, IncomingDetailModel item);
         Task Update(string type, IncomingDetailModel item);
+        Task Clear();
     }
 }

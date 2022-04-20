@@ -85,5 +85,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster
                     break;
             }
         }
+
+        public async Task Clear()
+        {
+            await Init();
+            await db_.DeleteAllAsync<PalletMasterModel>();
+        }
     }
 }

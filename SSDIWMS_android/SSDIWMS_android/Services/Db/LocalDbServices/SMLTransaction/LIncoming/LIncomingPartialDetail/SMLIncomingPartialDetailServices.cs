@@ -142,5 +142,10 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
             }
         }
 
+        public async Task Clear()
+        {
+            await Init();
+            await db_.DeleteAllAsync<IncomingPartialDetailModel>();
+        }
     }
 }

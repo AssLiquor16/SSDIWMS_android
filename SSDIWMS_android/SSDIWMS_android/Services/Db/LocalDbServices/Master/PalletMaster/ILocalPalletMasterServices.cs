@@ -12,5 +12,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster
         Task<PalletMasterModel> GetModel(string type, string[] stringfilter, int[] intfilter);
         Task Insert(string type, PalletMasterModel content);
         Task Update(string type, PalletMasterModel content);
+        Task Clear();
     }
 }
