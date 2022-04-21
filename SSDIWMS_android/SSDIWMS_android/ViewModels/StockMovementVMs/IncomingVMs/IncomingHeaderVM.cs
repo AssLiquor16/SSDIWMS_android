@@ -66,7 +66,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                         SelectedHeader = null;
                         break;
                     case "Pick":
-
+                        var route1 = $"{nameof(IncomingDetailListPage)}";
+                        await Shell.Current.GoToAsync(route1);
+                        SelectedHeader = null;
                         break;
                 }
 

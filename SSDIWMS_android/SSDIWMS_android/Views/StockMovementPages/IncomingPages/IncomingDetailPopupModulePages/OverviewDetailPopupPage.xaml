@@ -13,7 +13,7 @@
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-    <Frame HeightRequest="650" 
+    <Frame HeightRequest="630" 
            WidthRequest="350" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
@@ -151,6 +151,7 @@
                         </StackLayout>
                     </Frame>
                     <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
+                    <Button Text="cancel" Command="{Binding CancelCommand}"/>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

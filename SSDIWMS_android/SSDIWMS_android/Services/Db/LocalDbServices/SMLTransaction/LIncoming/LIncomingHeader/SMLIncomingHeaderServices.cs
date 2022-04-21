@@ -100,7 +100,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     n.FinalDate = DateTime.Now;
                     n.INCstatus = data.INCstatus;
                     n.FinalUserId = data.FinalUserId;
-                    n.TimesUpdated = n.TimesUpdated + 1;
+                    n.TimesUpdated += data.TimesUpdated;
                     await db_.UpdateAsync(n);
                     break;
             }

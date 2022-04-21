@@ -31,7 +31,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         ISMSIncomingHeaderServices serverDbIncomingHeaderService;
 
         IncomingDetailModel _selectedItem;
-        string _poNumber,_totalPOItems;
+        string _poNumber, _totalPOItems;
         bool _isrefreshing;
         public IncomingDetailModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
@@ -39,10 +39,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public bool IsRefreshing { get => _isrefreshing; set => SetProperty(ref _isrefreshing, value); }
 
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
+        public AsyncCommand CancelCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand FinalizeCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
-        public AsyncCommand PageRefreshCommand { get;  }
+        public AsyncCommand PageRefreshCommand { get; }
         public OverviewDetailPopupVM()
         {
             mainServices = DependencyService.Get<IMainServices>();
@@ -53,14 +54,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             serverDbIncomingHeaderService = DependencyService.Get<ISMSIncomingHeaderServices>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
+            CancelCommand = new AsyncCommand(Cancel);
             TappedCommand = new AsyncCommand(Tapped);
-            FinalizeCommand = new AsyncCommand(Finalize);
+            FinalizeCommand = new AsyncCommand(SetStatus);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
+        private async Task Cancel()
+        {
+            await PopupNavigation.Instance.PopAsync(true);
+        }
         private async Task Tapped()
         {
-            if(SelectedItem != null)
+            if (SelectedItem != null)
             {
                 await PopupNavigation.Instance.PushAsync(new PartialDetailListPopupPage(SelectedItem));
                 SelectedItem = null;
@@ -98,26 +104,26 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public async Task QueryAll()
         {
             IncomingDetailList.Clear();
-            
+
             var totalpartialcqty = 0;
             var AllItemInThisPo = await localDbIncomingDetailService.GetList("PONumber", null, null);
-            foreach(var item in AllItemInThisPo)
+            foreach (var item in AllItemInThisPo)
             {
                 int[] g = { item.INCDetId };
                 var e = await localDbIncomingParDetailService.GetList("PONumber&INCId", null, g);
-                foreach(var ite in e)
+                foreach (var ite in e)
                 {
                     totalpartialcqty += ite.PartialCQTY;
                 }
-                if(item.Qty > totalpartialcqty)
+                if (item.Qty > totalpartialcqty)
                 {
                     item.QTYStatus = "Short";
                 }
-                else if(item.Qty < totalpartialcqty)
+                else if (item.Qty < totalpartialcqty)
                 {
                     item.QTYStatus = "Over";
                 }
-                else if( item.Qty == totalpartialcqty)
+                else if (item.Qty == totalpartialcqty)
                 {
                     item.QTYStatus = "Ok";
                 }
@@ -129,6 +135,27 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             TotalPOItems = n + " " + "Items";
 
 
+        }
+
+        private async Task SetStatus()
+        {
+            var role = Preferences.Get("PrefUserRole", string.Empty);
+            if (role == "Check")
+            {
+                //finalize
+                await Finalize();
+            }
+            else if(role == "Pick")
+            {
+                //recieved
+                await Recieve();
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Alert", "User role not found.", "Ok");
+                await mainServices.RemovePreferences();
+                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+            }
         }
         private async Task Finalize()
         {
@@ -145,6 +172,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         FinalUserId = userId,
                         INCstatus = "Finalized",
                         PONumber = PONumber,
+                        TimesUpdated = 1
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber", e);
@@ -202,6 +230,58 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             }
 
+        }
+        private async Task Recieve()
+        {
+            bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the item?", "Yes", "No");
+            if(proceed == true)
+            {
+                try
+                {
+                    await notifService.LoadingProcess("Begin", "Processing...");
+                    var userId = Preferences.Get("PrefUserId", 0);
+                    IncomingHeaderModel e = new IncomingHeaderModel
+                    {
+                        FinalUserId = userId,
+                        INCstatus = "Recieved",
+                        PONumber = PONumber,
+                        TimesUpdated = 10
+
+                    };
+                    await localDbIncomingHeaderService.Update("PONumber", e);
+                    foreach (var item in IncomingDetailList)
+                    {
+                        item.TimesUpdated += 10;
+                        item.UserId = userId;
+                        await localDbIncomingDetailService.Update("Common", item);
+
+                        string[] s = { item.ItemCode };
+                        int[] i = { item.INCDetId };
+
+                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                        foreach (var paritem in retpardet)
+                        {
+                            paritem.TimesUpdated += 10;
+                            paritem.UserId = userId;
+                            paritem.Status = "Recieved";
+                            paritem.DateFinalized = DateTime.Now;
+                            await localDbIncomingParDetailService.Update("RefId", paritem);
+                        }
+                    }
+                    Preferences.Remove("PrefPONumber");
+                    Preferences.Remove("PrefBillDoc");
+                    Preferences.Remove("PrefCvan");
+                    Preferences.Remove("PrefShipNo");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Something went wrong");
+                }
+                await PopupNavigation.Instance.PopAllAsync(true);
+                await notifService.LoadingProcess("End", "");
+                var route = $"..";
+                await Shell.Current.GoToAsync(route);
+            }
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

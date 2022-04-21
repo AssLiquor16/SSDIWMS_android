@@ -85,55 +85,6 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
             }
         }
-        public async Task UpdateSpecifiedTrans()
-        {
-            var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
-            var role = Preferences.Get("PrefUserRole", string.Empty);
-            int[] WhIdFilter = { WhId };
-            var method = "";
-            switch (role)
-            {
-                case "Check":
-                    method = "GetOngoing";
-                    break;
-                case "Pick":
-                    method = "GetFinalize";
-                    break;
-                default: method = ""; break;
-            }
-
-            var sIncomingHeader = await serverDbIncomingHeaderService.GetList(method, null, WhIdFilter, null);
-            foreach(var sHeader in sIncomingHeader)
-            {
-                int[] x = { sHeader.INCId };
-                string[] y = { sHeader.PONumber };
-                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
-                if(lHeader == null)
-                {
-                    // insert to local
-                    await localDbIncomingHeaderService.Insert("Common", sHeader);
-
-                }
-                else
-                {
-                    if(lHeader.TimesUpdated > sHeader.TimesUpdated)
-                    {
-                        //update server
-                        await serverDbIncomingHeaderService.Update("Common", lHeader);
-                    }
-                    else if(lHeader.TimesUpdated < sHeader.TimesUpdated)
-                    {
-                        // update local
-                        await localDbIncomingHeaderService.Update("Common", sHeader);
-                    }
-                }
-                string[] sfilter = { sHeader.PONumber };
-                await UpdateDetail(sfilter);
-
-            }
-            
-            
-        }
         public async Task UpdateDetail(string[] poFilter)
         {
 
@@ -198,6 +149,57 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                     await localDbIncomingParDetailService.Update("RefId", retsval);
                 }
             }
+        }
+
+        //reject
+        public async Task UpdateSpecifiedTrans()
+        {
+            var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+            var role = Preferences.Get("PrefUserRole", string.Empty);
+            int[] WhIdFilter = { WhId };
+            var method = "";
+            switch (role)
+            {
+                case "Check":
+                    method = "GetOngoing";
+                    break;
+                case "Pick":
+                    method = "GetFinalize";
+                    break;
+                default: method = ""; break;
+            }
+
+            var sIncomingHeader = await serverDbIncomingHeaderService.GetList(method, null, WhIdFilter, null);
+            foreach (var sHeader in sIncomingHeader)
+            {
+                int[] x = { sHeader.INCId };
+                string[] y = { sHeader.PONumber };
+                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                if (lHeader == null)
+                {
+                    // insert to local
+                    await localDbIncomingHeaderService.Insert("Common", sHeader);
+
+                }
+                else
+                {
+                    if (lHeader.TimesUpdated > sHeader.TimesUpdated)
+                    {
+                        //update server
+                        await serverDbIncomingHeaderService.Update("Common", lHeader);
+                    }
+                    else if (lHeader.TimesUpdated < sHeader.TimesUpdated)
+                    {
+                        // update local
+                        await localDbIncomingHeaderService.Update("Common", sHeader);
+                    }
+                }
+                string[] sfilter = { sHeader.PONumber };
+                await UpdateDetail(sfilter);
+
+            }
+
+
         }
 
     }

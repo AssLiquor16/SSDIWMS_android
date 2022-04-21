@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using System;
@@ -16,12 +17,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         IncomingDetailModel _passedItem;
         public IncomingDetailModel PassedItem { get => _passedItem; set => SetProperty(ref _passedItem, value); }
         public ObservableRangeCollection<IncomingPartialDetailModel> PartialDetailList { get; set; }
+        public AsyncCommand CloseCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public PartialDetailListPopupVM()
         {
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             PartialDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
+            CloseCommand = new AsyncCommand(Close);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
+        }
+        private async Task Close()
+        {
+            await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task PageRefresh()
         {

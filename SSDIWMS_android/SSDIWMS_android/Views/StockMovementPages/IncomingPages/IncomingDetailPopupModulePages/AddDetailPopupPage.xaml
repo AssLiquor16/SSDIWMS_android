@@ -14,7 +14,7 @@
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
 
-    <Frame HeightRequest="280" 
+    <Frame HeightRequest="500" 
            WidthRequest="300" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
@@ -39,60 +39,64 @@
                                TextColor="Red"/>
                     </StackLayout>
                 <StackLayout IsVisible="{Binding SuccessView}" IsEnabled="{Binding SuccessView}" Padding="10,5">
-                    <Frame CornerRadius="0" Padding="10,0">
-                        <StackLayout>
-                            <StackLayout>
-                                <Label Text="{Binding PONumber}" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="Subtitle"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50*"/>
-                                        <ColumnDefinition Width="2*"/>
-                                        <ColumnDefinition Width="160*"/>
-                                        <ColumnDefinition Width="40*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="10*"/>
-                                        <RowDefinition Height="10*"/>
-                                        <RowDefinition Height="13*"/>
-                                        <RowDefinition Height="15*"/>
-                                        <RowDefinition Height="15*"/>
-                                    </Grid.RowDefinitions>
+                    <StackLayout VerticalOptions="CenterAndExpand">
 
-                                    <Label Text="Pallet"                    Grid.Row="0" Grid.Column="0" />
-                                    <Label Text=":"                         Grid.Row="0" Grid.Column="1" />
-                                    <Label Text="{Binding PalletCode}"      Grid.Row="0" Grid.Column="2" />
-                                    <Label Text="Edit" 
-                                   TextDecorations="Underline" 
-                                   TextColor="Blue"  Grid.Row="0" Grid.Column="3" >
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding NavPalletListCommand}"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-
-                                    <Label Text="Item Code"                 Grid.Row="1" Grid.Column="0" />
-                                    <Label Text=":"                         Grid.Row="1" Grid.Column="1" />
-                                    <Label Text="{Binding ItemCode}"        Grid.Row="1" Grid.Column="2" />
-
-                                    <Label Text="Item Desc"                 Grid.Row="2" Grid.Column="0" />
-                                    <Label Text=":"                         Grid.Row="2" Grid.Column="1" />
-                                    <Label Text="{Binding ItemDesc}"        Grid.Row="2" Grid.Column="2" />
-
-                                    <Label Text="BB Date"                   Grid.Row="3" Grid.Column="0" VerticalOptions="CenterAndExpand"/>
-                                    <Label Text=":"                         Grid.Row="3" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
-                                    <DatePicker Date="{Binding ExpiryDate}" Grid.Row="3" Grid.Column="2" VerticalOptions="StartAndExpand"/>
-
-                                    <Label Text="QTY"                       Grid.Row="4" Grid.Column="0" VerticalOptions="CenterAndExpand"/>
-                                    <Label Text=":"                         Grid.Row="4" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
-                                    <Entry Text="{Binding PartialCQTY}"     Grid.Row="4" Grid.Column="2" VerticalOptions="StartAndExpand"/>
-
-                                </Grid>
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="PO Number:" TextColor="DarkGray"/>
+                                <Label Text="{Binding PONumber}" FontSize="Subtitle" FontAttributes="Bold"/>
                             </StackLayout>
-                            <StackLayout>
-                                <Button Text="Add" Command="{Binding AddDetailCommand}" Margin="10"/>
+                        </Frame>
+
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="Pallet Code:" TextColor="DarkGray"/>
+                                <Label FontSize="Subtitle">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding PalletCode}"/>
+                                            <Span Text=" "/>
+                                            <Span Text="Edit" FontAttributes="Bold" TextColor="Blue" TextDecorations="Underline"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding NavPalletListCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </StackLayout>
-                        </StackLayout>
-                    </Frame>
-                    
+                        </Frame>
+
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="Item Code:" TextColor="DarkGray"/>
+                                <Label Text="{Binding ItemCode}" FontSize="Subtitle" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="Item Description:" TextColor="DarkGray"/>
+                                <Label Text="{Binding ItemDesc}" FontSize="Subtitle" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="Expiry Date:" TextColor="DarkGray"/>
+                                <DatePicker Date="{Binding ExpiryDate}" FontSize="Subtitle" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Label Text="QTY:" TextColor="DarkGray"/>
+                                <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Frame>
+
+                        <Button Text="Insert" CornerRadius="5" Command="{Binding AddDetailCommand}"/>
+                        <Button Text="Cancel" CornerRadius="5" Command="{Binding CancelCommand}"/>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

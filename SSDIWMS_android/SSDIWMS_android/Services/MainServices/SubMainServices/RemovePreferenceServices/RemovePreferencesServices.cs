@@ -22,6 +22,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreference
             Preferences.Remove("PrefBillDoc");
             Preferences.Remove("PrefCvan");
             Preferences.Remove("PrefShipNo");
+            Preferences.Remove("PrefShipLine");
             Preferences.Set("PrefLoggedIn", false);
             await Task.CompletedTask;
         }

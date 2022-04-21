@@ -35,12 +35,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
         public AsyncCommand NavPalletListCommand { get; }
         public AsyncCommand EditDetailCommand { get; }
+        public AsyncCommand CancelCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public EditDetailPopupVM()
         {
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             notifyService = DependencyService.Get<IToastNotifService>();
+            CancelCommand = new AsyncCommand(Cancel);
             NavPalletListCommand = new AsyncCommand(NavPalletList);
             EditDetailCommand = new AsyncCommand(EditDetail);
 
@@ -49,6 +51,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await Task.Delay(1);
                 PalletCode = e;
             });
+        }
+        private async Task Cancel()
+        {
+            await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task NavPalletList()
         {

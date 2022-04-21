@@ -40,6 +40,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public ObservableRangeCollection<PalletMasterModel> PalletList { get; set; }
         public ObservableRangeCollection<PalletMasterModel> FilteredPalletList { get; set; }
         public AsyncCommand UpdatePalletNavCommand { get; }
+        public AsyncCommand CancelCommand { get; }
         public AsyncCommand TappedCommand { get; set; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -49,6 +50,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             PalletList = new ObservableRangeCollection<PalletMasterModel>();
             FilteredPalletList = new ObservableRangeCollection<PalletMasterModel>();
             UpdatePalletNavCommand = new AsyncCommand(UpdatePalletNav);
+            CancelCommand = new AsyncCommand(Close);
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
@@ -99,7 +101,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             PalletList.AddRange(e);
             FilteredPalletList.AddRange(PalletList);
         }
-
+        private async Task Close()
+        {
+            await PopupNavigation.Instance.PopAsync(true);
+        }
         private void SearchItem()
         {
             SearchString = SearchString.ToUpperInvariant();

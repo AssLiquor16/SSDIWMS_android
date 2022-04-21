@@ -2,6 +2,7 @@
 <popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                   xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:fontAwsome="clr-namespace:FontAwesome"
                   xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs.IncomingDetailSubPopupModuleVMs" 
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                   
@@ -14,9 +15,9 @@ x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPo
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-    
-    <Frame HeightRequest="400" 
-           WidthRequest="320" 
+
+    <Frame HeightRequest="500" 
+           WidthRequest="300" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
            BackgroundColor="White"
@@ -29,7 +30,12 @@ x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPo
                          VerticalOptions="FillAndExpand">
 
                 <StackLayout>
-                    <Entry Text="{Binding SearchString}" Placeholder="Search pallet code"/>
+                    <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
+                        <StackLayout BackgroundColor="Transparent" Orientation="Horizontal">
+                            <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search pallet" WidthRequest="220"/>
+                            <Button FontFamily="FAS" Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" BackgroundColor="Transparent" TextColor="Black" WidthRequest="50" Margin="0"/>
+                        </StackLayout>
+                    </Frame>
                 </StackLayout>
                 <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
@@ -108,6 +114,7 @@ x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPo
                     </CollectionView>
 
                 </RefreshView>
+                <Button Text ="Cancel" Command="{Binding CancelCommand}" CornerRadius="5" Margin="5"/>
             </StackLayout>
         </StackLayout>
     </Frame>

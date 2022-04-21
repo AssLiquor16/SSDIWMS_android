@@ -8,6 +8,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#c4761d</Color>
+            <Color x:Key="MySecondary">#f2f2f0</Color>
             <Color x:Key="TextColor">#343536</Color>
             <Color x:Key="HeaderFooterTextCollor">#b56a1f</Color>
             <Color x:Key="SecondaryTextColor">#a6a5a4</Color>

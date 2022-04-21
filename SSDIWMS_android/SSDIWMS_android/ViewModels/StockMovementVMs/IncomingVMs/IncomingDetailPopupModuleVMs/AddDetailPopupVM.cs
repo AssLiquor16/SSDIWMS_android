@@ -48,6 +48,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
 
         public AsyncCommand NavPalletListCommand { get; }
+        public AsyncCommand CancelCommand { get; }
         public AsyncCommand AddDetailCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public AddDetailPopupVM()
@@ -61,6 +62,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             ItemMasterList = new ObservableRangeCollection<ItemMasterModel>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
 
+            CancelCommand = new AsyncCommand(Cancel);
             NavPalletListCommand = new AsyncCommand(NavPalletList);
             AddDetailCommand = new AsyncCommand(AddDetail);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
@@ -70,6 +72,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await Task.Delay(1);
                 PalletCode = e;
             });
+        }
+        private async Task Cancel()
+        {
+            await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task NavPalletList()
         {
