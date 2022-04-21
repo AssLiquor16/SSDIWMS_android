@@ -7,6 +7,6 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
 {
     public interface IISMSyncerServices
     {
-        Task ISMLSync();
+        Task ISMLSyncer();
     }
 }

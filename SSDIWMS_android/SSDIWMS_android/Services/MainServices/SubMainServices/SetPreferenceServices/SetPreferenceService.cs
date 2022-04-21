@@ -11,14 +11,22 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceSer
 {
     public class SetPreferenceService : ISetPreferenceService
     {
-        public Task OnStartSetPreference()
+        public async Task OnStartSetPreference()
         {
             Preferences.Set("PrefServerAddress", "http://192.168.1.217:80/");
             Preferences.Set("PrefLocalAddress", "SSDIWMSLoc.db");
             Preferences.Set("PrefDateTimeFormat","dd MMM yyy hh:mm");
             Preferences.Set("PrefISMSyncing", false);
             Preferences.Set("PrefDateTimeTick", 20);
-            return Task.CompletedTask;
+            var e = await SetRandomVal();
+            Preferences.Set("PrefTimerLongRandomVal",e);
+        }
+        private async Task<int> SetRandomVal()
+        {
+            await Task.Delay(1);
+            Random min = new Random();
+            int rmin = min.Next(100, 150);
+            return rmin;
         }
     }
 }

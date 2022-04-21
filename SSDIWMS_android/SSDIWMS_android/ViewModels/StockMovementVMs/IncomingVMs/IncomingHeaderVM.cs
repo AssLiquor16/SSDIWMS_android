@@ -53,10 +53,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             if(SelectedHeader != null)
             {
                 var filter = Preferences.Get("PrefUserRole", "");
+                Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
+                Preferences.Set("PrefBillDoc", SelectedHeader.BillDoc);
+                Preferences.Set("PrefCvan", SelectedHeader.CVAN);
+                Preferences.Set("PrefShipNo", SelectedHeader.ShipNo);
+                Preferences.Set("PrefShipLine", SelectedHeader.ShipLine);
                 switch (filter)
                 {
                     case "Check":
-                        Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
                         var route = $"{nameof(IncomingDetailListPage)}";
                         await Shell.Current.GoToAsync(route);
                         SelectedHeader = null;

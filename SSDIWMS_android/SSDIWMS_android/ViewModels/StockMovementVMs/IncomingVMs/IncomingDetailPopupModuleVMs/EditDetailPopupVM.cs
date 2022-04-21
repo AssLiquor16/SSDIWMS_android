@@ -21,6 +21,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
         IToastNotifService notifyService;
         IncomingPartialDetailModel _e;
+        DateTime _expiryDate;
         string _poNumber, _itemCode, _itemDesc, _palletCode, _amount;
         int _partialCQTY;
         public IncomingPartialDetailModel E { get => _e; set => SetProperty(ref _e, value); }
@@ -29,6 +30,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public string ItemDesc { get => _itemDesc; set => SetProperty(ref _itemDesc, value); }
         public string Amount { get => _amount; set => SetProperty(ref _amount, value); }
         public string PalletCode { get => _palletCode; set => SetProperty(ref _palletCode, value); }
+        public DateTime ExpiryDate { get => _expiryDate; set => SetProperty(ref _expiryDate, value); }
         public int PartialCQTY { get => _partialCQTY; set => SetProperty(ref _partialCQTY, value); }
 
         public AsyncCommand NavPalletListCommand { get; }
@@ -61,6 +63,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     E.TimesUpdated++;
                     E.PalletCode = PalletCode;
                     E.PartialCQTY = PartialCQTY;
+                    E.ExpiryDate = ExpiryDate;
                     await localDbIncomingParDetailService.Update("Common", E);
                     await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                     MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");

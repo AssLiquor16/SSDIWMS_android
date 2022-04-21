@@ -24,6 +24,7 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailP
             a.ItemDesc = e.ItemDesc;
             a.PalletCode = e.PalletCode;
             a.PartialCQTY = e.PartialCQTY;
+            a.ExpiryDate = e.ExpiryDate;
         }
     }
 }

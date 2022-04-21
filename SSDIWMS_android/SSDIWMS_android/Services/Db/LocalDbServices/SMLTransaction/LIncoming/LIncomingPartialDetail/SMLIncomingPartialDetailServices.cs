@@ -111,6 +111,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                         TimesUpdated = item.TimesUpdated,
                         POHeaderNumber = item.POHeaderNumber,
                         Status = item.Status,
+                        ExpiryDate = item.ExpiryDate,
                         DateFinalized = DateTime.MinValue
                     };
                     await db_.InsertAsync(initialData);

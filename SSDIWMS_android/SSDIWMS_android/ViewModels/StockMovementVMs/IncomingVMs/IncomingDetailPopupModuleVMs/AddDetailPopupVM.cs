@@ -27,6 +27,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         IMainServices mainService;
         IToastNotifService notifyService;
         IncomingDetailModel _e;
+        DateTime _expiryDate = DateTime.Now.Date;
         string _scannedCode,_poNumber,_itemCode,_itemDesc,_palletCode,_amount, _errorText;
         int _partialCQTY;
         bool _errorView,_succesView;
@@ -37,6 +38,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public string ItemDesc { get => _itemDesc; set => SetProperty(ref _itemDesc, value); }
         public string Amount { get => _amount; set => SetProperty(ref _amount, value); }
         public string PalletCode { get => _palletCode; set => SetProperty(ref _palletCode, value); }
+        public DateTime ExpiryDate { get => _expiryDate; set => SetProperty(ref _expiryDate, value); }
         public string ErrorText { get => _errorText; set => SetProperty(ref _errorText, value); }
         public int PartialCQTY { get => _partialCQTY; set => SetProperty(ref _partialCQTY, value); }
         public bool ErrorView { get => _errorView; set => SetProperty(ref _errorView, value); }
@@ -90,6 +92,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     bool isProceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to add the item?", "Yes", "No");
                     if(isProceed == true)
                     {
+                        ExpiryDate = ExpiryDate.Date;
                         var data = new IncomingPartialDetailModel
                         {
                             INCDetId = E.INCDetId,
@@ -98,6 +101,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             ItemDesc = E.ItemDesc,
                             PartialCQTY = PartialCQTY,
                             PalletCode = PalletCode,
+                            ExpiryDate = ExpiryDate,
                             TimesUpdated = 0,
                             POHeaderNumber = E.POHeaderNumber,
                             Status = "Pending",

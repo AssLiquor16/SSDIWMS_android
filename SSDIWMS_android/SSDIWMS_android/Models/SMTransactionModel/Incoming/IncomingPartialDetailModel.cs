@@ -23,5 +23,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public string POHeaderNumber { get; set; }
         public string Status { get; set; }
         public DateTime DateFinalized { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
 }

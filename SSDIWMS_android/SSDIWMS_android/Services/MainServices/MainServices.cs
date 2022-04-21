@@ -4,6 +4,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.MainServices;
+using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.StockMovementIncoming;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.User;
 using SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalculatorServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreferenceServices;
@@ -22,6 +23,7 @@ namespace SSDIWMS_android.Services.MainServices
     {
         ISetPreferenceService onstartPrefService;
         IRemovePreferenceServices removePrefService;
+        IISMSyncerServices incomingstocksyncer;
         IUserCheckerServices userCheckerService;
         IPercentageCalculatorServices percentageCalculatorServices;
 
@@ -38,8 +40,10 @@ namespace SSDIWMS_android.Services.MainServices
         {
             onstartPrefService = DependencyService.Get<ISetPreferenceService>();
             removePrefService = DependencyService.Get<IRemovePreferenceServices>();
+            incomingstocksyncer = DependencyService.Get<IISMSyncerServices>();
             userCheckerService = DependencyService.Get<IUserCheckerServices>();
             percentageCalculatorServices = DependencyService.Get<IPercentageCalculatorServices>();
+
 
             //masterdata
             artMasterService = DependencyService.Get<ILocalArticleMasterServices>();
@@ -54,6 +58,10 @@ namespace SSDIWMS_android.Services.MainServices
         public async Task CheckUser()
         {
             await userCheckerService.CheckLoginStatus();
+        }
+        public async Task SyncIncomingTransaction()
+        {
+            await incomingstocksyncer.ISMLSyncer();
         }
         public async Task OnstartSetDefaulPreferences()
         {

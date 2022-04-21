@@ -13,8 +13,8 @@
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-    <Frame HeightRequest="500" 
-           WidthRequest="320" 
+    <Frame HeightRequest="650" 
+           WidthRequest="350" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
            BackgroundColor="White"
@@ -25,18 +25,56 @@
                      VerticalOptions="FillAndExpand">
             <StackLayout HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
-                <StackLayout Padding="5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                    <Frame>
+                <StackLayout Padding="10" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <Frame Padding="10,5">
                         <StackLayout>
-                            <StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="PO    :"/>
-                                    <Label Text="{Binding PONumber}"/>
+                            <StackLayout Orientation="Vertical">
+                                <StackLayout HorizontalOptions="CenterAndExpand">
+                                    <Label Text="{Binding PONumber}" FontAttributes="Bold"/>
                                 </StackLayout>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="Total:"/>
-                                    <Label Text="{Binding TotalPOItems}"/>
-                                </StackLayout>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="38"/>
+                                        <ColumnDefinition Width="2"/>
+                                        <ColumnDefinition Width="140"/>
+                                        <ColumnDefinition Width="35"/>
+                                        <ColumnDefinition Width="2"/>
+                                        <ColumnDefinition Width="140"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="10"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!--row 0-->
+                                    <Label Text="{Binding UserRole}"        Grid.Row="0" Grid.Column="0"/>
+                                    <Label Text=":"                         Grid.Row="0" Grid.Column="1"/>
+                                    <Label Text="{Binding UserFullName}"    Grid.Row="0" Grid.Column="2"/>
+
+                                    <Label Text="Total"                     Grid.Row="0" Grid.Column="3"/>
+                                    <Label Text=":"                         Grid.Row="0" Grid.Column="4"/>
+                                    <Label Text="{Binding TotalPOItems}"    Grid.Row="0" Grid.Column="5"/>
+
+                                    <!--row 1-->
+                                    <Label Text="CVan"             Grid.Row="1" Grid.Column="0"/>
+                                    <Label Text=":"                         Grid.Row="1" Grid.Column="1"/>
+                                    <Label Text="{Binding CVAN}"            Grid.Row="1" Grid.Column="2"/>
+
+                                    <Label Text="Bill doc"                  Grid.Row="1" Grid.Column="3"/>
+                                    <Label Text=":"                         Grid.Row="1" Grid.Column="4"/>
+                                    <Label Text="{Binding BillDoc}"         Grid.Row="1" Grid.Column="5"/>
+
+                                    <!--row 2-->
+                                    <Label Text="Line"             Grid.Row="2" Grid.Column="0"/>
+                                    <Label Text=":"                         Grid.Row="2" Grid.Column="1"/>
+                                    <Label Text="{Binding ShippingLine}"    Grid.Row="2" Grid.Column="2"/>
+
+                                    <Label Text="Ship #"                    Grid.Row="2" Grid.Column="3"/>
+                                    <Label Text=":"                         Grid.Row="2" Grid.Column="4"/>
+                                    <Label Text="{Binding ShipNo}"          Grid.Row="2" Grid.Column="5"/>
+
+                                </Grid>
                                 <BoxView/>
                             </StackLayout>
                             <RefreshView IsRefreshing="{Binding IsRefreshing}" 
@@ -67,12 +105,15 @@
                                         <Grid Padding="0" VerticalOptions="CenterAndExpand">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="90*"/>
-                                                <ColumnDefinition Width="160*"/>
+                                                <ColumnDefinition Width="120*"/>
+                                                <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Text="Item Code" FontSize="Subtitle" Grid.Column="0" 
+                                            <Label Text="Item Code" FontAttributes="Bold" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                            <Label Text="Item Desc" FontSize="Subtitle" Grid.Column="1"
+                                            <Label Text="Item Desc" FontAttributes="Bold" Grid.Column="1"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            <Label Text="Status" FontAttributes="Bold" Grid.Column="2"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
                                         </Grid>
@@ -90,17 +131,14 @@
 
                                                 <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="90*"/>
-                                                        <ColumnDefinition Width="160*"/>
+                                                        <ColumnDefinition Width="70*"/>
+                                                        <ColumnDefinition Width="120*"/>
+                                                        <ColumnDefinition Width="50*"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <Label Text="{Binding ItemCode}" Grid.Column="0"/>
-                                                    <StackLayout Grid.Column="1">
-                                                        <Label Text="{Binding ItemDesc}"/>
-                                                        <StackLayout Orientation="Horizontal">
-                                                            <Label Text="{Binding QTYStatus}" FontSize="Micro"/>
-                                                        </StackLayout>
-                                                    </StackLayout>
+                                                    <Label Text="{Binding ItemDesc}" Grid.Column="1"/>
+                                                    <Label Text="{Binding QTYStatus}" Grid.Column="2"/>
 
                                                 </Grid>
 
@@ -110,9 +148,9 @@
                                 </CollectionView>
 
                             </RefreshView>
-                            <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
                         </StackLayout>
                     </Frame>
+                    <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

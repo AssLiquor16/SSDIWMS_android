@@ -63,6 +63,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             if(SelectedItem != null)
             {
                 await PopupNavigation.Instance.PushAsync(new PartialDetailListPopupPage(SelectedItem));
+                SelectedItem = null;
             }
         }
         private async Task ColViewRefresh()
@@ -73,11 +74,31 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         }
         public async Task PageRefresh()
         {
+            var userRole = Preferences.Get("PrefUserRole", string.Empty);
+            switch (userRole)
+            {
+                case "Check":
+                    UserRole = "Checker";
+                    break;
+                case "Pick":
+                    UserRole = "Picker";
+                    break;
+                default:
+                    UserRole = "Unassigned";
+                    break;
+            }
+            BillDoc = Preferences.Get("PrefBillDoc", string.Empty);
+            CVAN = Preferences.Get("PrefCvan", string.Empty);
+            ShipNo = Preferences.Get("PrefShipNo", string.Empty);
+            ShippingLine = Preferences.Get("PrefShipLine", string.Empty);
+            UserFullName = Preferences.Get("PrefUserFullname", string.Empty);
+            await LiveTimer();
             await QueryAll();
         }
         public async Task QueryAll()
         {
             IncomingDetailList.Clear();
+            
             var totalpartialcqty = 0;
             var AllItemInThisPo = await localDbIncomingDetailService.GetList("PONumber", null, null);
             foreach(var item in AllItemInThisPo)
@@ -109,8 +130,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
 
         }
-
-
         private async Task Finalize()
         {
             bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the item?", "Yes", "No");
@@ -149,6 +168,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         }
                     }
                     Preferences.Remove("PrefPONumber");
+                    Preferences.Remove("PrefBillDoc");
+                    Preferences.Remove("PrefCvan");
+                    Preferences.Remove("PrefShipNo");
                 }
                 catch
                 {
@@ -156,13 +178,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 }
                 try
                 {
-                    string[] strinfilter = { PONumber };
-                    var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
-                    if(poStatus == "Ongoing")
+                    bool busy = Preferences.Get("PrefISMSyncing", false);
+                    if (busy == false)
                     {
-                        await updaterservice.UpdateAllIncomingTrans();
-                        await notifService.StaticToastNotif("Success", "Item sync successfully.");
+                        string[] strinfilter = { PONumber };
+                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
+                        if (poStatus == "Ongoing")
+                        {
+                            await updaterservice.UpdateAllIncomingTrans();
+                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
+                        }
                     }
+                    
                 }
                 catch
                 {
@@ -175,6 +202,31 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             }
 
+        }
+
+        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
+        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt");
+        string _userFullname, _userRole,_billDOc,_cVan,_shipNo, _shipline;
+        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
+        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
+        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
+        public string UserRole { get => _userRole; set => SetProperty(ref _userRole, value); }
+        public string BillDoc { get => _billDOc; set => SetProperty(ref _billDOc, value); }
+        public string CVAN { get => _cVan; set => SetProperty(ref _cVan, value); }
+        public string ShipNo { get => _shipNo; set => SetProperty(ref _shipNo, value); }
+        public string ShippingLine { get => _shipline; set => SetProperty(ref _shipline, value); }
+        private async Task LiveTimer()
+        {
+            await Task.Delay(1);
+            Device.StartTimer(TimeSpan.FromSeconds(_datetimeTick), () => {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(1);
+                    LiveDate = DateTime.Now.ToString(_datetimeFormat);
+                });
+                return true; //use this to run continuously // false if you want to stop 
+
+            });
         }
     }
 }

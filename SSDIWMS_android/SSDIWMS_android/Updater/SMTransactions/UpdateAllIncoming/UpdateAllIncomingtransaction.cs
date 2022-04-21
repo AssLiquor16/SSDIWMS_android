@@ -1,4 +1,6 @@
-﻿using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
+﻿using MvvmHelpers;
+using SSDIWMS_android.Models.SMTransactionModel.Incoming;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingDetail;
@@ -27,6 +29,8 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
         ISMSIncomingPartialDetailServices serverDbIncomingParDetailService;
 
+        public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
+
         public UpdateAllIncomingtransaction()
         {
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
@@ -37,9 +41,51 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             serverDbIncomingParDetailService = DependencyService.Get<ISMSIncomingPartialDetailServices>();
-        }
 
+            IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
+        }
         public async Task UpdateAllIncomingTrans()
+        {
+            IncomingHeaderList.Clear();
+            var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+            var role = Preferences.Get("PrefUserRole", string.Empty);
+            int[] WhIdFilter = { WhId };
+            var OngoingMethod = "GetOngoing";
+            var FinalizedMethod = "GetFinalize";
+            var sIncomingOngoingHeader = await serverDbIncomingHeaderService.GetList(OngoingMethod, null, WhIdFilter, null);
+            var sIncomingFinalizeHeader = await serverDbIncomingHeaderService.GetList(FinalizedMethod, null, WhIdFilter, null);
+            IncomingHeaderList.AddRange(sIncomingOngoingHeader);
+            IncomingHeaderList.AddRange(sIncomingFinalizeHeader);
+            foreach (var sHeader in IncomingHeaderList)
+            {
+                int[] x = { sHeader.INCId };
+                string[] y = { sHeader.PONumber };
+                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                if (lHeader == null)
+                {
+                    // insert to local
+                    await localDbIncomingHeaderService.Insert("Common", sHeader);
+
+                }
+                else
+                {
+                    if (lHeader.TimesUpdated > sHeader.TimesUpdated)
+                    {
+                        //update server
+                        await serverDbIncomingHeaderService.Update("Common", lHeader);
+                    }
+                    else if (lHeader.TimesUpdated < sHeader.TimesUpdated)
+                    {
+                        // update local
+                        await localDbIncomingHeaderService.Update("Common", sHeader);
+                    }
+                }
+                string[] sfilter = { sHeader.PONumber };
+                await UpdateDetail(sfilter);
+
+            }
+        }
+        public async Task UpdateSpecifiedTrans()
         {
             var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
             var role = Preferences.Get("PrefUserRole", string.Empty);

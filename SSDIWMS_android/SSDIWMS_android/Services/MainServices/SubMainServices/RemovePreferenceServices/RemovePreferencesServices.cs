@@ -19,6 +19,9 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreference
             Preferences.Remove("PrefUserRole");
             Preferences.Remove("PrefUserWarehouseAssignedId");
             Preferences.Remove("PrefPONumber");
+            Preferences.Remove("PrefBillDoc");
+            Preferences.Remove("PrefCvan");
+            Preferences.Remove("PrefShipNo");
             Preferences.Set("PrefLoggedIn", false);
             await Task.CompletedTask;
         }
