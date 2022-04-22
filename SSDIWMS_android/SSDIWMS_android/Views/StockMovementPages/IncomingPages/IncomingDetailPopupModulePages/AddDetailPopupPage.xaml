@@ -90,7 +90,7 @@
                         <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
                             <StackLayout BackgroundColor="Transparent">
                                 <Label Text="QTY:" TextColor="DarkGray"/>
-                                <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold"/>
+                                <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold" Keyboard="Numeric"/>
                             </StackLayout>
                         </Frame>
 

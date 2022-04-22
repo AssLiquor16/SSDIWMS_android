@@ -23,20 +23,29 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
+            
             scanPage = new ZXingScannerPage();
             var con = BindingContext as IncomingDetailListVM;
-            scanPage.OnScanResult += (result) =>
+            if(con.Role == "Check")
             {
-                scanPage.IsScanning = false;
-                Device.BeginInvokeOnMainThread(async () =>
+                scanPage.OnScanResult += (result) =>
                 {
-                    await Navigation.PopAsync();
-                    await con.AddPopupNav(result.Text);
+                    scanPage.IsScanning = false;
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Navigation.PopAsync();
+                        await con.AddPopupNav(result.Text);
 
-                });
+                    });
 
-            };
-            await Navigation.PushAsync(scanPage);
+                };
+                await Navigation.PushAsync(scanPage);
+            }
+            else
+            {
+
+            }
+            
         }
     }
 }

@@ -17,7 +17,7 @@
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <StackLayout Padding="15">
+                <StackLayout Padding="15" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
                     <StackLayout Orientation="Horizontal">
                         <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
@@ -32,8 +32,10 @@
                         <Label>
                             Sonic Sales And Distribution Inc is an enterprise located in Philippines, with the main office in Davao City. It operates in the Merchant Wholesalers, Durable Goods industry.
                         </Label>
+
+                        <Button Text="Incoming stocks" Command="{Binding IncomingNavigationCommand}" VerticalOptions="EndAndExpand" IsEnabled="{Binding ProceedEnable}"/>
+                        <Button Text="Bad order stocks" Command="{Binding NavigationCommand}" VerticalOptions="EndAndExpand" IsEnabled="{Binding ProceedEnable}"/>
                     </StackLayout>
-                    <Button Text="Start" Command="{Binding NavigationCommand}" VerticalOptions="EndAndExpand" IsEnabled="{Binding ProceedEnable}"/>
                 </StackLayout>
             </Frame>
         </StackLayout>

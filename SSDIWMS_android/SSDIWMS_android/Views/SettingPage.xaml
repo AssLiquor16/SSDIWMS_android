@@ -27,6 +27,40 @@
                         <Label Text="Setting" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
 
                         <StackLayout>
+                            <StackLayout Orientation="Horizontal" IsVisible="{Binding AdminViewVisible}"
+                                         Padding="0,0,10,0"
+                                         BackgroundColor="{StaticResource BackgroundColor}"
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand" >
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.At}" 
+                                       VerticalOptions="CenterAndExpand" 
+                                       FontSize="Subtitle"
+                                       HorizontalOptions="Start"/>
+                                <Entry Text="{Binding IPVal}" 
+                                       FontSize="Subtitle"
+                                       WidthRequest="200"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="StartAndExpand"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Save}" 
+                                                FontFamily="FAS" Command="{Binding SaveIpAddressCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="35" 
+                                                HeightRequest="35"/>
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Undo}" 
+                                                FontFamily="FAS" Command="{Binding ReturnDefaultIpCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="35" 
+                                                HeightRequest="35"/>
+                                </StackLayout>
+
+                            </StackLayout>
+                            
                             <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 

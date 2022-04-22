@@ -103,6 +103,14 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     n.TimesUpdated += data.TimesUpdated;
                     await db_.UpdateAsync(n);
                     break;
+                case "PONumber1":
+                    var o = await db_.Table<IncomingHeaderModel>().Where(x => x.PONumber == data.PONumber).FirstOrDefaultAsync();
+                    o.RecDate = DateTime.Now;
+                    o.INCstatus = data.INCstatus;
+                    o.RecUserId = data.RecUserId;
+                    o.TimesUpdated += data.TimesUpdated;
+                    await db_.UpdateAsync(o);
+                    break;
             }
         }
 

@@ -95,7 +95,6 @@
             </Style>
 
             <Style x:Key="ColViewitemViewDefaultFormat" TargetType="StackLayout">
-                <Setter Property="Margin" Value="0,10"/>
                 <Setter Property="Padding" Value="0,5"/>
                 <Setter Property="BackgroundColor" Value="#f0e9d5"/>
             </Style>

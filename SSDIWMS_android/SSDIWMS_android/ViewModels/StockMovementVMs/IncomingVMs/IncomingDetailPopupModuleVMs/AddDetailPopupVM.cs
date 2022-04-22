@@ -110,8 +110,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             ExpiryDate = ExpiryDate,
                             TimesUpdated = 0,
                             POHeaderNumber = E.POHeaderNumber,
-                            Status = "Pending",
-
+                            Status = "Ongoing",
                         };
                         await localDbIncomingParDetailService.Insert("RefIdAutoGenerate", data);
                         await notifyService.StaticToastNotif("Success", "Item added.");

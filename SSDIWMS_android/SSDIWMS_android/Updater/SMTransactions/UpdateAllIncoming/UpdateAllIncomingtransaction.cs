@@ -18,6 +18,8 @@ using Xamarin.Forms;
 [assembly: Dependency(typeof(UpdateAllIncomingtransaction))]
 namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 {
+
+
     public class UpdateAllIncomingtransaction : IUpdateAllIncomingtransaction
     {
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
@@ -50,17 +52,21 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
             var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
             var role = Preferences.Get("PrefUserRole", string.Empty);
             int[] WhIdFilter = { WhId };
-            var OngoingMethod = "GetOngoing";
+            /*var OngoingMethod = "GetOngoing";
             var FinalizedMethod = "GetFinalize";
             var sIncomingOngoingHeader = await serverDbIncomingHeaderService.GetList(OngoingMethod, null, WhIdFilter, null);
             var sIncomingFinalizeHeader = await serverDbIncomingHeaderService.GetList(FinalizedMethod, null, WhIdFilter, null);
             IncomingHeaderList.AddRange(sIncomingOngoingHeader);
+            IncomingHeaderList.AddRange(sIncomingFinalizeHeader);*/
+            var sIncomingFinalizeHeader = await serverDbIncomingHeaderService.GetList("GetActDate", null, WhIdFilter, null);
             IncomingHeaderList.AddRange(sIncomingFinalizeHeader);
             foreach (var sHeader in IncomingHeaderList)
             {
                 int[] x = { sHeader.INCId };
                 string[] y = { sHeader.PONumber };
                 var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                string[] sfilter = { sHeader.PONumber };
+                await UpdateDetail(sfilter);
                 if (lHeader == null)
                 {
                     // insert to local
@@ -80,8 +86,6 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                         await localDbIncomingHeaderService.Update("Common", sHeader);
                     }
                 }
-                string[] sfilter = { sHeader.PONumber };
-                await UpdateDetail(sfilter);
 
             }
         }
@@ -93,7 +97,9 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
             {
                 int[] vs = { sDetail.INCDetId};
                 var lDetail = await localDbIncomingDetailService.GetModel("INCDetId", null, vs);
-                if(lDetail == null)
+                string[] PoIcFilter = { sDetail.POHeaderNumber, sDetail.ItemCode };
+                await UpdatePartialDetail(PoIcFilter);
+                if (lDetail == null)
                 {
                     await localDbIncomingDetailService.Insert("Common", sDetail);
                 }
@@ -110,8 +116,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                         await localDbIncomingDetailService.Update("Comon", sDetail);
                     }
                 }
-                string[] PoIcFilter = { sDetail.POHeaderNumber, sDetail.ItemCode };
-                await UpdatePartialDetail(PoIcFilter);
+                
             }
         }
         public async Task UpdatePartialDetail(string[] PoIcFilter)
@@ -145,8 +150,12 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                 var spDet = spardetails.Where(x => x.RefId == lpDet.RefId).FirstOrDefault();
                 if(spDet == null)
                 {
-                    var retsval = await serverDbIncomingParDetailService.SpecialCaseInsert("ReturnInsertedItem", lpDet);
-                    await localDbIncomingParDetailService.Update("RefId", retsval);
+                    var role = Preferences.Get("PrefUserRole", "");
+                    if(role == "Check")
+                    {
+                        var retsval = await serverDbIncomingParDetailService.SpecialCaseInsert("ReturnInsertedItem", lpDet);
+                        await localDbIncomingParDetailService.Update("RefId", retsval);
+                    }
                 }
             }
         }

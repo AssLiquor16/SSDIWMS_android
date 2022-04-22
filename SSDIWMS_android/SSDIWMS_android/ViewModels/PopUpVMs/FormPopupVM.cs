@@ -129,7 +129,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(10000);
+                await Task.Delay(3000);
 
                 try
                 {

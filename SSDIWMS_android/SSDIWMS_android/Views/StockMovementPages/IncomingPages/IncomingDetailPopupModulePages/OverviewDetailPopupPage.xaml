@@ -150,7 +150,7 @@
                             </RefreshView>
                         </StackLayout>
                     </Frame>
-                    <Button Text="Finalize" Command="{Binding FinalizeCommand}"/>
+                    <Button Text="{Binding ButtonText}" Command="{Binding FinalizeCommand}"/>
                     <Button Text="cancel" Command="{Binding CancelCommand}"/>
                 </StackLayout>
             </StackLayout>

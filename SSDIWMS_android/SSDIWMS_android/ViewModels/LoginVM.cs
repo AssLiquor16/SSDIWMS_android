@@ -67,6 +67,7 @@ namespace SSDIWMS_android.ViewModels
                                 Preferences.Set("PrefUserRole", returnval.UserRole);
                                 Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
                                 Preferences.Set("PrefLoggedIn", true);
+                                MessagingCenter.Send(this, "FromLoginToShell", "Go");
                                 var route = $"//{nameof(DashBoardPage)}";
                                 await Shell.Current.GoToAsync(route);
                             }

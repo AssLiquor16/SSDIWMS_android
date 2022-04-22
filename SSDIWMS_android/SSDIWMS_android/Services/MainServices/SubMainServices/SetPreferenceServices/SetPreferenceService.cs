@@ -13,7 +13,6 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceSer
     {
         public async Task OnStartSetPreference()
         {
-            Preferences.Set("PrefServerAddress", "http://192.168.1.217:80/");
             Preferences.Set("PrefLocalAddress", "SSDIWMSLoc.db");
             Preferences.Set("PrefDateTimeFormat","dd MMM yyy hh:mm");
             Preferences.Set("PrefISMSyncing", false);

@@ -104,12 +104,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" && x.ActRecDate == DateTime.Now.Date).ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" || x.INCstatus == "Finalized").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" && x.ActRecDate == DateTime.Now.Date).ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
@@ -127,12 +127,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" && x.ActRecDate == DateTime.Now.Date).ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" || x.INCstatus == "Finalized").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" && x.ActRecDate == DateTime.Now.Date).ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;

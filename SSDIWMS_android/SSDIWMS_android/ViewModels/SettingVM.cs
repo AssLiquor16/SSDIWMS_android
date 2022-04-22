@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
 using SSDIWMS_android.Updater.UpdateArticleMaster;
 using SSDIWMS_android.Views.PopUpPages;
@@ -14,7 +15,9 @@ namespace SSDIWMS_android.ViewModels
 {
     public class SettingVM : ViewModelBase
     {
-        bool _notifyIO = Preferences.Get("NotifyIO", false);
+        IToastNotifService notifyService;
+        bool _notifyIO = Preferences.Get("NotifyIO", false), _adminViewVisible;
+        string _ipVal;
         public bool NotifyIO
         {
             get => _notifyIO;
@@ -27,7 +30,11 @@ namespace SSDIWMS_android.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        public bool AdminViewVisible { get => _adminViewVisible; set => SetProperty(ref _adminViewVisible, value); }
+        public string IPVal { get => _ipVal; set => SetProperty(ref _ipVal, value); }
+       
+        public AsyncCommand SaveIpAddressCommand { get; }
+        public AsyncCommand ReturnDefaultIpCommand { get; }
         public AsyncCommand NotifCommand { get; }
         public AsyncCommand ArticleMasterUpdateCommand { get; }
         public AsyncCommand PalletMasterUpdateCommand { get; }
@@ -37,13 +44,36 @@ namespace SSDIWMS_android.ViewModels
 
         public SettingVM()
         {
+            notifyService = DependencyService.Get<IToastNotifService>();
+            SaveIpAddressCommand = new AsyncCommand(SaveIpAddress);
+            ReturnDefaultIpCommand = new AsyncCommand(ReturnDefaultIp);
             NotifCommand = new AsyncCommand(Notif);
             ArticleMasterUpdateCommand = new AsyncCommand(ArticleMasterUpdate);
             PalletMasterUpdateCommand = new AsyncCommand(PalletMasterUpdate);
             ClearTransactionCommand = new AsyncCommand(ClearTransaction);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-
+        private async Task SaveIpAddress()
+        {
+            Preferences.Remove("PrefServerAddress");
+            if (!string.IsNullOrWhiteSpace(IPVal))
+            {
+                Preferences.Set("PrefServerAddress", IPVal);
+                await notifyService.StaticToastNotif("Success", "I.P address save.");
+            }
+            else
+            {
+                await notifyService.StaticToastNotif("Error", "Empty entry.");
+            }
+            
+        }
+        private async Task ReturnDefaultIp()
+        {
+            Preferences.Remove("PrefServerAddress");
+            IPVal = "http://192.168.1.217:80/";
+            Preferences.Set("PrefServerAddress", IPVal);
+            await notifyService.StaticToastNotif("Success", "I.P address reset to default.");
+        }
         private async Task Notif()
         {
             var e = Preferences.Get("NotifyIO", false);
@@ -76,13 +106,24 @@ namespace SSDIWMS_android.ViewModels
         {
             await LiveTimer();
             UserFullName = Preferences.Get("PrefUserFullname", "");
+            Role = Preferences.Get("PrefUserRole", "");
+            switch (Role)
+            {
+                case "Admin":
+                    AdminViewVisible = true;
+                    break;
+                default: AdminViewVisible = false; break;
+            }
+            IPVal = Preferences.Get("PrefServerAddress", "http://192.168.1.217:80/");
+
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
+        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname,_role;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
         public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
+        public string Role { get => _role; set => SetProperty(ref _role, value); }
         private async Task LiveTimer()
         {
             await Task.Delay(1);

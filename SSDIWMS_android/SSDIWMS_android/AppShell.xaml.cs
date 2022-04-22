@@ -2,11 +2,13 @@
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Services.ServerDbServices.Users;
+using SSDIWMS_android.ViewModels;
 using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -17,9 +19,49 @@ namespace SSDIWMS_android
         IMainServices mainService;
         IToastNotifService notifService;
         IServerUserServices serverDbUserService;
+
+        string _fullname, _role;
+        bool _stockMovementVisible;
+        public bool StockMovementVisible
+        {
+            get => _stockMovementVisible;
+            set
+            {
+
+                if (value == _stockMovementVisible)
+                    return;
+                _stockMovementVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Fullname
+        {
+            get => _fullname;
+            set
+            {
+
+                if (value == _fullname)
+                    return;
+                _fullname = value;
+                OnPropertyChanged();
+            }
+        }
+        public string Role
+        {
+            get => _role;
+            set
+            {
+
+                if (value == _role)
+                    return;
+                _role = value;
+                OnPropertyChanged();
+            }
+        }
         public AppShell()
         {
             InitializeComponent();
+            
             BindingContext = this;
             serverDbUserService = DependencyService.Get<IServerUserServices>();
             notifService = DependencyService.Get<IToastNotifService>();
@@ -27,8 +69,29 @@ namespace SSDIWMS_android
 
             Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
             Routing.RegisterRoute(nameof(IncomingDetailListPage), typeof(IncomingDetailListPage));
-        }
+            Fullname = Preferences.Get("PrefUserFullname", string.Empty);
+            Role = Preferences.Get("PrefUserRole", string.Empty);
+            SetView(Role);
 
+            MessagingCenter.Subscribe<LoginVM, string>(this, "FromLoginToShell", async (page, e) =>
+            {
+                await Task.Delay(1);
+                Fullname = Preferences.Get("PrefUserFullname", string.Empty);
+                Role = Preferences.Get("PrefUserRole", string.Empty);
+                SetView(Role);
+            });
+        }
+        private void SetView(string role)
+        {
+            if(role == "Pick" || role == "Check")
+            {
+                StockMovementVisible = true;
+            }
+            else
+            {
+                StockMovementVisible = false;
+            }
+        }
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
             var con = new LoadingPopupVM();
@@ -53,5 +116,6 @@ namespace SSDIWMS_android
             await con.CloseAll();
           
         }
+
     }
 }

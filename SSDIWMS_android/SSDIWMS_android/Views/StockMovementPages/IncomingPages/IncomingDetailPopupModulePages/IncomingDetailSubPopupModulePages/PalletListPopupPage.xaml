@@ -6,6 +6,7 @@
                   xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs.IncomingDetailSubPopupModuleVMs" 
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                   
+                  
 x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages.PalletListPopupPage">
     <popup:PopupPage.BindingContext>
         <viewmodels:PalletListPopupVM/>
@@ -15,7 +16,6 @@ x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPo
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-
     <Frame HeightRequest="500" 
            WidthRequest="300" 
            VerticalOptions="CenterAndExpand" 
@@ -33,7 +33,7 @@ x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPo
                     <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
                         <StackLayout BackgroundColor="Transparent" Orientation="Horizontal">
                             <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search pallet" WidthRequest="220"/>
-                            <Button FontFamily="FAS" Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" BackgroundColor="Transparent" TextColor="Black" WidthRequest="50" Margin="0"/>
+                            <Button FontFamily="FAS" Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" Clicked="Button_Clicked" BackgroundColor="Transparent" TextColor="Black" WidthRequest="50" Margin="0"/>
                         </StackLayout>
                     </Frame>
                 </StackLayout>

@@ -80,11 +80,11 @@
                         <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
                             <StackLayout BackgroundColor="Transparent">
                                 <Label Text="QTY:" TextColor="DarkGray"/>
-                                <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold"/>
+                                <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold" Keyboard="Numeric"/>
                             </StackLayout>
                         </Frame>
 
-                        <Button Text="Insert" CornerRadius="5" Command="{Binding EditDetailCommand}"/>
+                        <Button Text="Edit" CornerRadius="5" Command="{Binding EditDetailCommand}"/>
                         <Button Text="Cancel" CornerRadius="5" Command="{Binding CancelCommand}"/>
                     </StackLayout>
                 </StackLayout>

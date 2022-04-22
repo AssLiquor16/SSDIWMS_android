@@ -64,7 +64,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
             if (E != null)
             {
-                if (!string.IsNullOrWhiteSpace(PalletCode) && PartialCQTY != 0)
+                if (!string.IsNullOrWhiteSpace(PalletCode))
                 {
                     E.TimesUpdated++;
                     E.PalletCode = PalletCode;

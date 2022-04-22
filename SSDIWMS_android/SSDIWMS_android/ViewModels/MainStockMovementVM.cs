@@ -14,11 +14,11 @@ namespace SSDIWMS_android.ViewModels
         bool _proceedEnable;
         public bool ProceedEnable { get => _proceedEnable; set => SetProperty(ref _proceedEnable, value); }
 
-        public AsyncCommand NavigationCommand { get; }
+        public AsyncCommand IncomingNavigationCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public MainStockMovementVM()
         {
-            NavigationCommand = new AsyncCommand(Navigation);
+            IncomingNavigationCommand = new AsyncCommand(Navigation);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
         private async Task Navigation()

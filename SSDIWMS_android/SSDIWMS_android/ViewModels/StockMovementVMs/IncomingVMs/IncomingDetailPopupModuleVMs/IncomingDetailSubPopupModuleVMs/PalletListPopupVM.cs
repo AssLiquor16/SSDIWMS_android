@@ -4,6 +4,7 @@ using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
             await PopupNavigation.Instance.PushAsync(new PalletMasterUpdaterPopupPage());
             SearchString = string.Empty;
+            await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task Tapped()
         {
@@ -101,7 +103,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             PalletList.AddRange(e);
             FilteredPalletList.AddRange(PalletList);
         }
-        private async Task Close()
+        public async Task Close()
         {
             await PopupNavigation.Instance.PopAsync(true);
         }
@@ -118,6 +120,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 var e = PalletList.Where(x => x.PalletCode.Contains(SearchString) || x.PalletDescription.Contains(SearchString)).ToList();
                 FilteredPalletList.AddRange(e);
             }
+        }
+        public async Task Back()
+        {
+            await PopupNavigation.Instance.PushAsync(new PalletListPopupPage("PalletList"));
         }
         
     }

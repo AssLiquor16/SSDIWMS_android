@@ -24,8 +24,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
 
+        string _toolbarColor, _role;
         bool _isRefreshing;
         IncomingPartialDetailModel _selectedDetail;
+        public string Role { get => _role; set => SetProperty(ref _role, value); }
+        public string ToolbarColor { get => _toolbarColor; set => SetProperty(ref _toolbarColor, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
         public IncomingPartialDetailModel SelectedDetail { get => _selectedDetail; set => SetProperty(ref _selectedDetail, value); }
 
@@ -79,6 +82,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         public async Task PageRefresh()
         {
+            Role = Preferences.Get("PrefUserRole", "");
             IncomingParDetailList.Clear();
             var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);
             IncomingParDetailList.AddRange(detailList);

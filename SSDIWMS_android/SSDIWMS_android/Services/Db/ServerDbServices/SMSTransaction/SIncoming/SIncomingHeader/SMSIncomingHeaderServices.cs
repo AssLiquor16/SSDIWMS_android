@@ -68,6 +68,18 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                         var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
                         return datas;
                     }
+                case "GetActDate":
+                    using (client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        int intf = intfilter[0];
+                        var json = await client.GetStringAsync($"api/IncomingHeaders/GetActDate/{intf}");
+                        var datas = JsonConvert.DeserializeObject<IEnumerable<IncomingHeaderModel>>(json);
+                        return datas;
+                    }
                 default: return null;
             }
         }

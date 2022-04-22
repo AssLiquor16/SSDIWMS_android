@@ -30,14 +30,25 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
         ISMSIncomingHeaderServices serverDbIncomingHeaderService;
 
+        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
+        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt");
+        string _userFullname, _userRole, _billDOc, _cVan, _shipNo, _shipline;
+        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         IncomingDetailModel _selectedItem;
-        string _poNumber, _totalPOItems;
+        string _poNumber, _totalPOItems, _buttonText;
         bool _isrefreshing;
         public IncomingDetailModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
         public string TotalPOItems { get => _totalPOItems; set => SetProperty(ref _totalPOItems, value); }
         public bool IsRefreshing { get => _isrefreshing; set => SetProperty(ref _isrefreshing, value); }
-
+        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
+        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
+        public string UserRole { get => _userRole; set => SetProperty(ref _userRole, value); }
+        public string ButtonText { get => _buttonText; set => SetProperty(ref _buttonText, value); }
+        public string BillDoc { get => _billDOc; set => SetProperty(ref _billDOc, value); }
+        public string CVAN { get => _cVan; set => SetProperty(ref _cVan, value); }
+        public string ShipNo { get => _shipNo; set => SetProperty(ref _shipNo, value); }
+        public string ShippingLine { get => _shipline; set => SetProperty(ref _shipline, value); }
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
         public AsyncCommand CancelCommand { get; }
         public AsyncCommand TappedCommand { get; }
@@ -85,12 +96,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             {
                 case "Check":
                     UserRole = "Checker";
+                    ButtonText = "Finalize";
                     break;
                 case "Pick":
                     UserRole = "Picker";
+                    ButtonText = "Recieve";
                     break;
                 default:
                     UserRole = "Unassigned";
+                    ButtonText = "Unable";
                     break;
             }
             BillDoc = Preferences.Get("PrefBillDoc", string.Empty);
@@ -242,13 +256,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
-                        FinalUserId = userId,
+                        RecUserId = userId,
                         INCstatus = "Recieved",
                         PONumber = PONumber,
                         TimesUpdated = 10
 
                     };
-                    await localDbIncomingHeaderService.Update("PONumber", e);
+                    await localDbIncomingHeaderService.Update("PONumber1", e);
                     foreach (var item in IncomingDetailList)
                     {
                         item.TimesUpdated += 10;
@@ -277,24 +291,31 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
+                try
+                {
+                    bool busy = Preferences.Get("PrefISMSyncing", false);
+                    if (busy == false)
+                    {
+                        string[] strinfilter = { PONumber };
+                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
+                        if (poStatus == "Finalized")
+                        {
+                            await updaterservice.UpdateAllIncomingTrans();
+                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
+                        }
+                    }
+
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
                 await PopupNavigation.Instance.PopAllAsync(true);
                 await notifService.LoadingProcess("End", "");
                 var route = $"..";
                 await Shell.Current.GoToAsync(route);
             }
         }
-
-        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt");
-        string _userFullname, _userRole,_billDOc,_cVan,_shipNo, _shipline;
-        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
-        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
-        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
-        public string UserRole { get => _userRole; set => SetProperty(ref _userRole, value); }
-        public string BillDoc { get => _billDOc; set => SetProperty(ref _billDOc, value); }
-        public string CVAN { get => _cVan; set => SetProperty(ref _cVan, value); }
-        public string ShipNo { get => _shipNo; set => SetProperty(ref _shipNo, value); }
-        public string ShippingLine { get => _shipline; set => SetProperty(ref _shipline, value); }
         private async Task LiveTimer()
         {
             await Task.Delay(1);
