@@ -7,6 +7,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
@@ -77,8 +78,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         public async Task AddPopupNav(string scannedCode)
         {
-            string[] datas = { PONumber, scannedCode };
+            /*
+             *  string[] datas = { PONumber, scannedCode };
             await PopupNavigation.Instance.PushAsync(new AddDetailPopupPage(datas));
+            */
+            var route = $"{nameof(AddDetailModulePage)}?PONumber={PONumber}&ScannedCode={scannedCode}";
+            await Shell.Current.GoToAsync(route);
         }
         public async Task PageRefresh()
         {

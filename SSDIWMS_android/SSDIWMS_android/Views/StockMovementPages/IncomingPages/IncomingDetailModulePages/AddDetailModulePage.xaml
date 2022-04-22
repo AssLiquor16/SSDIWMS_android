@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.AddDetailModulePage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:AddDetailModuleVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
+
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
+                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    <BoxView/>
+                    <StackLayout VerticalOptions="CenterAndExpand">
+
+                        <StackLayout IsVisible="{Binding ErrorView}" 
+                                 IsEnabled="{Binding ErrorView}" 
+                                 VerticalOptions="CenterAndExpand" 
+                                 HorizontalOptions="CenterAndExpand">
+                            <Label Text="{Binding ErrorText}" 
+                               FontSize="Title" 
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand" 
+                               TextColor="Red"/>
+                        </StackLayout>
+                        <StackLayout IsVisible="{Binding SuccessView}" IsEnabled="{Binding SuccessView}" Padding="10,5">
+                            <StackLayout VerticalOptions="CenterAndExpand">
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="PO Number:" TextColor="DarkGray"/>
+                                        <Entry Text="{Binding PONumber}" FontSize="Subtitle" FontAttributes="Bold" IsEnabled="False"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent" Orientation="Horizontal">
+                                        <StackLayout BackgroundColor="Transparent" Orientation="Vertical">
+                                            <Label Text="Pallet Code:" TextColor="DarkGray"/>
+                                            <Entry Text="{Binding PalletCode}" WidthRequest="180" FontSize="Subtitle" IsEnabled="False" />
+                                        </StackLayout>
+                                        <Button Text="Edit" CornerRadius="10"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="Item Code:" TextColor="DarkGray"/>
+                                        <Entry Text="{Binding ItemCode}" FontSize="Subtitle" FontAttributes="Bold" IsEnabled="False"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="Item Description:" TextColor="DarkGray"/>
+                                        <Editor Text="{Binding ItemDesc}" FontSize="Subtitle" FontAttributes="Bold" IsEnabled="False"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource PriorityColor}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="Expiry Date:" TextColor="DarkGray"/>
+                                        <DatePicker Date="{Binding ExpiryDate}" FontSize="Subtitle" FontAttributes="Bold" />
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource PriorityColor}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="QTY:" TextColor="DarkGray"/>
+                                        <Entry Text="{Binding PartialCQTY}" FontSize="Subtitle" FontAttributes="Bold"  Keyboard="Numeric"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+
+                                    <Button Text="Insert" CornerRadius="5" Command="{Binding AddDetailCommand}"/>
+                                    <Button Text="Cancel" CornerRadius="5" Command="{Binding CancelCommand}"/>
+
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

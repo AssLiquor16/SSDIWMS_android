@@ -7,6 +7,7 @@ using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -69,6 +70,7 @@ namespace SSDIWMS_android
 
             Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
             Routing.RegisterRoute(nameof(IncomingDetailListPage), typeof(IncomingDetailListPage));
+            Routing.RegisterRoute(nameof(AddDetailModulePage), typeof(AddDetailModulePage));
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);
