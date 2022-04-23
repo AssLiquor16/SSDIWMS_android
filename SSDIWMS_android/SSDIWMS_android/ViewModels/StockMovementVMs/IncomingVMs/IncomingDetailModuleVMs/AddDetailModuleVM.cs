@@ -7,6 +7,8 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs.IncomingDetailSubModuleVMs;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -61,10 +63,23 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             ItemMasterList = new ObservableRangeCollection<ItemMasterModel>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
 
+            NavPalletListCommand = new AsyncCommand(NavPalletList);
             AddDetailCommand = new AsyncCommand(AddDetail);
             CancelCommand = new AsyncCommand(Cancel);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
+
+            MessagingCenter.Subscribe<PalletMasterListDetailSubModuleVM, string>(this, "FromPalletListToAdd", (page, e) =>
+            {
+                PalletCode = e;
+            });
+
+        }
+        private async Task NavPalletList()
+        {
+
+            var route = $"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=AddDetail";
+            await Shell.Current.GoToAsync(route);
         }
         private async Task Cancel()
         {
@@ -149,7 +164,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     ItemDesc = IncomingDetailList[0].ItemDesc;
                     Amount = "Pesos :" + IncomingDetailList[0].Amount; ;
                     E = IncomingDetailList[0];
-                    await notifyService.StaticToastNotif("Success", "Item found");
                     ErrorView = false;
                     SuccessView = true;
                 }
@@ -176,7 +190,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 SuccessView = false;
             }
         }
-
 
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

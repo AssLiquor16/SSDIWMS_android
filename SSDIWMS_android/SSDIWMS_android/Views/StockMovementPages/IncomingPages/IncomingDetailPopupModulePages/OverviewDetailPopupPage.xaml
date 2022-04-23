@@ -2,6 +2,7 @@
 <popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                   xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:fontAwsome="clr-namespace:FontAwesome"
                   xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs" 
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                   x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.OverviewDetailPopupPage">
@@ -150,8 +151,29 @@
                             </RefreshView>
                         </StackLayout>
                     </Frame>
-                    <Button Text="{Binding ButtonText}" Command="{Binding FinalizeCommand}"/>
-                    <Button Text="cancel" Command="{Binding CancelCommand}"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+
+                        <Button Text="Back"
+                                CornerRadius="5"
+                                Command="{Binding CancelCommand}">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                 Glyph="{x:Static fontAwsome:FontAwesomeIcons.AngleLeft}"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button Text="{Binding ButtonText}" 
+                                CornerRadius="5" Padding="52,0" 
+                                Command="{Binding FinalizeCommand}"
+                                WidthRequest="200">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                 Glyph="{x:Static fontAwsome:FontAwesomeIcons.Check}"/>
+                            </Button.ImageSource>
+                        </Button>
+
+
+
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

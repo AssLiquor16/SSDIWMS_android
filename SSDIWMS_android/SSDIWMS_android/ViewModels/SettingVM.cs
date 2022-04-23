@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
 using SSDIWMS_android.Updater.UpdateArticleMaster;
@@ -16,6 +17,7 @@ namespace SSDIWMS_android.ViewModels
     public class SettingVM : ViewModelBase
     {
         IToastNotifService notifyService;
+        IMainServices mainService;
         bool _notifyIO = Preferences.Get("NotifyIO", false), _adminViewVisible;
         string _ipVal;
         public bool NotifyIO
@@ -44,6 +46,7 @@ namespace SSDIWMS_android.ViewModels
 
         public SettingVM()
         {
+            mainService = DependencyService.Get<IMainServices>();
             notifyService = DependencyService.Get<IToastNotifService>();
             SaveIpAddressCommand = new AsyncCommand(SaveIpAddress);
             ReturnDefaultIpCommand = new AsyncCommand(ReturnDefaultIp);
@@ -58,8 +61,16 @@ namespace SSDIWMS_android.ViewModels
             Preferences.Remove("PrefServerAddress");
             if (!string.IsNullOrWhiteSpace(IPVal))
             {
-                Preferences.Set("PrefServerAddress", IPVal);
-                await notifyService.StaticToastNotif("Success", "I.P address save.");
+                bool isProceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to change the IP address?", "Yes", "No");
+                if(isProceed == true)
+                {
+                    Preferences.Set("PrefServerAddress", IPVal);
+                    await notifyService.StaticToastNotif("Success", "I.P address save.");
+                    await Task.Delay(2000);
+                    await mainService.RemovePreferences();
+                    System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+                }
+                
             }
             else
             {
@@ -73,6 +84,9 @@ namespace SSDIWMS_android.ViewModels
             IPVal = "http://192.168.1.217:80/";
             Preferences.Set("PrefServerAddress", IPVal);
             await notifyService.StaticToastNotif("Success", "I.P address reset to default.");
+            await Task.Delay(2000);
+            await mainService.RemovePreferences();
+            System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
         }
         private async Task Notif()
         {

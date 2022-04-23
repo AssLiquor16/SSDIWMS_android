@@ -24,8 +24,9 @@
 
                         <Image Source="user.png"/>
                         <Label Text="Welcome" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="Title"/>
-                        <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="StartAndExpand"/>
-                        <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand"/>
+                        <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="StartAndExpand" FontSize="Subtitle"/>
+                        <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand"
+                          FontSize="Subtitle"/>
                         <Button Text="Login" Command="{Binding LoginCommand}"/>
                         <Label HorizontalOptions="EndAndExpand">
                             <Label.FormattedText>

@@ -194,6 +194,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     {
                         item.TimesUpdated += 1;
                         item.UserId = userId;
+                        item.QTYStatus = string.Empty;
                         await localDbIncomingDetailService.Update("Common", item);
 
                         string[] s = { item.ItemCode };
@@ -267,6 +268,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     {
                         item.TimesUpdated += 10;
                         item.UserId = userId;
+                        item.QTYStatus = string.Empty;
                         await localDbIncomingDetailService.Update("Common", item);
 
                         string[] s = { item.ItemCode };

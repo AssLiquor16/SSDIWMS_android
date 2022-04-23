@@ -68,8 +68,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         {
             if(SelectedDetail != null)
             {
-                await PopupNavigation.Instance.PushAsync(new EditDetailPopupPage(SelectedDetail));
-                SelectedDetail = null;
+                var route = $"{nameof(EditDetailModulePages)}?DataSender=DetailList&INCParDetId={SelectedDetail.INCParDetId}&RefId={SelectedDetail.RefId}&";
+                await Shell.Current.GoToAsync(route);
             }
         }
         private async Task ShowOverView()

@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
              xmlns:fontAwsome="clr-namespace:FontAwesome"
              xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs"
-             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.AddDetailModulePage">
+             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.EditDetailModulePages">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.BindingContext>
-        <viewmodels:AddDetailModuleVM/>
+        <viewmodels:EditDetailModuleVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="7">
@@ -25,18 +25,7 @@
                     </StackLayout>
                     <BoxView/>
                     <StackLayout VerticalOptions="CenterAndExpand">
-
-                        <StackLayout IsVisible="{Binding ErrorView}" 
-                                 IsEnabled="{Binding ErrorView}" 
-                                 VerticalOptions="CenterAndExpand" 
-                                 HorizontalOptions="CenterAndExpand">
-                            <Label Text="{Binding ErrorText}" 
-                               FontSize="Title" 
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand" 
-                               TextColor="Red"/>
-                        </StackLayout>
-                        <StackLayout IsVisible="{Binding SuccessView}" IsEnabled="{Binding SuccessView}" Padding="10,5">
+                        <StackLayout Padding="10,5">
                             <StackLayout VerticalOptions="CenterAndExpand">
 
                                 <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
@@ -109,7 +98,7 @@
                                     </StackLayout>
                                 </Frame>
 
-                                <Frame BackgroundColor="{StaticResource PriorityColor}" 
+                                <Frame BackgroundColor="{Binding EnableColor}" 
                                        Margin="5,3" 
                                        Padding="5,3">
                                     <StackLayout BackgroundColor="Transparent">
@@ -117,7 +106,7 @@
                                                TextColor="DarkGray"/>
                                         <Entry Text="{Binding PartialCQTY}" 
                                                FontSize="Subtitle" FontAttributes="Bold"  
-                                               Keyboard="Numeric"/>
+                                               Keyboard="Numeric" IsEnabled="{Binding ParQtyEditEnable}"/>
                                     </StackLayout>
                                 </Frame>
 
@@ -131,10 +120,10 @@
                                                              Glyph="{x:Static fontAwsome:FontAwesomeIcons.AngleLeft}"/>
                                         </Button.ImageSource>
                                     </Button>
-                                    <Button Text="Insert" 
+                                    <Button Text="Save" 
                                             CornerRadius="5" 
                                             Padding="55,0"
-                                            Command="{Binding AddDetailCommand}"
+                                            Command="{Binding EditDetailCommand}"
                                             WidthRequest="192">
                                         <Button.ImageSource>
                                             <FontImageSource FontFamily="FAS" 

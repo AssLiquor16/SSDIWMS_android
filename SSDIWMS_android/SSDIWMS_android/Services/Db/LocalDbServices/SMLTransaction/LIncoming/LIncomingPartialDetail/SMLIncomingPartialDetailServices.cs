@@ -84,6 +84,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var refId = stringfilter[0];
                     var filtereddata = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.RefId == refId).FirstOrDefaultAsync();
                     return filtereddata;
+                case "INCParDetId&RefId":
+                    var iNCParDetId1 = intfilter[0];
+                    var rEfId = stringfilter[0];
+                    var data1 = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == iNCParDetId1 &&  x.RefId == rEfId).FirstOrDefaultAsync();
+                    return data1;
                 default: return null;
             }
         }
@@ -132,6 +137,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     break;
                 case "RefId":
                     var conte = await db_.Table<IncomingPartialDetailModel>().Where(x => x.RefId == item.RefId).FirstOrDefaultAsync();
+                    conte = item;
+                    await db_.UpdateAsync(conte);
+                    break;
+                case "INCParDetId&RefId":
+                    var cont = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == item.INCParDetId && x.RefId == item.RefId).FirstOrDefaultAsync();
                     conte = item;
                     await db_.UpdateAsync(conte);
                     break;
