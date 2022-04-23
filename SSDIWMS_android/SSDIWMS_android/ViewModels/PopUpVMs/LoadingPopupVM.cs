@@ -38,6 +38,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await Task.Delay(1);
             if (string.IsNullOrWhiteSpace(TaskType))
             {
+                IconName = "cog.gif";
                 StaticLoadingText = "Processing...";
             }
             else if (TaskType == "Login")

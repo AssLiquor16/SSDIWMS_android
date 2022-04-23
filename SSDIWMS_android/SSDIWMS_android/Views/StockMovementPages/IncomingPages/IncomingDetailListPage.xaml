@@ -12,6 +12,11 @@
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding SyncCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.FileUpload}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
         <ToolbarItem Clicked="ToolbarItem_Clicked">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Plus}"/>

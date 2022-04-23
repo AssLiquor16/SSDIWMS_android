@@ -5,6 +5,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              Shell.NavBarIsVisible="False"
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
              Shell.FlyoutBehavior="Disabled"
              BackgroundColor="{StaticResource BackgroundColor}"
              x:Class="SSDIWMS_android.Views.LoginPage">
@@ -27,7 +28,18 @@
                         <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="StartAndExpand" FontSize="Subtitle"/>
                         <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand"
                           FontSize="Subtitle"/>
-                        <Button Text="Login" Command="{Binding LoginCommand}"/>
+
+                        <Button Text="Login" 
+                                            CornerRadius="5" 
+                                            Padding="70,0"
+                                            Command="{Binding LoginCommand}"
+                                            WidthRequest="192">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.SignInAlt}"/>
+                            </Button.ImageSource>
+                        </Button>
+
                         <Label HorizontalOptions="EndAndExpand">
                             <Label.FormattedText>
                                 <FormattedString>

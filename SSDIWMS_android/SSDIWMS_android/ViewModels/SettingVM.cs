@@ -67,7 +67,6 @@ namespace SSDIWMS_android.ViewModels
                     Preferences.Set("PrefServerAddress", IPVal);
                     await notifyService.StaticToastNotif("Success", "I.P address save.");
                     await Task.Delay(2000);
-                    await mainService.RemovePreferences();
                     System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
                 }
                 
@@ -85,7 +84,6 @@ namespace SSDIWMS_android.ViewModels
             Preferences.Set("PrefServerAddress", IPVal);
             await notifyService.StaticToastNotif("Success", "I.P address reset to default.");
             await Task.Delay(2000);
-            await mainService.RemovePreferences();
             System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
         }
         private async Task Notif()

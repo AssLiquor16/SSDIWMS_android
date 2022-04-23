@@ -43,6 +43,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     return all;
                 case "PONumber":
                     var POFilter = Preferences.Get("PrefPONumber", "");
+                    var h = await db_.Table<IncomingPartialDetailModel>().ToListAsync();
                     var PO = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.POHeaderNumber == POFilter).ToListAsync();
                     return PO;
                 case "PONumber&UserId":

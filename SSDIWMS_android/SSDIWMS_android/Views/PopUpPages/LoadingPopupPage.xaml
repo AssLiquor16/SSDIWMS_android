@@ -16,7 +16,7 @@
             Command="{Binding RefreshCommand}"/>
     </popup:PopupPage.Behaviors>
     
-    <Frame HeightRequest="200" 
+    <Frame HeightRequest="150" 
            WidthRequest="225" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
@@ -24,29 +24,30 @@
            CornerRadius="10"
            Padding="15"
            >
-        
-        <StackLayout HorizontalOptions="Center" 
-                     VerticalOptions="Center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
 
-                <StackLayout HorizontalOptions="CenterAndExpand" Grid.Row="0"
-                         VerticalOptions="CenterAndExpand">
-                    <Image Source="{Binding IconName}" IsAnimationPlaying="True"/>
-                    <Label Text="{Binding StaticLoadingText}" 
+        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackLayout >
+                        <Image Source="{Binding IconName}" IsAnimationPlaying="True"/>
+                        <Label Text="{Binding StaticLoadingText}" 
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand"/>
 
-                </StackLayout>
-                <StackLayout Grid.Row="1">
-                    <Label Text="{Binding LoadingText}" 
+                    </StackLayout>
+                    <StackLayout Grid.Row="1">
+                        <Label Text="{Binding LoadingText}" 
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand"/>
-                </StackLayout>
-            </Grid>
+                    </StackLayout>
+                </Grid>
+            </StackLayout>
         </StackLayout>
         
     </Frame>

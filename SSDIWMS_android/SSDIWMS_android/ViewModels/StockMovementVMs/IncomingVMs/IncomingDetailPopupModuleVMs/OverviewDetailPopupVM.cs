@@ -260,13 +260,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         RecUserId = userId,
                         INCstatus = "Recieved",
                         PONumber = PONumber,
-                        TimesUpdated = 10
+                        TimesUpdated = 20
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber1", e);
                     foreach (var item in IncomingDetailList)
                     {
-                        item.TimesUpdated += 10;
+                        item.TimesUpdated += 20;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
                         await localDbIncomingDetailService.Update("Common", item);
@@ -277,7 +277,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
                         foreach (var paritem in retpardet)
                         {
-                            paritem.TimesUpdated += 10;
+                            paritem.TimesUpdated += 20;
                             paritem.UserId = userId;
                             paritem.Status = "Recieved";
                             paritem.DateFinalized = DateTime.Now;

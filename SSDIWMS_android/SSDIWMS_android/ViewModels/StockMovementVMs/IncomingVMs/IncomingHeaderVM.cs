@@ -86,7 +86,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 try
                 {
                     await transactionUpdateService.UpdateAllIncomingTrans();
-                    await notifService.StaticToastNotif("Success", "Header updated succesfully.");
+                    await notifService.StaticToastNotif("Success", "Items updated succesfully.");
                 }
                 catch
                 {
@@ -140,7 +140,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             }
             UserFullName = Preferences.Get("PrefUserFullname", "");
         }
-
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);

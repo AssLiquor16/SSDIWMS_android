@@ -6,11 +6,14 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
+using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
+using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -35,6 +38,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
         public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
+        public AsyncCommand SyncCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
@@ -50,6 +54,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
             TappedCommand = new AsyncCommand(Tapped);
+            SyncCommand = new AsyncCommand(Sync);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
@@ -63,6 +68,33 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await ColViewRefresh();
             });
 
+        }
+        private async Task Sync()
+        {
+            var con = new LoadingPopupVM();
+            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(""));
+            var syncing = Preferences.Get("PrefISMSyncing", false);
+            if (syncing == false)
+            {
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await transactionUpdateService.UpdateAllIncomingTrans();
+                    await notifService.StaticToastNotif("Success", "Items updated succesfully.");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+
+                Preferences.Set("PrefISMSyncing", false);
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
+            }
+            await con.CloseAll();
+            await ColViewRefresh();
         }
         private async Task Tapped()
         {
@@ -90,7 +122,22 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             Role = Preferences.Get("PrefUserRole", "");
             IncomingParDetailList.Clear();
             var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);
-            IncomingParDetailList.AddRange(detailList);
+            if (Role == "Check")
+            {
+                var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
+                IncomingParDetailList.Clear();
+                IncomingParDetailList.AddRange(checklist);
+            }
+            else if (Role == "Pick")
+            {
+                var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
+                IncomingParDetailList.Clear();
+                IncomingParDetailList.AddRange(checklist);
+            }
+            else
+            {
+                IncomingParDetailList.Clear();
+            }
             await LiveTimer();
             UserFullName = Preferences.Get("PrefUserFullname", "");
             PONumber = Preferences.Get("PrefPONumber", "");
@@ -99,10 +146,23 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         {
             
             IsRefreshing = true;
-            IncomingParDetailList.Clear();
             var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);
-            IncomingParDetailList.Clear();
-            IncomingParDetailList.AddRange(detailList);
+            if (Role == "Check")
+            {
+                var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
+                IncomingParDetailList.Clear();
+                IncomingParDetailList.AddRange(checklist);
+            }
+            else if (Role == "Pick")
+            {
+                var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
+                IncomingParDetailList.Clear();
+                IncomingParDetailList.AddRange(checklist);
+            }
+            else
+            {
+                IncomingParDetailList.Clear();
+            }
             IsRefreshing = false;
         }
 
