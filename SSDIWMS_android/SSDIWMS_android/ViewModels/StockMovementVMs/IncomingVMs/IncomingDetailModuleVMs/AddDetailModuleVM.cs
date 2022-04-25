@@ -132,7 +132,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         private async Task PageRefresh()
         {
             await LiveTimer();
-            UserFullName = Preferences.Get("PrefUserFullname", string.Empty);
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             PalletCode = Preferences.Get("PrefSelectedPallet", string.Empty);
             if (!string.IsNullOrWhiteSpace(PONumber) && !string.IsNullOrWhiteSpace(ScannedCode))
             {

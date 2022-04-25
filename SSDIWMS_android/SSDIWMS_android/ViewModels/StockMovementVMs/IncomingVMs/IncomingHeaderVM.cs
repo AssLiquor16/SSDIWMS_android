@@ -137,7 +137,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     break;
                 default: break;
             }
-            UserFullName = Preferences.Get("PrefUserFullname", "");
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
         }
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;

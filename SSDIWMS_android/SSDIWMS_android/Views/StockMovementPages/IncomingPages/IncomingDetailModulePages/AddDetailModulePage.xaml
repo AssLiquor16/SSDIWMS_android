@@ -5,6 +5,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design" 
              xmlns:fontAwsome="clr-namespace:FontAwesome"
              xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs"
+             Title="INCOMING STOCKS"
              x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.AddDetailModulePage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
@@ -20,8 +21,24 @@
                 <StackLayout Padding="15">
 
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <BoxView/>
                     <StackLayout VerticalOptions="CenterAndExpand">

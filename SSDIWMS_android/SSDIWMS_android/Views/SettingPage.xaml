@@ -19,8 +19,24 @@
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout Padding="15">
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <BoxView/>
                     <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">
@@ -50,15 +66,15 @@
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
-                                                WidthRequest="35" 
-                                                HeightRequest="35"/>
+                                                WidthRequest="32" 
+                                                HeightRequest="32"/>
                                         <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Undo}" 
                                                 FontFamily="FAS" Command="{Binding ReturnDefaultIpCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
-                                                WidthRequest="35" 
-                                                HeightRequest="35"/>
+                                                WidthRequest="32" 
+                                                HeightRequest="32"/>
                                     </StackLayout>
 
                                 </StackLayout>
@@ -150,7 +166,7 @@
                                                VerticalOptions="CenterAndExpand"/>
 
                                     <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
-                                                FontFamily="FAS" Command="{Binding PalletMasterUpdateCommand}"
+                                                FontFamily="FAS" Command="{Binding AllUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
@@ -171,6 +187,28 @@
 
                                     <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
                                                 FontFamily="FAS" Command="{Binding ClearTransactionCommand}" 
+                                                CornerRadius="5" Margin="0" 
+                                                BackgroundColor="Red"
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                </StackLayout>
+
+                            </Frame>
+
+                            <Frame Style="{StaticResource Framegrouping}">
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.TrashAlt}" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+                                    <Label Text="Clear All" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
+                                                FontFamily="FAS" Command="{Binding ClearAllCommand}" 
                                                 CornerRadius="5" Margin="0" 
                                                 BackgroundColor="Red"
                                                 HorizontalOptions="EndAndExpand" 

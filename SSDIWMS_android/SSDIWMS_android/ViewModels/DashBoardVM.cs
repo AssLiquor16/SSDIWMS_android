@@ -27,7 +27,9 @@ namespace SSDIWMS_android.ViewModels
                 await Shell.Current.GoToAsync(route);
             }
             await LiveTimer();
-            UserFullName = Preferences.Get("PrefUserFullname", "");
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

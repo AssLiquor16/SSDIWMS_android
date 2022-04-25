@@ -37,6 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateAllMaster\AllMasterfileUpdaterPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Updater\MasterDatas\UpdateArticleMaster\ArticleMasterUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -74,15 +77,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailModulePages\IncomingDetailSubModulePages\PalletMasterListDetailSubModulePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\AddDetailPopupPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\EditDetailPopupPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\IncomingDetailSubPopupModulePages\PalletListPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\IncomingDetailSubPopupModulePages\PartialDetailListPopupPage.xaml">

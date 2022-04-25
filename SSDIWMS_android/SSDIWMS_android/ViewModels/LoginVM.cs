@@ -62,8 +62,8 @@ namespace SSDIWMS_android.ViewModels
                             if (returnval.UserStatus == "Active" && string.IsNullOrWhiteSpace(returnval.LoginStatus)) 
                             {
                                 await serverDbUserService.Update("Login", strignarray, null, returnval);
-                                Preferences.Set("PrefUserId", returnval.UserId);
                                 Preferences.Set("PrefUserFullname", returnval.UserFullName);
+                                Preferences.Set("PrefUserId", returnval.UserId);
                                 Preferences.Set("PrefUserRole", returnval.UserRole);
                                 Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
                                 Preferences.Set("PrefLoggedIn", true);

@@ -7,6 +7,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.ViewModels.PopUpVMs;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
@@ -28,9 +29,23 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
 
-        string _toolbarColor, _role;
+        string _toolbarColor, _role,_searchString;
         bool _isRefreshing;
         IncomingPartialDetailModel _selectedDetail;
+        public string SearchString
+        {
+            get => _searchString;
+            set
+            {
+
+                if (value == _searchString)
+                    return;
+                _searchString = value;
+                OnPropertyChanged();
+                SearchItem();
+            }
+        }
+
         public string Role { get => _role; set => SetProperty(ref _role, value); }
         public string ToolbarColor { get => _toolbarColor; set => SetProperty(ref _toolbarColor, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
@@ -38,6 +53,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
         public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
+        public ObservableRangeCollection<IncomingPartialDetailModel> FilteredIncomingParDetailList { get; set; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
@@ -51,17 +67,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
+            FilteredIncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
+
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
 
-            MessagingCenter.Subscribe<EditDetailPopupVM, string>(this, "FromDetailsEditMSG", async (page, e) => 
+            MessagingCenter.Subscribe<EditDetailModuleVM, string>(this, "FromDetailsEditMSG", async (page, e) => 
             {
                 await ColViewRefresh();
             });
-            MessagingCenter.Subscribe<AddDetailPopupVM, string>(this, "FromDetailsAddMSG", async (page, e) =>
+            MessagingCenter.Subscribe<AddDetailModuleVM, string>(this, "FromDetailsAddMSG", async (page, e) =>
             {
                 await ColViewRefresh();
             });
@@ -103,19 +121,27 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                FilteredIncomingParDetailList.Clear();
+                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else if (Role == "Pick")
             {
                 var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                FilteredIncomingParDetailList.Clear();
+                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else
             {
                 IncomingParDetailList.Clear();
+
+                FilteredIncomingParDetailList.Clear();
             }
             await LiveTimer();
-            UserFullName = Preferences.Get("PrefUserFullname", "");
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             PONumber = Preferences.Get("PrefPONumber", "");
         }
         public async Task ColViewRefresh()
@@ -128,18 +154,38 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                FilteredIncomingParDetailList.Clear();
+                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
+                
             }
             else if (Role == "Pick")
             {
                 var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                FilteredIncomingParDetailList.Clear();
+                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else
             {
                 IncomingParDetailList.Clear();
+                FilteredIncomingParDetailList.Clear();
             }
             IsRefreshing = false;
+        }
+        private void SearchItem()
+        {
+            SearchString = SearchString.ToUpperInvariant();
+            FilteredIncomingParDetailList.Clear();
+            if (string.IsNullOrWhiteSpace(SearchString))
+            {
+                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
+            }
+            else
+            {
+                var e = IncomingParDetailList.Where(x => x.ItemCode.Contains(SearchString) || x.ItemDesc.Contains(SearchString)).ToList();
+                FilteredIncomingParDetailList.AddRange(e);
+            }
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

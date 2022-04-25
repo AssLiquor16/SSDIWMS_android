@@ -68,6 +68,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         }
         private async Task PageRefresh()
         {
+            await LiveTimer();
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             var userRole = Preferences.Get("PrefUserRole", string.Empty);
             switch (userRole)
             {
@@ -107,6 +111,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
                 }
             }
+
         }
         private async Task Cancel()
         {

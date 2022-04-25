@@ -46,6 +46,9 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
             IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
         }
+
+
+        // you can make another sync methods and put the method in this main method.
         public async Task UpdateAllIncomingTrans()
         {
             IncomingHeaderList.Clear();
@@ -118,6 +121,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                 }
                 
             }
+
         }
         public async Task UpdatePartialDetail(string[] PoIcFilter)
         {
@@ -147,7 +151,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
             var lpardetails = await localDbIncomingParDetailService.GetList("PoIc", PoIcFilter,null);
             foreach(var lpDet in lpardetails)
             {
-                var spDet = spardetails.Where(x => x.RefId == lpDet.RefId).FirstOrDefault();
+                var spDet = spardetails.Where(x => x.RefId == lpDet.RefId && x.DateCreated == lpDet.DateCreated).FirstOrDefault();
                 if(spDet == null)
                 {
                     var role = Preferences.Get("PrefUserRole", "");
@@ -159,7 +163,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                 }
             }
         }
-
+        //pangitaon ang error sa di mu update ang qty sa pikas cp 
         //reject
         public async Task UpdateSpecifiedTrans()
         {

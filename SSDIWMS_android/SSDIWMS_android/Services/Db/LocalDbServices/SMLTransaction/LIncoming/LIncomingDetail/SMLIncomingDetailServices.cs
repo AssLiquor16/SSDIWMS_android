@@ -41,6 +41,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     return NoFilterDatas;
                 case "PONumber":
                     var POFilter = Preferences.Get("PrefPONumber", "");
+                    var alls = await db_.Table<IncomingDetailModel>().ToListAsync();
                     var POFilterDatas = await db_.Table<IncomingDetailModel>().Where(x => x.POHeaderNumber == POFilter).ToListAsync();
                     return POFilterDatas;
                 case "PONumber,TimesUpdated":

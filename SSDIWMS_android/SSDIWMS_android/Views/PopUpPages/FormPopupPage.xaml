@@ -29,8 +29,8 @@
                          VerticalOptions="FillAndExpand">
                 <Image Source="adminuser.png"/>
                 <Label Text="Admin Login" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
-                <Entry Text="{Binding Username}" Placeholder="Username" WidthRequest="250"/>
-                <Entry Text="{Binding Password}" Placeholder="Password" WidthRequest="250"/>
+                <Entry Text="{Binding Username}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle"/>
+                <Entry Text="{Binding Password}" Placeholder="Password" WidthRequest="250" FontSize="Subtitle"/>
                 <Button Text="Login" Command="{Binding LoginCommand}"/>
             </StackLayout>
         </StackLayout>

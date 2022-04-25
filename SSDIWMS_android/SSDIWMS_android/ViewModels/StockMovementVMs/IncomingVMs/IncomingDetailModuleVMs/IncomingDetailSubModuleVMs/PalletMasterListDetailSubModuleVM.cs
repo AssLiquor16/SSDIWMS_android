@@ -97,6 +97,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         private async Task PageRefresh()
         {
             await LiveTimer();
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             FilteredPalletList.Clear();
             PalletList.Clear();
             var e = await localDbPalletMasterService.GetList("WhIdFilter", null, null);

@@ -39,7 +39,10 @@ namespace SSDIWMS_android.ViewModels
                 ProceedEnable = false;
             }
             await LiveTimer();
-            UserFullName = Preferences.Get("PrefUserFullname", "");
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
+            
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

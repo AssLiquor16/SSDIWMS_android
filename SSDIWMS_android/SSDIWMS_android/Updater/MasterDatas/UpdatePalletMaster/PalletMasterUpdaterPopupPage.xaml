@@ -4,6 +4,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
                   xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster"
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                  CloseWhenBackgroundIsClicked="False"
                   x:Class="SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster.PalletMasterUpdaterPopupPage">
     <popup:PopupPage.BindingContext>
         <viewmodels:PalletMasterUpdaterPopupVM/>

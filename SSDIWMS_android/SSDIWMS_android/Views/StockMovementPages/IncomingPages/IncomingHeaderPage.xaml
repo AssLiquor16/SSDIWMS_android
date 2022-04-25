@@ -4,6 +4,7 @@
              xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms"
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
              x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingHeaderPage"
              Title="INCOMING STOCKS"
              >
@@ -21,8 +22,24 @@
                 <StackLayout Padding="15">
 
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <BoxView/>
 
@@ -111,7 +128,6 @@
                                                                          Grid.Column="2">
                                                                 <Label Text="{Binding INCstatus}" 
                                                                        FontSize="Micro" 
-                                                                       TextColor="{Binding StatusColor}" 
                                                                        HorizontalOptions="StartAndExpand"/>
                                                             </StackLayout>
 

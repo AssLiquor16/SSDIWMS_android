@@ -28,8 +28,24 @@
                 <StackLayout Padding="15">
 
                     <StackLayout Orientation="Horizontal">
-                        <Label Text="{Binding LiveDate}" FontSize="Subtitle" HorizontalOptions="StartAndExpand"/>
-                        <Label Text="{Binding UserFullName}" FontSize="Subtitle" HorizontalOptions="EndAndExpand"/>
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                     <BoxView/>
                     <StackLayout Orientation="Vertical" 
@@ -39,10 +55,15 @@
                         <StackLayout HorizontalOptions="CenterAndExpand">
                             <Label Text="{Binding PONumber}" FontSize="Title"/>
                         </StackLayout>
+                        <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
+                            <StackLayout BackgroundColor="Transparent">
+                                <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search item"/>
+                            </StackLayout>
+                        </Frame>
                         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                             <CollectionView 
-                                        ItemsSource="{Binding IncomingParDetailList}"
+                                        ItemsSource="{Binding FilteredIncomingParDetailList}"
                                         SelectionMode="Single"
                                         SelectedItem="{Binding SelectedDetail}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
@@ -64,18 +85,18 @@
                                     </StackLayout>
                                 </CollectionView.EmptyView>
                                 <CollectionView.Header>
-                                    <Grid Padding="0" VerticalOptions="CenterAndExpand">
+                                    <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
-                                            <ColumnDefinition Width="160*"/>
+                                            <ColumnDefinition Width="180*"/>
                                             <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="Item Code" FontSize="Subtitle" Grid.Column="0" 
+                                        <Label Text="Item Code" FontSize="Small" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="Item Desc" FontSize="Subtitle" Grid.Column="1"
+                                        <Label Text="Item Desc" FontSize="Small" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="QTY" FontSize="Subtitle" Grid.Column="2"
+                                        <Label Text="QTY" FontSize="Small" Grid.Column="2"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
                                     </Grid>
@@ -89,28 +110,34 @@
                                 </CollectionView.Footer>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <StackLayout Style="{StaticResource ColViewitemViewDefaultFormat}">
+                                        
+                                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
 
-                                            <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="70*"/>
-                                                    <ColumnDefinition Width="160*"/>
-                                                    <ColumnDefinition Width="40*"/>
-                                                </Grid.ColumnDefinitions>
+                                            <StackLayout BackgroundColor="Transparent">
 
-                                                <Label Text="{Binding ItemCode}" Grid.Column="0"/>
-                                                <StackLayout Grid.Column="1">
-                                                    <Label Text="{Binding ItemDesc}"/>
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Pallet:" FontSize="Micro"/>
-                                                        <Label Text="{Binding PalletCode}" FontSize="Micro"/>
+                                                <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="70*"/>
+                                                        <ColumnDefinition Width="180*"/>
+                                                        <ColumnDefinition Width="40*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackLayout Grid.Column="0">
+                                                        <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <Label Text="{Binding PalletCode}" FontSize="Micro" HorizontalOptions="StartAndExpand"/>
+                                                        </StackLayout>
                                                     </StackLayout>
-                                                </StackLayout>
-                                                <Label Text="{Binding PartialCQTY}" Grid.Column="2"/>
+                                                    <StackLayout Grid.Column="1">
+                                                        <Label Text="{Binding ItemDesc}" FontAttributes="Bold" FontSize="Small"/>
+                                                    </StackLayout>
+                                                    <Label Text="{Binding PartialCQTY}" FontSize="Small" Grid.Column="2"/>
 
-                                            </Grid>
+                                                </Grid>
 
-                                        </StackLayout>
+                                            </StackLayout>
+                                        </Frame>
+                                        
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>

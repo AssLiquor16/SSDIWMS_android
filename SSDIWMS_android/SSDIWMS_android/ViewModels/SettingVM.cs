@@ -2,6 +2,7 @@
 using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
 using SSDIWMS_android.Updater.UpdateArticleMaster;
 using SSDIWMS_android.Views.PopUpPages;
@@ -40,6 +41,7 @@ namespace SSDIWMS_android.ViewModels
         public AsyncCommand NotifCommand { get; }
         public AsyncCommand ArticleMasterUpdateCommand { get; }
         public AsyncCommand PalletMasterUpdateCommand { get; }
+        public AsyncCommand AllUpdateCommand { get; }
         public AsyncCommand ClearTransactionCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
 
@@ -53,6 +55,7 @@ namespace SSDIWMS_android.ViewModels
             NotifCommand = new AsyncCommand(Notif);
             ArticleMasterUpdateCommand = new AsyncCommand(ArticleMasterUpdate);
             PalletMasterUpdateCommand = new AsyncCommand(PalletMasterUpdate);
+            AllUpdateCommand = new AsyncCommand(AllUpdate);
             ClearTransactionCommand = new AsyncCommand(ClearTransaction);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
@@ -110,6 +113,10 @@ namespace SSDIWMS_android.ViewModels
         {
             await PopupNavigation.Instance.PushAsync(new PalletMasterUpdaterPopupPage());
         }
+        private async Task AllUpdate()
+        {
+            await PopupNavigation.Instance.PushAsync(new AllMasterfileUpdaterPopupPage());
+        }
         private async Task ClearTransaction()
         {
             await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminClearTrans"));
@@ -117,7 +124,9 @@ namespace SSDIWMS_android.ViewModels
         private async Task PageRefresh()
         {
             await LiveTimer();
-            UserFullName = Preferences.Get("PrefUserFullname", "");
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             Role = Preferences.Get("PrefUserRole", "");
             switch (Role)
             {

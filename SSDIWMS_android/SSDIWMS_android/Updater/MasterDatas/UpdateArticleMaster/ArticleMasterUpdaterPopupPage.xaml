@@ -3,6 +3,7 @@
                   xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+                  CloseWhenBackgroundIsClicked="False"
                   xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.UpdateArticleMaster"
                   x:Class="SSDIWMS_android.Updater.UpdateArticleMaster.ArticleMasterUpdaterPopupPage">
     <popup:PopupPage.BindingContext>
