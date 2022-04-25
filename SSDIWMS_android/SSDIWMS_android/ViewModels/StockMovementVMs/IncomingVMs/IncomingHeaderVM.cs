@@ -63,17 +63,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     case "Check":
                         var route = $"{nameof(IncomingDetailListPage)}";
                         await Shell.Current.GoToAsync(route);
-                        SelectedHeader = null;
                         break;
                     case "Pick":
                         var route1 = $"{nameof(IncomingDetailListPage)}";
                         await Shell.Current.GoToAsync(route1);
-                        SelectedHeader = null;
                         break;
                 }
 
                 
             }
+            SelectedHeader = null;
         }
         private async Task ColViewRefresh()
         {

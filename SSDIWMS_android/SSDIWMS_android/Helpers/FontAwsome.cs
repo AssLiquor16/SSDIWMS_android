@@ -20697,5 +20697,6 @@ namespace FontAwesome
         public const string NewSync = "\uf0ac";
         public const string NewLogout = "\uf060";
         public const string NewPallet = "\uf482";
+        public const string newFiles = "\ue178";
     }
 }

@@ -33,8 +33,46 @@
                             Sonic Sales And Distribution Inc is an enterprise located in Philippines, with the main office in Davao City. It operates in the Merchant Wholesalers, Durable Goods industry.
                         </Label>
 
-                        <Button Text="Incoming stocks" Command="{Binding IncomingNavigationCommand}" VerticalOptions="EndAndExpand" IsEnabled="{Binding ProceedEnable}"/>
-                        <Button Text="Bad order stocks" Command="{Binding NavigationCommand}" VerticalOptions="EndAndExpand" IsEnabled="{Binding ProceedEnable}"/>
+                        <ScrollView>
+
+                            <StackLayout>
+                                <Frame Style="{StaticResource Framegrouping1}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Incoming Stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                        <Button
+                                            IsEnabled="{Binding ProceedEnable}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60"
+                                            Command="{Binding IncomingNavigationCommand}" >
+                                            <Button.ImageSource>
+                                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                            </Button.ImageSource>
+                                        </Button>
+
+                                    </StackLayout>
+                                </Frame>
+                                
+                                <Frame Style="{StaticResource Framegrouping1}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Bad Stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                        <Button
+                                            IsEnabled="{Binding ProceedEnable}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                            <Button.ImageSource>
+                                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                            </Button.ImageSource>
+                                        </Button>
+
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+
+                        </ScrollView>
                     </StackLayout>
                 </StackLayout>
             </Frame>

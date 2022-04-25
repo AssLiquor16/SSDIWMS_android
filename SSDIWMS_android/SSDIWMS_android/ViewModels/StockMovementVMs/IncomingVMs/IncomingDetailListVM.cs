@@ -38,7 +38,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
         public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
-        public AsyncCommand SyncCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
@@ -54,7 +53,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
             TappedCommand = new AsyncCommand(Tapped);
-            SyncCommand = new AsyncCommand(Sync);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
@@ -68,33 +66,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await ColViewRefresh();
             });
 
-        }
-        private async Task Sync()
-        {
-            var con = new LoadingPopupVM();
-            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(""));
-            var syncing = Preferences.Get("PrefISMSyncing", false);
-            if (syncing == false)
-            {
-                Preferences.Set("PrefISMSyncing", true);
-                try
-                {
-                    await transactionUpdateService.UpdateAllIncomingTrans();
-                    await notifService.StaticToastNotif("Success", "Items updated succesfully.");
-                }
-                catch
-                {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }
 
-                Preferences.Set("PrefISMSyncing", false);
-            }
-            else
-            {
-                await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
-            }
-            await con.CloseAll();
-            await ColViewRefresh();
+
+            //rejects
+            //SyncCommand = new AsyncCommand(Sync);
+
         }
         private async Task Tapped()
         {
@@ -186,5 +162,35 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             });
         }
 
+
+
+        //rejects 
+        /*private async Task Sync()
+        {
+            var con = new LoadingPopupVM();
+            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(""));
+            var syncing = Preferences.Get("PrefISMSyncing", false);
+            if (syncing == false)
+            {
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await transactionUpdateService.UpdateAllIncomingTrans();
+                    await notifService.StaticToastNotif("Success", "Items updated succesfully.");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+
+                Preferences.Set("PrefISMSyncing", false);
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
+            }
+            await con.CloseAll();
+            await ColViewRefresh();
+        }*/
     }
 }

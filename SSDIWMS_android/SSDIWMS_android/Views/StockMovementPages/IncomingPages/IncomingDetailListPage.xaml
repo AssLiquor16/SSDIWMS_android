@@ -5,6 +5,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:fontAwsome="clr-namespace:FontAwesome"
+             Title="INCOMING STOCKS"
              x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailListPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
@@ -12,11 +13,6 @@
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding SyncCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.FileUpload}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
         <ToolbarItem Clicked="ToolbarItem_Clicked">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Plus}"/>

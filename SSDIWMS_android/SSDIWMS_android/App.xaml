@@ -122,6 +122,15 @@
                 <Setter Property="Padding" Value="0,5"/>
                 <Setter Property="BackgroundColor" Value="#f0e9d5"/>
             </Style>
+
+            <Style x:Key="Framegrouping" TargetType="Frame">
+                <Setter Property="Padding" Value="10,5"/>
+                <Setter Property="Margin" Value="5,0"/>
+            </Style>
+            <Style x:Key="Framegrouping1" TargetType="Frame">
+                <Setter Property="Padding" Value="10,10"/>
+                <Setter Property="Margin" Value="5,5"/>
+            </Style>
         </ResourceDictionary>        
     </Application.Resources>
 </Application>
