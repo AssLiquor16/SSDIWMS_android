@@ -171,6 +171,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
         }
+
+
+        /*var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
+                        if (poStatus == "Ongoing")
+                        {
+                        }*/
         private async Task Finalize()
         {
             bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the item?", "Yes", "No");
@@ -192,7 +198,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     await localDbIncomingHeaderService.Update("PONumber", e);
                     foreach (var item in IncomingDetailList)
                     {
-                        item.TimesUpdated += 1;
+                        item.TimesUpdated += 2;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
                         await localDbIncomingDetailService.Update("Common", item);
@@ -203,11 +209,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
                         foreach (var paritem in retpardet)
                         {
-                            paritem.TimesUpdated += 1;
+                            paritem.TimesUpdated += 2;
                             paritem.UserId = userId;
                             paritem.Status = "Finalized";
                             paritem.DateFinalized = DateTime.Now;
-                            await localDbIncomingParDetailService.Update("RefId", paritem);
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }
                     }
                     Preferences.Remove("PrefPONumber");
@@ -225,12 +231,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     if (busy == false)
                     {
                         string[] strinfilter = { PONumber };
-                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
-                        if (poStatus == "Ongoing")
-                        {
-                            await updaterservice.UpdateAllIncomingTrans();
-                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
-                        }
+                        await updaterservice.UpdateAllIncomingTrans();
+                        await notifService.StaticToastNotif("Success", "Item sync successfully.");
+                        
                     }
                     
                 }
@@ -281,7 +284,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             paritem.UserId = userId;
                             paritem.Status = "Recieved";
                             paritem.DateFinalized = DateTime.Now;
-                            await localDbIncomingParDetailService.Update("RefId", paritem);
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }
                     }
                     Preferences.Remove("PrefPONumber");

@@ -96,9 +96,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             }
             if (!string.IsNullOrWhiteSpace(DataSender))
             {
+                DateTime dCreated = Preferences.Get("PrefINCParDetDateCreated", DateTime.MinValue);
                 int[] i = { INCParDetId };
                 string[] s = { RefId };
-                var retdata = await localDbIncomingParDetailService.GetModel("INCParDetId&RefId", s, i);
+                DateTime[] t = { dCreated };
+                var retdata = await localDbIncomingParDetailService.GetModel("INCParDetId&RefId&DateCreated", s, i, t);
                 if (retdata != null)
                 {
                     E = retdata;
@@ -135,7 +137,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         E.PalletCode = PalletCode;
                         E.PartialCQTY = PartialCQTY;
                         E.ExpiryDate = ExpiryDate;
-                        await localDbIncomingParDetailService.Update("INCParDetId&RefId", E);
+                        await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
                         await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                         MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
                         await Shell.Current.GoToAsync("..");

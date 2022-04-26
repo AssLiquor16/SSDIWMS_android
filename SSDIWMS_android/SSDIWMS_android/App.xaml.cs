@@ -2,6 +2,7 @@
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Views;
 using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

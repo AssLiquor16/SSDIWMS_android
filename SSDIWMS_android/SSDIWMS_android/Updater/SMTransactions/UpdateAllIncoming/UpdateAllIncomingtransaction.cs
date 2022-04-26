@@ -129,7 +129,8 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
             foreach(var spardetail in spardetails)
             {
                 string[] b = { spardetail.RefId };
-                var lpardetail = await localDbIncomingParDetailService.GetModel("RefId", b, null);
+                DateTime[] c = { spardetail.DateCreated };
+                var lpardetail = await localDbIncomingParDetailService.GetModel("RefId&DateCreated", b, null, c);
                 if(lpardetail == null)
                 {
                     await localDbIncomingParDetailService.Insert("Common", spardetail);
@@ -144,7 +145,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                     else if(lpardetail.TimesUpdated < spardetail.TimesUpdated)
                     {
                         // update local
-                        await localDbIncomingParDetailService.Update("RefId", spardetail);
+                        await localDbIncomingParDetailService.Update("RefId&DateCreated", spardetail);
                     }
                 }
             }

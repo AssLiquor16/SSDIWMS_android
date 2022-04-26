@@ -19,6 +19,8 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceSer
             Preferences.Set("PrefDateTimeTick", 20);
             var e = await SetRandomVal();
             Preferences.Set("PrefTimerLongRandomVal",e);
+            Preferences.Remove("PrefINCParDetDateCreated");
+            Preferences.Remove("PrefSelectedPallet");
         }
         private async Task<int> SetRandomVal()
         {

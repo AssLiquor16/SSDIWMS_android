@@ -83,14 +83,21 @@
         <DataTemplate>
             <Grid BackgroundColor="#074e8c"
                   HeightRequest="100">
-                <StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand">
-                    <Label Text="{Binding Fullname}"
-                       TextColor="White"
+
+                <Label TextColor="White"
+                       FontSize="Title"
                        FontAttributes="Bold"
                        FontFamily="FAS"
                        HorizontalTextAlignment="Center"
-                       VerticalTextAlignment="Center" />
-                </StackLayout>
+                       VerticalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                            <Span Text=" "/>
+                            <Span Text="{Binding Fullname}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </Grid>
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>

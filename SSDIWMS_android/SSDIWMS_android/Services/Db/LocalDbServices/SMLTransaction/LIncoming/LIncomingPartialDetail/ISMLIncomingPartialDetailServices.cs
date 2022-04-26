@@ -9,7 +9,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
     public interface ISMLIncomingPartialDetailServices
     {
         Task<IEnumerable<IncomingPartialDetailModel>> GetList(string type, string[] stringfilter, int[] intfilter);
-        Task<IncomingPartialDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter);
+        Task<IncomingPartialDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter);
         Task Insert(string type, IncomingPartialDetailModel item);
         Task Update(string type, IncomingPartialDetailModel item);
         Task Clear();

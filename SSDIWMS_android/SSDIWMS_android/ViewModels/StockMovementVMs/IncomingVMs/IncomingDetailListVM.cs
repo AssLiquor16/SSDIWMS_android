@@ -94,7 +94,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         {
             if(SelectedDetail != null)
             {
-                var route = $"{nameof(EditDetailModulePages)}?DataSender=DetailList&INCParDetId={SelectedDetail.INCParDetId}&RefId={SelectedDetail.RefId}&";
+
+                var route = $"{nameof(EditDetailModulePages)}?DataSender=DetailList&INCParDetId={SelectedDetail.INCParDetId}&RefId={SelectedDetail.RefId}";
+                Preferences.Set("PrefINCParDetDateCreated", SelectedDetail.DateCreated);
                 await Shell.Current.GoToAsync(route);
             }
         }
@@ -146,6 +148,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         public async Task ColViewRefresh()
         {
+            try
+            {
+                await transactionUpdateService.UpdateAllIncomingTrans();
+                await notifService.StaticToastNotif("Success", "Items synced succesfully.");
+            }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+            }
             
             IsRefreshing = true;
             var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);

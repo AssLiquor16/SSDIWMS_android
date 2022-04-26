@@ -72,7 +72,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
             }
         }
 
-        public async Task<IncomingPartialDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter)
+        public async Task<IncomingPartialDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter)
         {
             await Init();
             switch (type)
@@ -81,14 +81,16 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var iNCParDetId = intfilter[0];
                     var singleData = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == iNCParDetId).FirstOrDefaultAsync();
                     return singleData;
-                case "RefId":
+                case "RefId&DateCreated":
+                    DateTime datecreated = datefilter[0];
                     var refId = stringfilter[0];
-                    var filtereddata = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.RefId == refId).FirstOrDefaultAsync();
+                    var filtereddata = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.RefId == refId && x.DateCreated == datecreated).FirstOrDefaultAsync();
                     return filtereddata;
-                case "INCParDetId&RefId":
+                case "INCParDetId&RefId&DateCreated":
                     var iNCParDetId1 = intfilter[0];
                     var rEfId = stringfilter[0];
-                    var data1 = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == iNCParDetId1 &&  x.RefId == rEfId).FirstOrDefaultAsync();
+                    var dCreated = datefilter[0];
+                    var data1 = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == iNCParDetId1 &&  x.RefId == rEfId && x.DateCreated == dCreated).FirstOrDefaultAsync();
                     return data1;
                 default: return null;
             }
@@ -126,6 +128,15 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
             }
         }
 
+        /*case "INCParDetId&RefId&DCreated":
+                    var cont = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == item.INCParDetId && x.RefId == item.RefId &&x.DateCreated == item.DateCreated).FirstOrDefaultAsync();
+                    cont.PartialCQTY = item.PartialCQTY;
+                    cont.UserId = item.UserId;
+                    cont.TimesUpdated = item.TimesUpdated;
+                    cont.Status = item.Status;
+                    cont.DateFinalized = item.DateFinalized;
+                    await db_.UpdateAsync(cont);
+                    break;*/
         public async Task Update(string type, IncomingPartialDetailModel item)
         {
             await Init();
@@ -136,21 +147,22 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     content = item;
                     await db_.UpdateAsync(content);
                     break;
-                case "RefId":
-                    var conte = await db_.Table<IncomingPartialDetailModel>().Where(x => x.RefId == item.RefId).FirstOrDefaultAsync();
-                    conte = item;
-                    await db_.UpdateAsync(conte);
-                    break;
-                case "INCParDetId&RefId":
-                    var cont = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == item.INCParDetId && x.RefId == item.RefId).FirstOrDefaultAsync();
-                    conte = item;
-                    await db_.UpdateAsync(conte);
-                    break;
                 case "RefIdAutoGenerate":
                     var ret = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == item.INCParDetId).FirstOrDefaultAsync();
                     ret.RefId = ret.RefId + item.INCParDetId;
                     await db_.UpdateAsync(ret);
                     break;
+                case "RefId&DateCreated":
+                    var conte = await db_.Table<IncomingPartialDetailModel>().Where(x => x.RefId == item.RefId && x.DateCreated == item.DateCreated).FirstOrDefaultAsync();
+                    conte.PartialCQTY = item.PartialCQTY;
+                    conte.UserId = item.UserId;
+                    conte.TimesUpdated = item.TimesUpdated;
+                    conte.PalletCode = item.PalletCode;
+                    conte.Status = item.Status;
+                    conte.DateFinalized = item.DateFinalized;
+                    await db_.UpdateAsync(conte);
+                    break;
+                default: break;
             }
         }
 
