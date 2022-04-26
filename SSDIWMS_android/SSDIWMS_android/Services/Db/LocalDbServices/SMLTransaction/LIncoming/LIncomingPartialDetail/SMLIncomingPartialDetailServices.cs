@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,12 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
 {
     public class SMLIncomingPartialDetailServices : ISMLIncomingPartialDetailServices
     {
+        ILocalSiteMasterServices localDbSiteMasterService;
+
+        public SMLIncomingPartialDetailServices()
+        {
+            localDbSiteMasterService = DependencyService.Get<ILocalSiteMasterServices>();
+        }
         SQLiteAsyncConnection db_;
 
         async Task Init()
@@ -68,6 +75,9 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var secondfilter = stringfilter[1]; ; // itemcode
                     var n = await db_.Table<IncomingPartialDetailModel>().Where(x => x.POHeaderNumber == firstfilter && x.ItemCode == secondfilter).ToListAsync();
                     return n;
+                case "AllZeroServerId":
+                    var noServerIdList = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCServerId == 0).ToListAsync();
+                    return noServerIdList;
                 default: return null;
             }
         }
@@ -105,10 +115,19 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     await db_.InsertAsync(item);
                     break;
                 case "RefIdAutoGenerate":
+                    var datec = DateTime.Now;
+                    var datec1 = datec.ToString("MMddyyyymmssffff");
+                    var site = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+                    var sitedata = await localDbSiteMasterService.GetModel("WarehouseId", site);
+                    var splitsite = sitedata.SiteCompleteDesc.Split(' ');
+                    var siteInitial = splitsite[0];
+                    var siteSubInitial = siteInitial.Substring(0, 3);
+
+                    var refId = siteSubInitial + $"{item.INCHeaderId}" + $"{item.INCHeaderId}" + datec1;
                     var initialData = new IncomingPartialDetailModel 
                     { 
                         DateCreated = DateTime.Now,
-                        RefId = item.INCDetId + "P",
+                        RefId = refId,
                         INCDetId = item.INCDetId,
                         INCHeaderId = item.INCHeaderId,
                         ItemCode = item.ItemCode,
@@ -123,7 +142,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                         DateFinalized = DateTime.MinValue
                     };
                     await db_.InsertAsync(initialData);
-                    await Update("RefIdAutoGenerate", initialData);
                     break;
             }
         }
@@ -147,13 +165,9 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     content = item;
                     await db_.UpdateAsync(content);
                     break;
-                case "RefIdAutoGenerate":
-                    var ret = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == item.INCParDetId).FirstOrDefaultAsync();
-                    ret.RefId = ret.RefId + item.INCParDetId;
-                    await db_.UpdateAsync(ret);
-                    break;
                 case "RefId&DateCreated":
                     var conte = await db_.Table<IncomingPartialDetailModel>().Where(x => x.RefId == item.RefId && x.DateCreated == item.DateCreated).FirstOrDefaultAsync();
+                    conte.INCServerId = item.INCServerId;
                     conte.PartialCQTY = item.PartialCQTY;
                     conte.UserId = item.UserId;
                     conte.TimesUpdated = item.TimesUpdated;

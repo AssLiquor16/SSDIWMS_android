@@ -43,7 +43,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                             {
                                 await Task.Delay(10);
                                 await updateAllIncomingtransaction.UpdateAllIncomingTrans();
-                                await notifyService.ToastNotif("Success", "Syncing execute succesfully.");
+                                await notifyService.ToastNotif("Success", "Sync execute succesfully.");
                             }
                             catch
                             {
@@ -53,7 +53,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                         }
                         else
                         {
-                            await notifyService.ToastNotif("Error", "Attempting failed, syncing busy.");
+                            await notifyService.ToastNotif("Error", "Sync busy.");
                         }
                     }
                 });

@@ -10,7 +10,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int INCServerId { get; set; }
         [PrimaryKey,AutoIncrement]
         public int INCParDetId { get; set; }
-        public DateTime DateCreated { get; set; }
         public string RefId { get; set; }           // INCDetId + P + INCParDetId
         public int INCDetId { get; set; }
         public int INCHeaderId { get; set; }
@@ -22,6 +21,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int TimesUpdated { get; set; }
         public string POHeaderNumber { get; set; }
         public string Status { get; set; }
+        public DateTime DateCreated { get; set; }
         public DateTime DateFinalized { get; set; }
         public DateTime ExpiryDate { get; set; }
     }

@@ -110,7 +110,7 @@
                                 </CollectionView.Footer>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        
+
                                         <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
 
                                             <StackLayout BackgroundColor="Transparent">
@@ -137,13 +137,33 @@
 
                                             </StackLayout>
                                         </Frame>
-                                        
+
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
 
                         </RefreshView>
-                        <Button Text="Summary" Command="{Binding ShowOverViewCommand}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="5,0">
+
+                        <Button
+                                            CornerRadius="5"
+                                            Command="{Binding SyncCommand}">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.SyncAlt}"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button Text="Summary" 
+                                            CornerRadius="5" 
+                                            Padding="55,0"
+                                            Command="{Binding ShowOverViewCommand}"
+                                            WidthRequest="200">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ClipboardList}"/>
+                            </Button.ImageSource>
+                        </Button>
                     </StackLayout>
                 </StackLayout>
             </Frame>

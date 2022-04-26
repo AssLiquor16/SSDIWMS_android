@@ -95,7 +95,8 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                         var json = JsonConvert.SerializeObject(item);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
                         var res = await client.PutAsync($"api/IncomingPartialDetails/{item.INCServerId}", content);
-                        var sult = res.StatusCode.ToString();
+                        var sult = res.Content.ReadAsStringAsync().Result;
+                        Console.WriteLine(sult);
                     }
                     break;
                 default: break;

@@ -54,6 +54,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
         public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
         public ObservableRangeCollection<IncomingPartialDetailModel> FilteredIncomingParDetailList { get; set; }
+        public AsyncCommand SyncCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
@@ -69,6 +70,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
             FilteredIncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
 
+            SyncCommand = new AsyncCommand(Sync);
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
@@ -99,6 +101,32 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 Preferences.Set("PrefINCParDetDateCreated", SelectedDetail.DateCreated);
                 await Shell.Current.GoToAsync(route);
             }
+        }
+        private async Task Sync()
+        {
+            await notifService.LoadingProcess("Begin", "Attempting to sync...");
+            var syncing = Preferences.Get("PrefISMSyncing", false);
+            if (syncing == false)
+            {
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await transactionUpdateService.UpdateAllIncomingTrans();
+                    await notifService.StaticToastNotif("Success", "Items synced succesfully.");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Sync busy, try again later.");
+            }
+            Preferences.Set("PrefISMSyncing", false);
+            await Shell.Current.GoToAsync("..");
+            await notifService.LoadingProcess("End", " ");
+
         }
         private async Task ShowOverView()
         {
@@ -148,15 +176,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         public async Task ColViewRefresh()
         {
-            try
-            {
-                await transactionUpdateService.UpdateAllIncomingTrans();
-                await notifService.StaticToastNotif("Success", "Items synced succesfully.");
-            }
-            catch
-            {
-                await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-            }
             
             IsRefreshing = true;
             var detailList = await localDbIncomingParDetailService.GetList("PONumber", null, null);

@@ -3,7 +3,9 @@ using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.ArticleMaster;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.ViewModels;
@@ -20,6 +22,10 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
         IMainServices mainServices;
         ILocalArticleMasterServices localDbArticleMasterService;
         IServerArticleMasterServices serverDbArticleMasterService;
+
+        ILocalSiteMasterServices localDbSiteMasterService;
+        IServerSiteMasterServices serverDbSiteMasterService;
+
         IToastNotifService notifService;
 
         string _staticloadingText, _loadingText, _taskType, _errorText;
@@ -36,6 +42,10 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
             mainServices = DependencyService.Get<IMainServices>();
             localDbArticleMasterService = DependencyService.Get<ILocalArticleMasterServices>();
             serverDbArticleMasterService = DependencyService.Get<IServerArticleMasterServices>();
+
+            localDbSiteMasterService = DependencyService.Get<ILocalSiteMasterServices>();
+            serverDbSiteMasterService = DependencyService.Get<IServerSiteMasterServices>();
+
             notifService = DependencyService.Get<IToastNotifService>();
 
             ArticleMasterList = new ObservableRangeCollection<ArticleMasterModel>();
@@ -51,6 +61,20 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
         {
             try
             {
+
+                var sites = await serverDbSiteMasterService.GetList("Common", null, null);
+                foreach (var site in sites)
+                {
+                    var locsite = await localDbSiteMasterService.GetModel("Common", site.SiteId);
+                    if (locsite == null)
+                    {
+                        await localDbSiteMasterService.Insert("Common", site);
+                    }
+                    else
+                    {
+                        await localDbSiteMasterService.Update("Common", site);
+                    }
+                }
                 ArticleMasterList.Clear();
                 var retdata = await serverDbArticleMasterService.GetList("All", null, null);
                 ArticleMasterList.AddRange(retdata);

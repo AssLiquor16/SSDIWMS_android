@@ -159,11 +159,28 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                     if(role == "Check")
                     {
                         var retsval = await serverDbIncomingParDetailService.SpecialCaseInsert("ReturnInsertedItem", lpDet);
-                        await localDbIncomingParDetailService.Update("RefId", retsval);
+                        if(retsval.INCServerId != 0)
+                        {
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", retsval);
+                        }
+                       
                     }
                 }
             }
+            var zeroServerId = await localDbIncomingParDetailService.GetList("AllZeroServerId", null,null);
+            foreach(var sdata in spardetails)
+            {
+                var locItem = zeroServerId.Where(x=>x.RefId == sdata.RefId).FirstOrDefault();
+                {
+                    if(locItem != null)
+                    {
+                        await localDbIncomingParDetailService.Update("RefId&DateCreated", sdata);
+                    }
+                }
+            }
+
         }
+
         //pangitaon ang error sa di mu update ang qty sa pikas cp 
         //reject
         public async Task UpdateSpecifiedTrans()
