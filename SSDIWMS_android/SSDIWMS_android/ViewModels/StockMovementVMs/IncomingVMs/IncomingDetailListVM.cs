@@ -29,23 +29,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
 
-        string _toolbarColor, _role,_searchString;
+        string _toolbarColor, _role;
         bool _isRefreshing;
         IncomingPartialDetailModel _selectedDetail;
-        public string SearchString
-        {
-            get => _searchString;
-            set
-            {
-
-                if (value == _searchString)
-                    return;
-                _searchString = value;
-                OnPropertyChanged();
-                SearchItem();
-            }
-        }
-
         public string Role { get => _role; set => SetProperty(ref _role, value); }
         public string ToolbarColor { get => _toolbarColor; set => SetProperty(ref _toolbarColor, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
@@ -53,7 +39,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
         public ObservableRangeCollection<IncomingPartialDetailModel> IncomingParDetailList { get; set; }
-        public ObservableRangeCollection<IncomingPartialDetailModel> FilteredIncomingParDetailList { get; set; }
         public AsyncCommand SyncCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
@@ -68,7 +53,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
-            FilteredIncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
 
             SyncCommand = new AsyncCommand(Sync);
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
@@ -151,22 +135,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
-                FilteredIncomingParDetailList.Clear();
-                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else if (Role == "Pick")
             {
                 var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
-                FilteredIncomingParDetailList.Clear();
-                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else
             {
                 IncomingParDetailList.Clear();
-
-                FilteredIncomingParDetailList.Clear();
             }
             await LiveTimer();
             var userfullname = Preferences.Get("PrefUserFullname", "");
@@ -184,8 +162,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
-                FilteredIncomingParDetailList.Clear();
-                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
                 
             }
             else if (Role == "Pick")
@@ -193,29 +169,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
-                FilteredIncomingParDetailList.Clear();
-                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
             }
             else
             {
                 IncomingParDetailList.Clear();
-                FilteredIncomingParDetailList.Clear();
             }
             IsRefreshing = false;
-        }
-        private void SearchItem()
-        {
-            SearchString = SearchString.ToUpperInvariant();
-            FilteredIncomingParDetailList.Clear();
-            if (string.IsNullOrWhiteSpace(SearchString))
-            {
-                FilteredIncomingParDetailList.AddRange(IncomingParDetailList);
-            }
-            else
-            {
-                var e = IncomingParDetailList.Where(x => x.ItemCode.Contains(SearchString) || x.ItemDesc.Contains(SearchString)).ToList();
-                FilteredIncomingParDetailList.AddRange(e);
-            }
         }
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

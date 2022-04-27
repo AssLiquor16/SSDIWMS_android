@@ -82,11 +82,11 @@
 
                                                     <Label Text="Bill Doc" FontSize="Small" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                    <Label Text="P.O #" FontSize="Small" Grid.Column="1"
+                                                    <Label Text="P.O Number" FontSize="Small" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
                                                     <Label Text="Status" FontSize="Small" Grid.Column="2"
                                                        HorizontalTextAlignment="Start"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}" Margin="-10,0,0,0"/>
 
                                                 </Grid>
 
@@ -114,20 +114,20 @@
 
                                                             <StackLayout Grid.Column="0" >
                                                                 <StackLayout>
-                                                                    <Label Text="{Binding BillDoc}" FontSize="Micro"/>
+                                                                    <Label Text="{Binding BillDoc}" FontSize="Small"/>
                                                                 </StackLayout>
                                                             </StackLayout>
                                                             <StackLayout Grid.Column="1">
-                                                                <Label Text="{Binding PONumber}" FontSize="Small"/>
+                                                                <Label Text="{Binding PONumber}" FontSize="Subtitle"/>
                                                                 <StackLayout Orientation="Horizontal">
-                                                                    <Label Text="Ship Code:" FontSize="Micro"/>
-                                                                    <Label Text="{Binding ShipCode}" FontSize="Micro"/>
+                                                                    <Label Text="Ship Code:" FontSize="Small"/>
+                                                                    <Label Text="{Binding ShipCode}" FontSize="Small"/>
                                                                 </StackLayout>
                                                             </StackLayout>
                                                             <StackLayout Orientation="Horizontal"
                                                                          Grid.Column="2">
                                                                 <Label Text="{Binding INCstatus}" 
-                                                                       FontSize="Micro" 
+                                                                       FontSize="Small" 
                                                                        HorizontalOptions="StartAndExpand"/>
                                                             </StackLayout>
 

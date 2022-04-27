@@ -47,6 +47,29 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
             }
             
         }
+
+        private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                var searchKey = e.NewTextValue;
+                var _con = BindingContext as IncomingDetailListVM;
+                searchKey = searchKey.ToUpper();
+                if (string.IsNullOrWhiteSpace(searchKey))
+                {
+                    PartialDetailsColView.ItemsSource = _con.IncomingParDetailList;
+                }
+                else
+                {
+                    PartialDetailsColView.ItemsSource = _con.IncomingParDetailList.Where(i => i.ItemCode.Contains(searchKey) || i.ItemDesc.Contains(searchKey) || i.PalletCode.Contains(searchKey));
+                }
+            }
+            catch (Exception ex)
+            {
+                App.Current.MainPage.DisplayAlert("Alert", "Emptyname" + ex.ToString(), "OK");
+                return;
+            }
+        }
     }
 }
 // await PopupNavigation.Instance.PushAsync(new IncomingDetailAddPopupPage());

@@ -30,8 +30,23 @@
                 <StackLayout Padding="5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Frame>
                         <StackLayout>
+                            <Frame CornerRadius="10" BackgroundColor="LightGray" Margin="5">
+
+                                <Picker 
+                                        HorizontalOptions="FillAndExpand"
+                                        FontAttributes="Bold"
+                                        Title="Sort by pallet" 
+                                        FontSize="Subtitle"
+                                        BackgroundColor="Transparent"
+                                        Grid.Column="0"
+                                        TitleColor="Gray"
+                                        ItemsSource="{Binding PList}"
+                                        ItemDisplayBinding="{Binding PalletCode}" 
+                                        SelectedItem="{Binding SelectedPallet}"/>
+
+                            </Frame>
                             <CollectionView 
-                                        ItemsSource="{Binding PartialDetailList}"
+                                        ItemsSource="{Binding FilterPartialList}"
                                         RemainingItemsThreshold="1"
 
                                         Margin="7,15">
@@ -50,21 +65,37 @@
                                     </StackLayout>
                                 </CollectionView.EmptyView>
                                 <CollectionView.Header>
-                                    <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
+                                    <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
-                                            <ColumnDefinition Width="140*"/>
+                                            <ColumnDefinition Width="130*"/>
                                             <ColumnDefinition Width="30*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="Item Code"  Grid.Column="0" 
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="Item Desc"  Grid.Column="1"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="QTY"  Grid.Column="2"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                        <Label 
+                                        VerticalTextAlignment="Center"
+                                        Text="Item Code"  
+                                        FontSize="Subtitle"
+                                        Grid.Column="0"     
+                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
+
+                                        <Label 
+                                        VerticalTextAlignment="Center"
+                                        Text="Item Desc"  
+                                        FontSize="Subtitle"
+                                        Grid.Column="1"     
+                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
+
+                                        <Label Text="QTY"  
+                                           Margin="-15,0,0,0"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalOptions="Start"
+                                           FontSize="Subtitle"
+                                           Grid.Column="2"
+                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
                                     </Grid>
+
                                 </CollectionView.Header>
                                 <CollectionView.Footer>
                                     <StackLayout>
@@ -80,7 +111,7 @@
                                                 <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="70*"/>
-                                                        <ColumnDefinition Width="140*"/>
+                                                        <ColumnDefinition Width="130*"/>
                                                         <ColumnDefinition Width="30*"/>
                                                     </Grid.ColumnDefinitions>
 

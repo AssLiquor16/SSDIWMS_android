@@ -77,7 +77,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         private async Task ColViewRefresh()
         {
             IsRefreshing = true;
-            IncomingHeaderList.Clear();
             var syncing = Preferences.Get("PrefISMSyncing", false);
             if (syncing == false)
             {
@@ -98,6 +97,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             {
                 await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
             }
+
+
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
             var filter = Preferences.Get("PrefUserRole", "");
             switch (filter)
@@ -120,7 +121,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         private async Task PageRefresh()
         {
             await LiveTimer();
-            IncomingHeaderList.Clear();
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
             var filter = Preferences.Get("PrefUserRole", "");
             switch (filter)

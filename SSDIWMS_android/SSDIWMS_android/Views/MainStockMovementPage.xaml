@@ -5,6 +5,7 @@
              xmlns:fontAwsome="clr-namespace:FontAwesome"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms"
+             Title="Stock Movement"
              x:Class="SSDIWMS_android.Views.MainStockMovementPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior

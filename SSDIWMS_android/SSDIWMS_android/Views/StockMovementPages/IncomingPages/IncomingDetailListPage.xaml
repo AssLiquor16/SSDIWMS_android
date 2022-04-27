@@ -57,14 +57,15 @@
                         </StackLayout>
                         <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
                             <StackLayout BackgroundColor="Transparent">
-                                <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search item"/>
+                                <Entry TextChanged="Entry_TextChanged" FontSize="Subtitle" Placeholder="Search item"/>
                             </StackLayout>
                         </Frame>
                         <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                             <CollectionView 
-                                        ItemsSource="{Binding FilteredIncomingParDetailList}"
+                                        ItemsSource="{Binding IncomingParDetailList}"
                                         SelectionMode="Single"
+                                        x:Name="PartialDetailsColView"
                                         SelectedItem="{Binding SelectedDetail}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
                                         RemainingItemsThreshold="1"
@@ -92,12 +93,12 @@
                                             <ColumnDefinition Width="40*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="Item Code" FontSize="Small" Grid.Column="0" 
+                                        <Label Text="Item Code" FontSize="Subtitle" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="Item Desc" FontSize="Small" Grid.Column="1"
+                                        <Label Text="Item Desc" FontSize="Subtitle" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        <Label Text="QTY" FontSize="Small" Grid.Column="2"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                        <Label Text="QTY" FontSize="Subtitle" Grid.Column="2"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}" Margin="-10,0,0,0"/>
 
                                     </Grid>
                                 </CollectionView.Header>
@@ -125,13 +126,13 @@
                                                     <StackLayout Grid.Column="0">
                                                         <Label Text="{Binding ItemCode}" FontSize="Small"/>
                                                         <StackLayout Orientation="Horizontal">
-                                                            <Label Text="{Binding PalletCode}" FontSize="Micro" HorizontalOptions="StartAndExpand"/>
+                                                            <Label Text="{Binding PalletCode}" FontSize="Small" HorizontalOptions="StartAndExpand"/>
                                                         </StackLayout>
                                                     </StackLayout>
                                                     <StackLayout Grid.Column="1">
                                                         <Label Text="{Binding ItemDesc}" FontAttributes="Bold" FontSize="Small"/>
                                                     </StackLayout>
-                                                    <Label Text="{Binding PartialCQTY}" FontSize="Small" Grid.Column="2"/>
+                                                    <Label Text="{Binding PartialCQTY}" FontSize="Subtitle" Grid.Column="2"/>
 
                                                 </Grid>
 

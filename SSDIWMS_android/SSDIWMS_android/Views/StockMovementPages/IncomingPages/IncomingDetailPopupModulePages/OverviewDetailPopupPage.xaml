@@ -149,7 +149,7 @@
                             </RefreshView>
                         </StackLayout>
                     </Frame>
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="-5,0,0,0">
 
                         <Button Text="Back"
                                 CornerRadius="5"
