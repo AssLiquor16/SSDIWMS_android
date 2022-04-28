@@ -17,7 +17,6 @@ namespace SSDIWMS_android.ViewModels
         public DashBoardVM()
         {
             PageRefreshCommand = new AsyncCommand(PageRefresh);
-            PassModelCommand = new AsyncCommand(PassModel);
         }
 
         private async Task PageRefresh()
@@ -65,46 +64,8 @@ namespace SSDIWMS_android.ViewModels
         public string PassVal1 { get => _passval1; set => SetProperty(ref _passval1, value); }
         public string Passval2 { get => _passval2; set => SetProperty(ref _passval2, value); }
 
-        public AsyncCommand PassModelCommand { get;  }
+       
 
-        public async Task PassModel()
-        {
-            await Task.Delay(1);
-            model1.ItemCode = GetVal1;
-            model1.ItemDesc = GetVal2;
-            var retobj = await SetVal("Details", model1);
-            IncomingDetailModel n = (IncomingDetailModel)retobj;
-            PassVal1 = GetVal1;
-            Passval2 = n.ItemDesc;
-        }
-
-        public async Task<object> SetVal(string arg, object e)
-        {
-            await Task.Delay(1);
-            switch (arg)
-            {
-                case "Details":
-                    IncomingDetailModel retval = new IncomingDetailModel();
-                    IncomingDetailModel passedVal = (IncomingDetailModel)e;
-                    if(passedVal.ItemDesc == "pork")
-                    {
-                        retval.ItemDesc = "HARAM";
-                    }
-                    else if(passedVal.ItemDesc == "chicken")
-                    {
-                        retval.ItemDesc = "HALAL";
-                    }
-                    else
-                    {
-                        retval.ItemDesc = "DILI MANI PAGKAON";
-                    }
-                    return retval;
-                default: return null;
-            }
-        }
-        public void clear(object e)
-        {
-            
-        }
+        
     }
 }

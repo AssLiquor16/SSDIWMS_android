@@ -9,5 +9,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
     {
         Task<int> ReturnInt(string type, string[] stringdata, int[] intdata);
         Task InsertData(string type, string[] stringdata, int[] intdata);
+        Task<DateTime> GetServerDate();
     }
 }

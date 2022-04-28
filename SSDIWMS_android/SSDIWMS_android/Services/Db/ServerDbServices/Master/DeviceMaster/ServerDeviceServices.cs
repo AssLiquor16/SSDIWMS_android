@@ -74,6 +74,18 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
             }
         }
 
-        
+        public async Task<DateTime> GetServerDate()
+        {
+            using (client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.MaxResponseContentBufferSize = 10000000;
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var json = await client.GetStringAsync($"api/Devices/ServerDate");
+                var i = JsonConvert.DeserializeObject<DateTime>(json);
+                return i;
+            }
+        }
     }
 }

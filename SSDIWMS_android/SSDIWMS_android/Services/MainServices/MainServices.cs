@@ -4,6 +4,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.MainServices;
+using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.Date;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.StockMovementIncoming;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.User;
 using SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalculatorServices;
@@ -26,6 +27,7 @@ namespace SSDIWMS_android.Services.MainServices
         IISMSyncerServices incomingstocksyncer;
         IUserCheckerServices userCheckerService;
         IPercentageCalculatorServices percentageCalculatorServices;
+        IDateVerifierServices dateCheckerService;
 
         //masterdata
         ILocalArticleMasterServices artMasterService;
@@ -43,7 +45,7 @@ namespace SSDIWMS_android.Services.MainServices
             incomingstocksyncer = DependencyService.Get<IISMSyncerServices>();
             userCheckerService = DependencyService.Get<IUserCheckerServices>();
             percentageCalculatorServices = DependencyService.Get<IPercentageCalculatorServices>();
-
+            dateCheckerService = DependencyService.Get<IDateVerifierServices>();
 
             //masterdata
             artMasterService = DependencyService.Get<ILocalArticleMasterServices>();
@@ -87,6 +89,10 @@ namespace SSDIWMS_android.Services.MainServices
             await artMasterService.Clear();
             await palletMasterService.Clear();
             await ClearTransactionData();
+        }
+        public async Task DateCheckTimerInit()
+        {
+            await dateCheckerService.DateTimerInitialize();
         }
     }
 }

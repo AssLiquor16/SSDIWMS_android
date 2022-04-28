@@ -58,13 +58,6 @@
                             888 Mintrade Building, R. Castillo Street, Agdao, Davao City Davao City; Davao del Sur; Postal Code: 1103
                         </Label>
                     </StackLayout>
-
-                    <Entry Text="{Binding GetVal1}"/>
-                    <Entry Text="{Binding GetVal2}"/>
-
-                    <Label Text="{Binding PassVal1}"/>
-                    <Label Text="{Binding Passval2}"/>
-                    <Button Text="Add" Command="{Binding PassModelCommand}"/>
                 </StackLayout>
             </Frame>
         </StackLayout>

@@ -25,6 +25,7 @@ namespace SSDIWMS_android
             await mainService.OnstartSetDefaulPreferences();
             await mainService.SyncIncomingTransaction();
             await mainService.CheckUser();
+            await mainService.DateCheckTimerInit();
         }
 
         protected override void OnSleep()
