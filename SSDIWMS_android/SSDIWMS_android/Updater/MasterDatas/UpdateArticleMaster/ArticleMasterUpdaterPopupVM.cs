@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
@@ -19,6 +20,7 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
 {
     public class ArticleMasterUpdaterPopupVM : ViewModelBase
     {
+        PercentageCalculator percentageCalculator = new PercentageCalculator();
         IMainServices mainServices;
         ILocalArticleMasterServices localDbArticleMasterService;
         IServerArticleMasterServices serverDbArticleMasterService;
@@ -119,7 +121,7 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await mainServices.GetPercentage("ArticleMaster", decArray);
+                    LoadingText = await percentageCalculator.GetPercentage("ArticleMaster", decArray);
                     await Task.Delay(50);
                 }
                 await notifService.StaticToastNotif("Success", "Article master downloaded succesfully.");

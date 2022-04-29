@@ -116,7 +116,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     break;
                 case "RefIdAutoGenerate":
                     var datec = DateTime.Now;
-
                     var datec1 = datec.ToString("MMddyyyymmssffff");
                     var site = Preferences.Get("PrefUserWarehouseAssignedId", 0);
                     var sitedata = await localDbSiteMasterService.GetModel("WarehouseId", site);

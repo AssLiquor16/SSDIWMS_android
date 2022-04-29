@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
@@ -19,6 +20,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
 {
     public class AllMasterfileUpdaterPopupVM : ViewModelBase
     {
+        PercentageCalculator percalc = new PercentageCalculator();
         IMainServices mainServices;
         ILocalArticleMasterServices localDbArticleMasterService;
         IServerArticleMasterServices serverDbArticleMasterService;
@@ -108,14 +110,14 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await mainServices.GetPercentage("ArticleMaster", decArray);
+                    LoadingText = await percalc.GetPercentage("ArticleMaster", decArray);
                     await Task.Delay(50);
                 }
-                await notifService.StaticToastNotif("Success", "Article master downloaded succesfully.");
+                await notifService.ToastNotif("Success", "Article master downloaded succesfully.");
             }
             catch
             {
-                await notifService.StaticToastNotif("Error", ErrorText);
+                await notifService.ToastNotif("Error", ErrorText);
             }
         }
         private async Task UpdatePalletMaster()
@@ -141,14 +143,14 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await mainServices.GetPercentage("PalletMaster", decArray);
+                    LoadingText = await percalc.GetPercentage("PalletMaster", decArray);
                     await Task.Delay(50);
                 }
-                await notifService.StaticToastNotif("Success", "Pallet master downloaded succesfully.");
+                await notifService.ToastNotif("Success", "Pallet master downloaded succesfully.");
             }
             catch
             {
-                await notifService.StaticToastNotif("Error", ErrorText);
+                await notifService.ToastNotif("Error", ErrorText);
             }
         }
     }

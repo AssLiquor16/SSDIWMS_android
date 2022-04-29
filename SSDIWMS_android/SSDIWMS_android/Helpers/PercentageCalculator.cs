@@ -1,15 +1,16 @@
-﻿using SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalculatorServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-[assembly: Dependency(typeof(PercentageCalculatorServices))]
-namespace SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalculatorServices
+namespace SSDIWMS_android.Helpers
 {
-    public class PercentageCalculatorServices : IPercentageCalculatorServices
+    public class PercentageCalculator
     {
+        public PercentageCalculator()
+        {
+
+        }
         public async Task<string> GetPercentage(string type, decimal[] decimalarray)
         {
             await Task.Delay(1);
@@ -32,7 +33,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalcul
                 default: return null;
             }
             return msg;
-            
+
         }
     }
 }

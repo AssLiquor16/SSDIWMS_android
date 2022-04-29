@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.PalletMaster;
@@ -17,6 +18,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster
 {
     public class PalletMasterUpdaterPopupVM : ViewModelBase
     {
+        PercentageCalculator percalc = new PercentageCalculator();
         IMainServices mainServices;
         ILocalPalletMasterServices localDbPalletMasterService;
         IServerPalletMasterServices serverDbPalletMasterService;
@@ -70,7 +72,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await mainServices.GetPercentage("PalletMaster", decArray);
+                    LoadingText = await percalc.GetPercentage("PalletMaster", decArray);
                     await Task.Delay(50);
                 }
                 await notifService.StaticToastNotif("Success", "Pallet master downloaded succesfully.");

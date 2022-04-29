@@ -7,7 +7,6 @@ using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.Date;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.StockMovementIncoming;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.User;
-using SSDIWMS_android.Services.MainServices.SubMainServices.PercentageCalculatorServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreferenceServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceServices;
 using System;
@@ -26,7 +25,6 @@ namespace SSDIWMS_android.Services.MainServices
         IRemovePreferenceServices removePrefService;
         IISMSyncerServices incomingstocksyncer;
         IUserCheckerServices userCheckerService;
-        IPercentageCalculatorServices percentageCalculatorServices;
         IDateVerifierServices dateCheckerService;
 
         //masterdata
@@ -44,7 +42,6 @@ namespace SSDIWMS_android.Services.MainServices
             removePrefService = DependencyService.Get<IRemovePreferenceServices>();
             incomingstocksyncer = DependencyService.Get<IISMSyncerServices>();
             userCheckerService = DependencyService.Get<IUserCheckerServices>();
-            percentageCalculatorServices = DependencyService.Get<IPercentageCalculatorServices>();
             dateCheckerService = DependencyService.Get<IDateVerifierServices>();
 
             //masterdata
@@ -72,11 +69,6 @@ namespace SSDIWMS_android.Services.MainServices
         public async Task RemovePreferences()
         {
             await removePrefService.RemovePreference();
-        }
-        public async Task<string> GetPercentage(string type, decimal[] decimalarray)
-        {
-            var ans = await percentageCalculatorServices.GetPercentage(type, decimalarray);
-            return ans;
         }
         public async Task ClearTransactionData()
         {

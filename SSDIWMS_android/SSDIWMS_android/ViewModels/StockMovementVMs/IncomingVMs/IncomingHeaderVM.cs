@@ -84,18 +84,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 try
                 {
                     await transactionUpdateService.UpdateAllIncomingTrans();
-                    await notifService.StaticToastNotif("Success", "Items updated succesfully.");
+                    await notifService.ToastNotif("Success", "Items updated succesfully.");
                 }
                 catch
                 {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                    await notifService.ToastNotif("Error", "Cannot connect to server.");
                 }
                 
                 Preferences.Set("PrefISMSyncing", false);
             }
             else
             {
-                await notifService.StaticToastNotif("Error", "Syncing busy, please try again later.");
+                await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
             }
 
 
