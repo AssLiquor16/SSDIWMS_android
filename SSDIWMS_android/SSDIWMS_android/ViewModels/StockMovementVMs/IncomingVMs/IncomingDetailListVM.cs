@@ -176,7 +176,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             }
             IsRefreshing = false;
         }
-
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname, _pONumber;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);

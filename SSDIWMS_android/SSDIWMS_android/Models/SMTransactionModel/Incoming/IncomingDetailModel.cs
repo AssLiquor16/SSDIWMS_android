@@ -19,5 +19,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int TimesUpdated { get; set; }
         public string POHeaderNumber { get; set; }
         public string QTYStatus { get; set; }
+        public string Color { get; set; }
     }
 }

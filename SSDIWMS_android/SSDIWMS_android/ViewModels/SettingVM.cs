@@ -19,7 +19,7 @@ namespace SSDIWMS_android.ViewModels
     {
         IToastNotifService notifyService;
         IMainServices mainService;
-        bool _notifyIO = Preferences.Get("NotifyIO", false), _adminViewVisible;
+        bool _notifyIO, _adminViewVisible;
         string _ipVal;
         public bool NotifyIO
         {
@@ -29,6 +29,7 @@ namespace SSDIWMS_android.ViewModels
 
                 if (value == _notifyIO)
                     return;
+                Preferences.Set("NotifyIO", value);
                 _notifyIO = value;
                 OnPropertyChanged();
             }
@@ -128,6 +129,7 @@ namespace SSDIWMS_android.ViewModels
             var name = userfullname.Split(' ');
             UserFullName = name[0];
             Role = Preferences.Get("PrefUserRole", "");
+            NotifyIO = Preferences.Get("NotifyIO", false);
             switch (Role)
             {
                 case "Admin":

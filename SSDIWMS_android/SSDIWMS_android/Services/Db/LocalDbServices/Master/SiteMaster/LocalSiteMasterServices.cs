@@ -42,8 +42,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster
                     var aa = await db_.Table<SitesModel>().Where(x => x.SiteId == id).FirstOrDefaultAsync();
                     return aa;
                 case "WarehouseId":
+                    var alls = await db_.Table<SitesModel>().ToListAsync();
                     var ab = await db_.Table<SitesModel>().Where(x => x.WarehouseId == id).FirstOrDefaultAsync();
                     return ab;
+                case "SiteId":
+                    return await db_.Table<SitesModel>().Where(x => x.SiteId == id).FirstOrDefaultAsync();
                 default: return null;
             }
         }

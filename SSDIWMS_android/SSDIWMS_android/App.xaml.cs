@@ -23,7 +23,7 @@ namespace SSDIWMS_android
         protected override async void OnStart()
         {
             await mainService.OnstartSetDefaulPreferences();
-            await mainService.SyncIncomingTransaction();
+            //await mainService.SyncIncomingTransaction();
             await mainService.CheckUser();
             await mainService.DateCheckTimerInit();
         }

@@ -51,7 +51,6 @@
                                 <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
                             </Label.GestureRecognizers>
                         </Label>
-
                     </StackLayout>
                 </Frame>
                 

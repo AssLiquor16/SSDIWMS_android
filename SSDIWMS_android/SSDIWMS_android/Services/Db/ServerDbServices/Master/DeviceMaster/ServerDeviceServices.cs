@@ -16,7 +16,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
 {
     public class ServerDeviceServices : IServerDeviceServices
     {
-        string BaseUrl = Preferences.Get("PrefServerAddress", "http://192.168.1.217:80/");
+        string BaseUrl = Ip_Conf.baseUrl;
         HttpClient client;
 
         public async Task<int> ReturnInt(string type, string[] stringdata, int[] intdata)

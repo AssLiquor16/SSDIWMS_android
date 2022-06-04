@@ -13,7 +13,6 @@ namespace SSDIWMS_android.ViewModels
     {
         bool _proceedEnable;
         public bool ProceedEnable { get => _proceedEnable; set => SetProperty(ref _proceedEnable, value); }
-
         public AsyncCommand IncomingNavigationCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public MainStockMovementVM()

@@ -132,14 +132,17 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 if (item.Qty > totalpartialcqty)
                 {
                     item.QTYStatus = "Short";
+                    item.Color = "Red";
                 }
                 else if (item.Qty < totalpartialcqty)
                 {
                     item.QTYStatus = "Over";
+                    item.Color = "Red";
                 }
                 else if (item.Qty == totalpartialcqty)
                 {
                     item.QTYStatus = "Ok";
+                    item.Color = "Green";
                 }
                 item.Cqty = totalpartialcqty;
                 totalpartialcqty = 0;

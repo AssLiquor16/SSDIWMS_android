@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SSDIWMS_android.Models;
+using SSDIWMS_android.Services.Db;
 using SSDIWMS_android.Services.ServerDbServices.Users;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 {
     public class ServerUserServices : IServerUserServices
     {
-        string BaseUrl = Preferences.Get("PrefServerAddress", "http://192.168.1.217:80/");
+        string BaseUrl = Ip_Conf.baseUrl;
         HttpClient client;
 
         public async Task<IEnumerable<UsermasterModel>> ReturnList(string type, string[] stringFilter, int[] intFilter)

@@ -104,7 +104,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" || x.INCstatus == "Finalized").ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
@@ -126,7 +126,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             switch (filter)
             {
                 case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing" || x.INCstatus == "Finalized").ToList();
+                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
                     break;

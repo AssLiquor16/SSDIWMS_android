@@ -75,7 +75,34 @@
                                         <Editor Text="{Binding ItemDesc}" 
                                                 FontSize="Subtitle" 
                                                 FontAttributes="Bold" 
+                                                HeightRequest="70"
                                                 IsEnabled="False"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource PriorityColor}"
+                                       Margin="5,3" 
+                                       Padding="5,3"
+                                       IsVisible="{Binding LocationVisible}"
+                                       >
+                                    <StackLayout BackgroundColor="Transparent" 
+                                                 Orientation="Horizontal">
+                                        <StackLayout BackgroundColor="Transparent" 
+                                                     Orientation="Vertical">
+                                            <Label Text="Location:" 
+                                                   TextColor="DarkGray"/>
+                                            <Entry Text="{Binding PalletCode}" 
+                                                   WidthRequest="220" 
+                                                   FontSize="Subtitle" 
+                                                   IsEnabled="False" />
+                                        </StackLayout>
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" 
+                                                BackgroundColor="Transparent" 
+                                                Command="{Binding NavPalletListCommand}"
+                                                CornerRadius="10" 
+                                                TextColor="{StaticResource TextColor}" 
+                                                FontSize="Title" 
+                                                WidthRequest="50"/>
                                     </StackLayout>
                                 </Frame>
 

@@ -79,14 +79,17 @@
 
                                 <Frame BackgroundColor="{StaticResource MySecondary}" 
                                        Margin="5,3" 
-                                       Padding="5,3">
+                                       Padding="5,3"
+                                       >
                                     <StackLayout BackgroundColor="Transparent">
                                         <Label Text="Item Description:" 
                                                TextColor="DarkGray"/>
                                         <Editor Text="{Binding ItemDesc}" 
                                                 FontSize="Subtitle" 
+                                                HeightRequest="70"
                                                 FontAttributes="Bold" 
-                                                IsEnabled="False"/>
+                                                IsEnabled="False"
+                                                />
                                     </StackLayout>
                                 </Frame>
 

@@ -16,7 +16,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster
 
     public class ServerSiteMasterServices : IServerSiteMasterServices
     {
-        string BaseUrl = Preferences.Get("PrefServerAddress", "http://192.168.1.217:80/");
+        string BaseUrl = Ip_Conf.baseUrl;
         HttpClient client;
 
         public async Task<IEnumerable<SitesModel>> GetList(string type, string[] stringfilter, int[] intfilter)

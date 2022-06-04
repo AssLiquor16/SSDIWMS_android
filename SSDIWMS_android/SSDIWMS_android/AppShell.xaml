@@ -116,11 +116,17 @@
         </FlyoutItem.FlyoutIcon>
         <ShellContent Route="MainStockMovementPage" ContentTemplate="{DataTemplate local:MainStockMovementPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Setting">
+    <FlyoutItem Title="Settings">
         <FlyoutItem.FlyoutIcon>
             <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Cog}" Color="{StaticResource Primary}"/>
         </FlyoutItem.FlyoutIcon>
         <ShellContent Route="SettingPage" ContentTemplate="{DataTemplate local:SettingPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Maintenance">
+        <FlyoutItem.FlyoutIcon>
+            <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Tools}" Color="{StaticResource Primary}"/>
+        </FlyoutItem.FlyoutIcon>
+        <ShellContent Route="MaintenancePage" ContentTemplate="{DataTemplate local:MaintenancePage}" />
     </FlyoutItem>
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
     <MenuItem Text="Logout" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked">

@@ -30,6 +30,9 @@ namespace SSDIWMS_android.Helpers
                 case "IncomingDetail":
                     msg = "Acuracy: " + g + " %";
                     break;
+                case "Sites":
+                    msg = "Acuracy: " + g + " %";
+                    break;
                 default: return null;
             }
             return msg;

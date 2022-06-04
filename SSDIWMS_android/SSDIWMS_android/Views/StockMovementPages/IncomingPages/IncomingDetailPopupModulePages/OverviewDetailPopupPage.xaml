@@ -137,7 +137,7 @@
 
                                                         <Label Text="{Binding ItemCode}" Grid.Column="0"/>
                                                         <Label Text="{Binding ItemDesc}" Grid.Column="1"/>
-                                                        <Label Text="{Binding QTYStatus}" Grid.Column="2"/>
+                                                        <Label Text="{Binding QTYStatus}" Grid.Column="2" TextColor="{Binding Color}"/>
 
                                                     </Grid>
                                                 </StackLayout>

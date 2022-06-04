@@ -1,4 +1,5 @@
-﻿using MvvmHelpers.Commands;
+﻿using Acr.UserDialogs;
+using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Services.Db.ServerDbServices.Devices;
 using SSDIWMS_android.Services.DeviceServices;
@@ -114,6 +115,6 @@ namespace SSDIWMS_android.ViewModels
                 await Shell.Current.GoToAsync(route);
             }
         }
-
+        
     }
 }

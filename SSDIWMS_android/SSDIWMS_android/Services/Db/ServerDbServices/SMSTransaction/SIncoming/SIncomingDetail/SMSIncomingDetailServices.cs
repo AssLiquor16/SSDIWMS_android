@@ -15,7 +15,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 {
     public class SMSIncomingDetailServices : ISMSIncomingDetailServices
     {
-        string BaseUrl = Preferences.Get("PrefServerAddress", "http://192.168.1.217:80/");
+        string BaseUrl = Ip_Conf.baseUrl;
         HttpClient client;
 
         public async Task<IEnumerable<IncomingDetailModel>> GetList(string type, string[] stringfilter, int[] intfilter)
