@@ -2,12 +2,12 @@
 <popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                   xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.MasterDatas.UpdateLocationMaster" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseLocationMaster" 
                   xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
                   CloseWhenBackgroundIsClicked="False"
-                  x:Class="SSDIWMS_android.Updater.MasterDatas.UpdateLocationMaster.LocationMasterUpdaterPopupPage">
+                  x:Class="SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseLocationMaster.WarehouseLocationMasterUpdaterPopupPage">
     <popup:PopupPage.BindingContext>
-        <viewmodels:LocationMasterUpdaterPopupVM/>
+        <viewmodels:WarehouseLocationMasterUpdaterPopupVM/>
     </popup:PopupPage.BindingContext>
     <popup:PopupPage.Behaviors>
         <xct:EventToCommandBehavior

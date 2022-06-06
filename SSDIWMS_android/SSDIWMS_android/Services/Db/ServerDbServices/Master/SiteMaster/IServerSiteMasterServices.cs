@@ -8,6 +8,6 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster
 {
     public interface IServerSiteMasterServices
     {
-        Task<IEnumerable<SitesModel>> GetList(string type, string[] stringfilter, int[] intfilter);
+        Task<IEnumerable<SitesModel>> GetList(string type = null, string[] stringfilter = null, int[] intfilter = null);
     }
 }

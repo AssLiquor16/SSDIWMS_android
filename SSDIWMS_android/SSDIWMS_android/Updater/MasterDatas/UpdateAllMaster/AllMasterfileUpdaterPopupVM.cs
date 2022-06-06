@@ -5,9 +5,11 @@ using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.PalletMaster;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
@@ -30,6 +32,8 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         IServerPalletMasterServices serverDbPalletMasterService;
         IServerSiteMasterServices serverDbSitesMasterService;
         ILocalSiteMasterServices localDbSitesMasterService;
+        ILocalWarehouseLocationMasterServices localDbWarehouseLocationMasterMasterService;
+        IServerWarehouseLocationMasterServices serverDbWarehouseLocationMasterService;
         IToastNotifService notifService;
 
         string _staticloadingText, _loadingText, _taskType, _errorText;
@@ -42,6 +46,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         public ObservableRangeCollection<ArticleMasterModel> ArticleMasterList { get; set; }
         public ObservableRangeCollection<PalletMasterModel> PalletMasterList { get; set; }
         public ObservableRangeCollection<SitesModel> SitesList { get; set; }
+        public ObservableRangeCollection<WarehouseLocationModel> WarehouseLocationList { get; set; }
 
         public AsyncCommand PageRefreshCommand { get; }
         
@@ -54,10 +59,13 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             serverDbPalletMasterService = DependencyService.Get<IServerPalletMasterServices>();
             serverDbSitesMasterService = DependencyService.Get<IServerSiteMasterServices>();
             localDbSitesMasterService = DependencyService.Get<ILocalSiteMasterServices>();
+            localDbWarehouseLocationMasterMasterService = DependencyService.Get<ILocalWarehouseLocationMasterServices>();
+            serverDbWarehouseLocationMasterService = DependencyService.Get<IServerWarehouseLocationMasterServices>();
             notifService = DependencyService.Get<IToastNotifService>();
 
             ArticleMasterList = new ObservableRangeCollection<ArticleMasterModel>();
             PalletMasterList = new ObservableRangeCollection<PalletMasterModel>();
+            WarehouseLocationList = new ObservableRangeCollection<WarehouseLocationModel>();
             SitesList = new ObservableRangeCollection<SitesModel>();
 
             PageRefreshCommand = new AsyncCommand(PageRefresh);
@@ -68,6 +76,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             await UpdateArticleMaster();
             await UpdatePalletMaster();
             await UpdateSiteMaster();
+            await UpdateWarehouseLocationMaster();
             await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task UpdateArticleMaster()
@@ -187,6 +196,43 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     await Task.Delay(50);
                 }
                 await notifService.ToastNotif("Success", "Sites master downloaded succesfully.");
+
+            }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", ErrorText);
+            }
+        }
+        private async Task UpdateWarehouseLocationMaster()
+        {
+            try
+            {
+                SitesList.Clear();
+                var retdata = await serverDbWarehouseLocationMasterService.GetList();
+                WarehouseLocationList.AddRange(retdata);
+                decimal totcount = WarehouseLocationList.Count;
+                decimal foreachcount = 0;
+                foreach (var item in retdata)
+                {
+                    var filter = new WarehouseLocationModel
+                    {
+                        LocId = item.LocId
+                    };
+                    var localDataCheck = await localDbWarehouseLocationMasterMasterService.GetFirstOrDefault(filter);
+                    if (localDataCheck == null)
+                    {
+                        await localDbWarehouseLocationMasterMasterService.Insert(item);
+                    }
+                    else
+                    {
+                        await localDbWarehouseLocationMasterMasterService.Update(item);
+                    }
+                    foreachcount++;
+                    decimal[] decArray = { foreachcount, totcount };
+                    LoadingText = await percalc.GetPercentage("WarehouseLocation", decArray);
+                    await Task.Delay(50);
+                }
+                await notifService.ToastNotif("Success", "WarehouseLocation master downloaded succesfully.");
 
             }
             catch

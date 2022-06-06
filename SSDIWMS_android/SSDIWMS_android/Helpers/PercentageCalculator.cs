@@ -25,13 +25,19 @@ namespace SSDIWMS_android.Helpers
                     msg = "Article master  " + g + "% out of 100%";
                     break;
                 case "PalletMaster":
-                    msg = "PalletMaster  " + g + "% out of 100%";
+                    msg = "Pallet Master  " + g + "% out of 100%";
                     break;
                 case "IncomingDetail":
                     msg = "Acuracy: " + g + " %";
                     break;
                 case "Sites":
-                    msg = "Acuracy: " + g + " %";
+                    msg = "Sites Master: " + g + " %";
+                    break;
+                case "WarehouseLocation":
+                    msg = "WarehouseLocation Master: " + g + " %";
+                    break;
+                case "Warehouse":
+                    msg = "Warehouse Master: " + g + " %";
                     break;
                 default: return null;
             }

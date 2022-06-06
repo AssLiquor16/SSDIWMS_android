@@ -4,6 +4,9 @@ using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
+using SSDIWMS_android.Updater.MasterDatas.UpdateSiteMaster;
+using SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseLocationMaster;
+using SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseMaster;
 using SSDIWMS_android.Updater.UpdateArticleMaster;
 using SSDIWMS_android.Views.PopUpPages;
 using System;
@@ -42,6 +45,9 @@ namespace SSDIWMS_android.ViewModels
         public AsyncCommand NotifCommand { get; }
         public AsyncCommand ArticleMasterUpdateCommand { get; }
         public AsyncCommand PalletMasterUpdateCommand { get; }
+        public AsyncCommand AreaMasterUpdateCommand { get; }
+        public AsyncCommand WarehouseLocationUpdateCommand { get; }
+        public AsyncCommand WarehouseUpdateCommand { get; }
         public AsyncCommand AllUpdateCommand { get; }
         public AsyncCommand ClearTransactionCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -56,10 +62,14 @@ namespace SSDIWMS_android.ViewModels
             NotifCommand = new AsyncCommand(Notif);
             ArticleMasterUpdateCommand = new AsyncCommand(ArticleMasterUpdate);
             PalletMasterUpdateCommand = new AsyncCommand(PalletMasterUpdate);
+            AreaMasterUpdateCommand = new AsyncCommand(AreaMasterUpdate);
+            WarehouseLocationUpdateCommand = new AsyncCommand(WarehouseLocationUpdate);
+            WarehouseUpdateCommand = new AsyncCommand(WarehouseUpdate);
             AllUpdateCommand = new AsyncCommand(AllUpdate);
             ClearTransactionCommand = new AsyncCommand(ClearTransaction);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
+
         private async Task SaveIpAddress()
         {
             Preferences.Remove("PrefServerAddress");
@@ -106,22 +116,13 @@ namespace SSDIWMS_android.ViewModels
             await Task.Delay(1);
         }
         
-        private async Task ArticleMasterUpdate()
-        {
-            await PopupNavigation.Instance.PushAsync(new ArticleMasterUpdaterPopupPage());
-        }
-        private async Task PalletMasterUpdate()
-        {
-            await PopupNavigation.Instance.PushAsync(new PalletMasterUpdaterPopupPage());
-        }
-        private async Task AllUpdate()
-        {
-            await PopupNavigation.Instance.PushAsync(new AllMasterfileUpdaterPopupPage());
-        }
-        private async Task ClearTransaction()
-        {
-            await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminClearTrans"));
-        }
+        private async Task ArticleMasterUpdate() => await PopupNavigation.Instance.PushAsync(new ArticleMasterUpdaterPopupPage());
+        private async Task PalletMasterUpdate() => await PopupNavigation.Instance.PushAsync(new PalletMasterUpdaterPopupPage());
+        private async Task AreaMasterUpdate() => await PopupNavigation.Instance.PushAsync(new SiteMasterUpdaterPopupPage());
+        private async Task WarehouseLocationUpdate() => await PopupNavigation.Instance.PushAsync(new WarehouseLocationMasterUpdaterPopupPage());
+        private async Task WarehouseUpdate() => await PopupNavigation.Instance.PushAsync(new WarehouseMasterUpdaterPopupPage());
+        private async Task AllUpdate() => await PopupNavigation.Instance.PushAsync(new AllMasterfileUpdaterPopupPage());
+        private async Task ClearTransaction() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminClearTrans"));
         private async Task PageRefresh()
         {
             await LiveTimer();

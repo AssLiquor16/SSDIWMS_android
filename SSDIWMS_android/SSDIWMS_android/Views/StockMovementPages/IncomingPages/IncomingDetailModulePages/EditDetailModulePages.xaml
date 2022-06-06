@@ -91,7 +91,7 @@
                                                      Orientation="Vertical">
                                             <Label Text="Location:" 
                                                    TextColor="DarkGray"/>
-                                            <Entry Text="{Binding PalletCode}" 
+                                            <Entry Text="{Binding WarehouseLocation}" 
                                                    WidthRequest="220" 
                                                    FontSize="Subtitle" 
                                                    IsEnabled="False" />

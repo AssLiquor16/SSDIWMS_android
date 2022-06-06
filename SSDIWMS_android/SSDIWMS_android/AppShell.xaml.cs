@@ -74,7 +74,7 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(AddDetailModulePage), typeof(AddDetailModulePage));
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
-            
+            Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);

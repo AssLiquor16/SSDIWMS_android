@@ -43,10 +43,16 @@
     <EmbeddedResource Update="Updater\MasterDatas\UpdateArticleMaster\ArticleMasterUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Updater\MasterDatas\UpdateLocationMaster\LocationMasterUpdaterPopupPage.xaml">
+    <EmbeddedResource Update="Updater\MasterDatas\UpdatePalletMaster\PalletMasterUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Updater\MasterDatas\UpdatePalletMaster\PalletMasterUpdaterPopupPage.xaml">
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateSiteMaster\SiteMasterUpdaterPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateWarehouseLocationMaster\WarehouseLocationMasterUpdaterPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateWarehouseMaster\WarehouseMasterUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DashBoardPage.xaml">
@@ -80,6 +86,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailModulePages\IncomingDetailSubModulePages\PalletMasterListDetailSubModulePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailModulePages\IncomingDetailSubModulePages\WarehouseLocationMasterListDetailSubModulePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\IncomingDetailSubPopupModulePages\PartialDetailListPopupPage.xaml">

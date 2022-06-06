@@ -1,25 +1,23 @@
 ﻿using Newtonsoft.Json;
 using SSDIWMS_android.Models.MasterListModel;
-using SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseLocationMaster;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(ServerSiteMasterServices))]
-namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster
+[assembly: Dependency(typeof(ServerWarehouseLocationMasterServices))]
+namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseLocationMaster
 {
-
-    public class ServerSiteMasterServices : IServerSiteMasterServices
+    public class ServerWarehouseLocationMasterServices : IServerWarehouseLocationMasterServices
     {
         string BaseUrl = Ip_Conf.baseUrl;
         HttpClient client;
 
-        public async Task<IEnumerable<SitesModel>> GetList(string type = null, string[] stringfilter = null, int[] intfilter = null)
+        public async Task<IEnumerable<WarehouseLocationModel>> GetList(WarehouseLocationModel obj = null, string type = null)
         {
             switch (type)
             {
@@ -30,13 +28,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = await client.GetStringAsync($"api/Sites");
-                        var pallets = JsonConvert.DeserializeObject<IEnumerable<SitesModel>>(json);
-                        return pallets;
+                        var json = await client.GetStringAsync($"api/WarehouseLocations");
+                        var WarehouseLocations = JsonConvert.DeserializeObject<IEnumerable<WarehouseLocationModel>>(json);
+                        return WarehouseLocations;
                     }
-                default:
-                    return null;
+                default: return null;
+
             }
         }
+
     }
 }

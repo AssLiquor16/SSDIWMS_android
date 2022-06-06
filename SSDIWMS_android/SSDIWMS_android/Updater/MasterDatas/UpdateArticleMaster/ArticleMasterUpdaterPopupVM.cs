@@ -24,10 +24,8 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
         IMainServices mainServices;
         ILocalArticleMasterServices localDbArticleMasterService;
         IServerArticleMasterServices serverDbArticleMasterService;
-
         ILocalSiteMasterServices localDbSiteMasterService;
         IServerSiteMasterServices serverDbSiteMasterService;
-
         IToastNotifService notifService;
 
         string _staticloadingText, _loadingText, _taskType, _errorText;

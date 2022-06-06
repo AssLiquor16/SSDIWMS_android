@@ -93,6 +93,72 @@
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+                                    <Label Text="Site master" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding AreaMasterUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame Style="{StaticResource Framegrouping}">
+                                <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+                                    <Label Text="WarehouseLocation master" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding WarehouseLocationUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame Style="{StaticResource Framegrouping}">
+                                <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Warehouse}" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+                                    <Label Text="Warehouse master" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding WarehouseUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame Style="{StaticResource Framegrouping}">
+                                <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
                                     <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Copy}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>

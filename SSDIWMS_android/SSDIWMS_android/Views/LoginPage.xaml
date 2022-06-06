@@ -26,7 +26,7 @@
                         <Image Source="user.png"/>
                         <Label Text="Welcome" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="Title"/>
                         <Entry Placeholder="Username" Text="{Binding Username}" VerticalOptions="StartAndExpand" FontSize="Subtitle"/>
-                        <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand"
+                        <Entry Placeholder="Password" Text="{Binding Password}" VerticalOptions="StartAndExpand" IsPassword="True"
                           FontSize="Subtitle"/>
 
                         <Button Text="Login" 

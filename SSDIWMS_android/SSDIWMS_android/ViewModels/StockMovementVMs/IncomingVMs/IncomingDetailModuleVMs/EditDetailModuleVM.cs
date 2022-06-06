@@ -24,7 +24,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         IToastNotifService notifyService;
         IncomingPartialDetailModel _e;
         DateTime _expiryDate;
-        string _refId, _poNumber, _itemCode, _itemDesc, _palletCode, _amount, _dataSender, _enableColor;
+        string _refId, _poNumber, _itemCode, _itemDesc, _palletCode, _amount, _dataSender, _enableColor, _warehouseLocation;
         int _incParDetId, _partialCQTY;
         bool _palleteditEnable, _expiryDateEditEnable, _parQtyEditEnable, _locationVisible;
 
@@ -37,6 +37,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public string ItemCode { get => _itemCode; set => SetProperty(ref _itemCode, value); }
         public string ItemDesc { get => _itemDesc; set => SetProperty(ref _itemDesc, value); }
         public string Amount { get => _amount; set => SetProperty(ref _amount, value); }
+        public string WarehouseLocation { get => _warehouseLocation; set => SetProperty(ref _warehouseLocation, value); }
         public string PalletCode { get => _palletCode; set => SetProperty(ref _palletCode, value); }
         public DateTime ExpiryDate { get => _expiryDate; set => SetProperty(ref _expiryDate, value); }
         public int PartialCQTY { get => _partialCQTY; set => SetProperty(ref _partialCQTY, value); }
@@ -141,16 +142,33 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 bool isProceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to edit the item?", "Yes", "No");
                 if(isProceed == true)
                 {
-                    if (!string.IsNullOrWhiteSpace(PalletCode))
+                    if (Preferences.Get("PrefUserRole", string.Empty) == "Check")
                     {
-                        E.TimesUpdated++;
-                        E.PalletCode = PalletCode;
-                        E.PartialCQTY = PartialCQTY;
-                        E.ExpiryDate = ExpiryDate;
-                        await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
-                        await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
-                        MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
-                        await Shell.Current.GoToAsync("..");
+                        if (!string.IsNullOrWhiteSpace(PalletCode))
+                        {
+                            E.TimesUpdated++;
+                            E.PalletCode = PalletCode;
+                            E.PartialCQTY = PartialCQTY;
+                            E.ExpiryDate = ExpiryDate;
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
+                            await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
+                            MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
+                            await Shell.Current.GoToAsync("..");
+                        }
+                    }
+                    else if(Preferences.Get("PrefUserRole", string.Empty) == "Pick")
+                    {
+                        if (!string.IsNullOrWhiteSpace(PalletCode) || !string.IsNullOrWhiteSpace(WarehouseLocation))
+                        {
+                            E.TimesUpdated++;
+                            E.PalletCode = PalletCode;
+                            E.PartialCQTY = PartialCQTY;
+                            E.ExpiryDate = ExpiryDate;
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
+                            await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
+                            MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
+                            await Shell.Current.GoToAsync("..");
+                        }
                     }
                 }
 

@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Updater.MasterDatas.UpdateLocationMaster
+namespace SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseMaster
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LocationMasterUpdaterPopupPage : Rg.Plugins.Popup.Pages.PopupPage
+    public partial class WarehouseMasterUpdaterPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
-        public LocationMasterUpdaterPopupPage()
+        public WarehouseMasterUpdaterPopupPage()
         {
             InitializeComponent();
         }
