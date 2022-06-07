@@ -88,7 +88,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         private async Task AddDetail()
         {
             var loggedInUser = Preferences.Get("PrefUserId", 0);
-            if (!string.IsNullOrWhiteSpace(PalletCode) && PartialCQTY != 0)
+            if (PartialCQTY != 0) // string.IsNullOrWhiteSpace(PalletCode)
             {
                 if (loggedInUser == 0)
                 {
@@ -110,11 +110,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             ItemCode = E.ItemCode,
                             ItemDesc = E.ItemDesc,
                             PartialCQTY = PartialCQTY,
-                            PalletCode = PalletCode,
-                            ExpiryDate = ExpiryDate,
+                            PalletCode = string.Empty, // PalletCode
+                            ExpiryDate = DateTime.MinValue.Date, // ExpiryDate
                             TimesUpdated = 0,
                             POHeaderNumber = E.POHeaderNumber,
                             Status = "Ongoing",
+                            WarehouseLocation = string.Empty
                         };
                         await localDbIncomingParDetailService.Insert("RefIdAutoGenerate", data);
                         await notifyService.StaticToastNotif("Success", "Item added.");

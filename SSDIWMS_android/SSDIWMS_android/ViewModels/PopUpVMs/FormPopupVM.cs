@@ -54,6 +54,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         await ClearTransaction();
                         break;
                     case "ClearAll":
+                        await ClearAll();
                         break;
                     default:
                         break;
@@ -68,8 +69,6 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         {
             await Task.Delay(1);
         }
-
-
 
         public async Task RegisterDevice()
         {
@@ -125,6 +124,48 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         }
         public async Task ClearTransaction()
         {
+            var con = new LoadingPopupVM();
+            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
+            if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
+            {
+                await Task.Delay(3000);
+
+                try
+                {
+                    string[] uandp = { Username, Password };
+                    var returnval = await serverDbUserService.ReturnModel("Login", uandp, null);
+                    if (returnval != null)
+                    {
+                        if (returnval.UserStatus == "Active" && returnval.UserRole == "Admin")
+                        {
+                            // clear transaction
+                            await mainService.ClearTransactionData();
+                            await notifService.StaticToastNotif("Success", "Transaction cleared");
+                        }
+                        else
+                        {
+                            await notifService.StaticToastNotif("Error", "Credentials are incorrect.");
+                        }
+                    }
+                    else
+                    {
+                        await notifService.StaticToastNotif("Error", "User doesnt exist.");
+                    }
+                }
+                catch (Exception)
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Missing entry.");
+            }
+            await con.CloseAll();
+        }
+        public async Task ClearAll()
+        {
+
             var con = new LoadingPopupVM();
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))

@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
@@ -17,13 +18,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
     [QueryProperty(nameof(PageCameFrom), nameof(PageCameFrom))]
     public class PalletMasterListDetailSubModuleVM : ViewModelBase
     {
+        public LiveTime livetimer { get; } = new LiveTime();
         ILocalPalletMasterServices localDbPalletMasterService;
 
         PalletMasterModel _selectedPallet;
-        string _pageCameFrom, _searchString;
+        string _pageCameFrom, _searchString, _userFullname;
         bool _isRefreshing;
         public PalletMasterModel SelectedPallet { get => _selectedPallet; set => SetProperty(ref _selectedPallet, value); }
         public string PageCameFrom { get => _pageCameFrom; set => SetProperty(ref _pageCameFrom, value); }
+        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
         public string SearchString
         {
             get => _searchString;
@@ -33,8 +36,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 if (value == _searchString)
                     return;
                 _searchString = value;
+                SearchItem(value);
                 OnPropertyChanged();
-                SearchItem();
             }
         }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
@@ -89,17 +92,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             SearchString = string.Empty;
             PalletList.Clear();
             FilteredPalletList.Clear();
-            var e = await localDbPalletMasterService.GetList("WhIdFilter", null, null);
-            PalletList.AddRange(e);
+            PalletList.AddRange(await localDbPalletMasterService.GetList("WhIdFilter", null, null));
             FilteredPalletList.AddRange(PalletList);
             IsRefreshing = false;
         }
         private async Task PageRefresh()
         {
-            await LiveTimer();
-            var userfullname = Preferences.Get("PrefUserFullname", "");
-            var name = userfullname.Split(' ');
-            UserFullName = name[0];
+            await livetimer.LiveTimer();
+            UserFullName = Preferences.Get("PrefUserFullname", "").Split(' ')[0];
             FilteredPalletList.Clear();
             PalletList.Clear();
             var e = await localDbPalletMasterService.GetList("WhIdFilter", null, null);
@@ -110,42 +110,22 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
             await Shell.Current.GoToAsync("..");
         }
-        private void SearchItem()
+        private void SearchItem(string val)
         {
-            SearchString = SearchString.ToUpperInvariant();
-            FilteredPalletList.Clear();
-            if (string.IsNullOrWhiteSpace(SearchString))
+            val = val.ToUpper();
+            if (string.IsNullOrWhiteSpace(val))
             {
+                FilteredPalletList.Clear();
                 FilteredPalletList.AddRange(PalletList);
             }
             else
             {
-                var e = PalletList.Where(x => x.PalletCode.Contains(SearchString) || x.PalletDescription.Contains(SearchString)).ToList();
-                FilteredPalletList.AddRange(e);
+                FilteredPalletList.Clear();
+                FilteredPalletList.AddRange(PalletList.Where(x => x.PalletCode.Contains(val)).ToList());
             }
         }
-        public async Task Back()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
+        public async Task Back() => await Shell.Current.GoToAsync("..");
 
-        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
-        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
-        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
-        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
-        private async Task LiveTimer()
-        {
-            await Task.Delay(1);
-            Device.StartTimer(TimeSpan.FromSeconds(_datetimeTick), () => {
-                Task.Run(async () =>
-                {
-                    await Task.Delay(1);
-                    LiveDate = DateTime.Now.ToString(_datetimeFormat);
-                });
-                return true; //use this to run continuously // false if you want to stop 
 
-            });
-        }
     }
 }

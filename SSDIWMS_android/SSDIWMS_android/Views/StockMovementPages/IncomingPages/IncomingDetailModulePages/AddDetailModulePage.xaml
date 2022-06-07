@@ -93,7 +93,7 @@
                                     </StackLayout>
                                 </Frame>
 
-                                <Frame BackgroundColor="{StaticResource PriorityColor}"
+                                <Frame BackgroundColor="{StaticResource PriorityColor}" IsVisible="false"
                                        Margin="5,3" 
                                        Padding="5,3">
                                     <StackLayout BackgroundColor="Transparent" 
@@ -117,7 +117,7 @@
                                     </StackLayout>
                                 </Frame>
 
-                                <Frame BackgroundColor="{StaticResource PriorityColor}" 
+                                <Frame BackgroundColor="{StaticResource PriorityColor}" IsVisible="false"
                                        Margin="5,3" 
                                        Padding="5,3">
                                     <StackLayout BackgroundColor="Transparent">
@@ -125,7 +125,7 @@
                                                TextColor="DarkGray"/>
                                         <DatePicker Date="{Binding ExpiryDate}" 
                                                     FontSize="Subtitle" 
-                                                    FontAttributes="Bold" />
+                                                    FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
                                     </StackLayout>
                                 </Frame>
 

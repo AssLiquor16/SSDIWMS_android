@@ -26,7 +26,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         DateTime _expiryDate;
         string _refId, _poNumber, _itemCode, _itemDesc, _palletCode, _amount, _dataSender, _enableColor, _warehouseLocation;
         int _incParDetId, _partialCQTY;
-        bool _palleteditEnable, _expiryDateEditEnable, _parQtyEditEnable, _locationVisible;
+        bool _palleteditEnable, _expiryDateEditEnable, _parQtyEditEnable, _locationVisible, _checkerVisible;
 
         public int INCParDetId { get => _incParDetId; set => SetProperty(ref _incParDetId, value); }
         public string RefId { get => _refId; set => SetProperty(ref _refId, value); }
@@ -47,8 +47,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public bool ExpiryDateEditEnable { get => _expiryDateEditEnable; set => SetProperty(ref _expiryDateEditEnable, value); }
         public bool ParQtyEditEnable { get => _parQtyEditEnable; set => SetProperty(ref _parQtyEditEnable, value); }
         public bool LocationVisible { get => _locationVisible; set => SetProperty(ref _locationVisible, value); }
-
-        public AsyncCommand NavLocationListCommand { get; }
+        public bool CheckerVisible { get => _checkerVisible; set => SetProperty(ref _checkerVisible, value); }
+        
+        public AsyncCommand NavWarehouseLocationListCommand { get; }
         public AsyncCommand NavPalletListCommand { get; }
         public AsyncCommand EditDetailCommand { get; }
         public AsyncCommand CancelCommand { get; }
@@ -61,79 +62,87 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             notifyService = DependencyService.Get<IToastNotifService>();
             PageRefreshCommand = new AsyncCommand(PageRefresh);
             CancelCommand = new AsyncCommand(Cancel);
-            NavLocationListCommand = new AsyncCommand(NavLocationList);
+            NavWarehouseLocationListCommand = new AsyncCommand(NavWarehouseLocationList);
             NavPalletListCommand = new AsyncCommand(NavPalletList);
             EditDetailCommand = new AsyncCommand(EditDetail);
-
+            MessagingCenter.Subscribe<WarehouseLocationMasterListDetailSubModuleVM, string>(this, "FromWarehouseLocationListToEdit", (page, e) =>
+              {
+                  WarehouseLocation = e;
+              });
             MessagingCenter.Subscribe<PalletMasterListDetailSubModuleVM, string>(this, "FromPalletListToEdit", (page, e) =>
             {
                 PalletCode = e;
             });
         }
 
-        private async Task NavLocationList() => await Shell.Current.GoToAsync($"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
+        private async Task NavWarehouseLocationList() => 
+            await Shell.Current.GoToAsync($"{nameof(WarehouseLocationMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
 
+        private async Task NavPalletList() => 
+            await Shell.Current.GoToAsync($"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
 
         private async Task PageRefresh()
         {
-            await LiveTimer();
-            var userfullname = Preferences.Get("PrefUserFullname", "");
-            var name = userfullname.Split(' ');
-            UserFullName = name[0];
-            var userRole = Preferences.Get("PrefUserRole", string.Empty);
-            switch (userRole)
+            if (Preferences.Get("PrefIncomingInitialRefresh", false) == false)
             {
-                case "Check":
-                    PalleteditEnable = true;
-                    ExpiryDateEditEnable = true;
-                    ParQtyEditEnable = true;
-                    EnableColor = "#ffdbb3";
-                    LocationVisible = false;
-                    break;
-                case "Pick":
-                    PalleteditEnable = true;
-                    ExpiryDateEditEnable = true;
-                    ParQtyEditEnable = false;
-                    EnableColor = "#f2f2f0";
-                    LocationVisible = true;
-                    break;
-                default:
-                    PalleteditEnable = false;
-                    ExpiryDateEditEnable = false;
-                    ParQtyEditEnable = false;
-                    EnableColor = "#f2f2f0";
-                    LocationVisible = false;
-                    break;
-            }
-            if (!string.IsNullOrWhiteSpace(DataSender))
-            {
-                DateTime dCreated = Preferences.Get("PrefINCParDetDateCreated", DateTime.MinValue);
-                int[] i = { INCParDetId };
-                string[] s = { RefId };
-                DateTime[] t = { dCreated };
-                var retdata = await localDbIncomingParDetailService.GetModel("INCParDetId&RefId&DateCreated", s, i, t);
-                if (retdata != null)
+                await LiveTimer();
+                var userfullname = Preferences.Get("PrefUserFullname", "");
+                var name = userfullname.Split(' ');
+                UserFullName = name[0];
+                var userRole = Preferences.Get("PrefUserRole", string.Empty);
+                switch (userRole)
                 {
-                    E = retdata;
-                    PONumber = retdata.POHeaderNumber;
-                    ItemCode = retdata.ItemCode;
-                    ItemDesc = retdata.ItemDesc;
-                    PalletCode = retdata.PalletCode;
-                    ExpiryDate = retdata.ExpiryDate;
-                    PartialCQTY = retdata.PartialCQTY;
-
+                    case "Check":
+                        PalleteditEnable = true;
+                        ExpiryDateEditEnable = true;
+                        ParQtyEditEnable = true;
+                        EnableColor = "#ffdbb3";
+                        LocationVisible = false;
+                        CheckerVisible = true;
+                        break;
+                    case "Pick":
+                        PalleteditEnable = true;
+                        ExpiryDateEditEnable = true;
+                        ParQtyEditEnable = false;
+                        EnableColor = "#f2f2f0";
+                        LocationVisible = true;
+                        CheckerVisible = false;
+                        break;
+                    default:
+                        PalleteditEnable = false;
+                        ExpiryDateEditEnable = false;
+                        ParQtyEditEnable = false;
+                        EnableColor = "#f2f2f0";
+                        LocationVisible = false;
+                        CheckerVisible = false;
+                        break;
                 }
+                if (!string.IsNullOrWhiteSpace(DataSender))
+                {
+                    DateTime dCreated = Preferences.Get("PrefINCParDetDateCreated", DateTime.MinValue);
+                    int[] i = { INCParDetId };
+                    string[] s = { RefId };
+                    DateTime[] t = { dCreated };
+                    var retdata = await localDbIncomingParDetailService.GetModel("INCParDetId&RefId&DateCreated", s, i, t);
+                    if (retdata != null)
+                    {
+                        E = retdata;
+                        PONumber = retdata.POHeaderNumber;
+                        ItemCode = retdata.ItemCode;
+                        ItemDesc = retdata.ItemDesc;
+                        PalletCode = retdata.PalletCode;
+                        ExpiryDate = retdata.ExpiryDate;
+                        PartialCQTY = retdata.PartialCQTY;
+                        WarehouseLocation = retdata.WarehouseLocation;
+                    }
+                }
+                Preferences.Set("PrefIncomingInitialRefresh", true);
             }
 
         }
         private async Task Cancel()
         {
             await Shell.Current.GoToAsync("..");
-        }
-        private async Task NavPalletList()
-        {
-            var route = $"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail";
-            await Shell.Current.GoToAsync(route);
         }
         private async Task EditDetail()
         {
@@ -144,8 +153,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     if (Preferences.Get("PrefUserRole", string.Empty) == "Check")
                     {
-                        if (!string.IsNullOrWhiteSpace(PalletCode))
-                        {
+                        // if (!string.IsNullOrWhiteSpace(PalletCode))
                             E.TimesUpdated++;
                             E.PalletCode = PalletCode;
                             E.PartialCQTY = PartialCQTY;
@@ -154,21 +162,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                             MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
                             await Shell.Current.GoToAsync("..");
-                        }
                     }
                     else if(Preferences.Get("PrefUserRole", string.Empty) == "Pick")
                     {
-                        if (!string.IsNullOrWhiteSpace(PalletCode) || !string.IsNullOrWhiteSpace(WarehouseLocation))
-                        {
+                        // if (!string.IsNullOrWhiteSpace(PalletCode) || !string.IsNullOrWhiteSpace(WarehouseLocation))
                             E.TimesUpdated++;
                             E.PalletCode = PalletCode;
                             E.PartialCQTY = PartialCQTY;
+                            E.WarehouseLocation = WarehouseLocation;
                             E.ExpiryDate = ExpiryDate;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
                             await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                             MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
                             await Shell.Current.GoToAsync("..");
-                        }
                     }
                 }
 
@@ -178,7 +184,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await Shell.Current.GoToAsync("..");
             }
         }
-
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);

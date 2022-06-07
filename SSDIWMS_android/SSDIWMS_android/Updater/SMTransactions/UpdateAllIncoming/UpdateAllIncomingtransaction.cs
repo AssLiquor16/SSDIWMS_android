@@ -116,7 +116,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                     else if(lDetail.TimesUpdated < sDetail.TimesUpdated)
                     {
                         //update local
-                        await localDbIncomingDetailService.Update("Comon", sDetail);
+                        await localDbIncomingDetailService.Update("Common", sDetail);
                     }
                 }
                 

@@ -5,7 +5,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms"
              xmlns:fontAwsome="clr-namespace:FontAwesome"
-             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages.WarehouseLocationMasterListDetailSubModulePage">
+             Title="INCOMING STOCKS" x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages.WarehouseLocationMasterListDetailSubModulePage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"
@@ -25,7 +25,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding LiveDate}"/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -43,7 +43,7 @@
                     <StackLayout>
                         <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
                             <StackLayout BackgroundColor="Transparent" Orientation="Horizontal">
-                                <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search pallet" WidthRequest="230"/>
+                                <Entry Text="{Binding SearchString}" FontSize="Subtitle" Placeholder="Search location" WidthRequest="230"/>
                                 <Button FontFamily="FAS" Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" Clicked="Button_Clicked" BackgroundColor="Transparent" TextColor="Black" WidthRequest="50" FontSize="Title" Margin="0"/>
                             </StackLayout>
                         </Frame>
@@ -51,7 +51,7 @@
                     <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                         <CollectionView 
-                                        ItemsSource="{Binding FilteredWarehouseLocation}"
+                                        ItemsSource="{Binding FilteredWarehouseLocationList}"
                                         SelectionMode="Single"
                                         SelectedItem="{Binding SelectedWarehouseLocation}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
@@ -78,15 +78,8 @@
                                 </StackLayout>
                             </CollectionView.EmptyView>
                             <CollectionView.Header>
-                                <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90*"/>
-                                        <ColumnDefinition Width="160*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label Text="Code" FontSize="Subtitle" Grid.Column="0" 
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                    <Label Text="Description" FontSize="Subtitle" Grid.Column="1"
+                                <Grid Padding="10,5,2,5" VerticalOptions="Start">
+                                    <Label Text="Warehouse Location" FontSize="Subtitle" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
 
                                 </Grid>
@@ -100,27 +93,13 @@
                             </CollectionView.Footer>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
-
+                                    <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0" Margin="5">
                                         <StackLayout BackgroundColor="Transparent">
-
                                             <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="90*"/>
-                                                    <ColumnDefinition Width="160*"/>
                                                 </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding PalletCode}" Grid.Column="0"/>
-                                                <StackLayout Grid.Column="1">
-                                                    <Label Text="{Binding PalletDescription}"/>
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Status:" FontSize="Micro"/>
-                                                        <Label Text="{Binding PalletStatus}" FontSize="Micro"/>
-                                                    </StackLayout>
-                                                </StackLayout>
-
+                                                <Label Text="{Binding Final_Location}" FontSize="Subtitle" FontFamily="FAS" FontAttributes="Bold"/>
                                             </Grid>
-
                                         </StackLayout>
                                     </Frame>
                                 </DataTemplate>

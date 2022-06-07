@@ -21,9 +21,13 @@
            BackgroundColor="White"
            CornerRadius="10"
            >
-
         <StackLayout HorizontalOptions="FillAndExpand" 
                      VerticalOptions="FillAndExpand">
+            <Button FontFamily="FAS" FontSize="Subtitle"   Text="{x:Static fontAwsome:FontAwesomeIcons.Times}"
+                    HorizontalOptions="End" WidthRequest="30" HeightRequest="20" Margin="0"
+                                BackgroundColor="Transparent" TextColor="Red"
+                                Command="{Binding CancelCommand}">
+            </Button>
             <StackLayout HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
                 <StackLayout Padding="10" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
@@ -150,21 +154,22 @@
                         </StackLayout>
                     </Frame>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="-5,0,0,0">
-
-                        <Button Text="Back"
+                        <Button Text="Return" TextColor="Red" IsVisible="{Binding ReturnView}"
                                 CornerRadius="5"
-                                Command="{Binding CancelCommand}">
+                                Command="{Binding ReturnToOngoingCommand}">
                             <Button.ImageSource>
-                                <FontImageSource FontFamily="FAS" 
-                                                 Glyph="{x:Static fontAwsome:FontAwesomeIcons.AngleLeft}"/>
+                                <FontImageSource FontFamily="FAS" Color="Red"
+                                                 Glyph="{x:Static fontAwsome:FontAwesomeIcons.TimesCircle}"/>
                             </Button.ImageSource>
                         </Button>
                         <Button Text="{Binding ButtonText}" 
                                 CornerRadius="5" Padding="52,0" 
                                 Command="{Binding FinalizeCommand}"
-                                WidthRequest="235">
+                                TextColor="Green"
+                                WidthRequest="225">
                             <Button.ImageSource>
                                 <FontImageSource FontFamily="FAS" 
+                                                 Color="Green"
                                                  Glyph="{x:Static fontAwsome:FontAwesomeIcons.Check}"/>
                             </Button.ImageSource>
                         </Button>

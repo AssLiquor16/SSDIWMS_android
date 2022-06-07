@@ -29,7 +29,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.ArticleMaster
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = await client.GetStringAsync($"api/ArticleMasters/Get/Active");
+                        var json = await client.GetStringAsync($"api/articleMasters/getbytrue");
                         var articleMasters = JsonConvert.DeserializeObject<IEnumerable<ArticleMasterModel>>(json);
                         return articleMasters;
                     }

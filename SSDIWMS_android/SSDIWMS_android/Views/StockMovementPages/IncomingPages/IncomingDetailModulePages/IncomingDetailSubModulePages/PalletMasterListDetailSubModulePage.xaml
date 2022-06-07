@@ -26,7 +26,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding LiveDate}"/>
+                                    <Span Text="{Binding livetimer.LiveDate}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -79,17 +79,9 @@
                                 </StackLayout>
                             </CollectionView.EmptyView>
                             <CollectionView.Header>
-                                <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90*"/>
-                                        <ColumnDefinition Width="160*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label Text="Code" FontSize="Subtitle" Grid.Column="0" 
+                                <Grid Padding="10,5,2,5" VerticalOptions="Start">
+                                    <Label Text="Pallet code" FontSize="Subtitle" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                    <Label Text="Description" FontSize="Subtitle" Grid.Column="1"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-
                                 </Grid>
                             </CollectionView.Header>
                             <CollectionView.Footer>
@@ -106,19 +98,8 @@
                                         <StackLayout BackgroundColor="Transparent">
 
                                             <Grid Margin="0,5" Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="90*"/>
-                                                    <ColumnDefinition Width="160*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding PalletCode}" Grid.Column="0"/>
-                                                <StackLayout Grid.Column="1">
-                                                    <Label Text="{Binding PalletDescription}"/>
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Status:" FontSize="Micro"/>
-                                                        <Label Text="{Binding PalletStatus}" FontSize="Micro"/>
-                                                    </StackLayout>
-                                                </StackLayout>
+                                                <Label Text="{Binding PalletCode}" FontSize="Subtitle" Grid.Column="0"/>
+                                                
 
                                             </Grid>
 

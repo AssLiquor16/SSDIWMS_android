@@ -9,6 +9,6 @@ namespace SSDIWMS_android.Services.NotificationServices
     {
         Task ToastNotif(string type, string msg);
         Task StaticToastNotif(string type, string msg);
-        Task LoadingProcess(string type, string msg);
+        Task LoadingProcess(string type, string msg = null);
     }
 }

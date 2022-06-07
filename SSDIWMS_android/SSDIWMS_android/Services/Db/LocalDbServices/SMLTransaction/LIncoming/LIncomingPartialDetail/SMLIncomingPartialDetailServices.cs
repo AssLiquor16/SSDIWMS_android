@@ -139,7 +139,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                         POHeaderNumber = item.POHeaderNumber,
                         Status = item.Status,
                         ExpiryDate = item.ExpiryDate,
-                        DateFinalized = DateTime.MinValue
+                        DateFinalized = DateTime.MinValue,
+                        WarehouseLocation = item.WarehouseLocation
                     };
                     await db_.InsertAsync(initialData);
                     break;
@@ -174,6 +175,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     conte.PalletCode = item.PalletCode;
                     conte.Status = item.Status;
                     conte.DateFinalized = item.DateFinalized;
+                    conte.ExpiryDate = item.ExpiryDate;
+                    conte.WarehouseLocation = item.WarehouseLocation;
                     await db_.UpdateAsync(conte);
                     break;
                 default: break;

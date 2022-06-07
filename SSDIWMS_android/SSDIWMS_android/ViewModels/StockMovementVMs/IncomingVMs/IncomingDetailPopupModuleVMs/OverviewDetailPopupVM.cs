@@ -36,11 +36,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         IncomingDetailModel _selectedItem;
         string _poNumber, _totalPOItems, _buttonText;
-        bool _isrefreshing;
+        bool _isrefreshing, _returnView;
         public IncomingDetailModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
         public string TotalPOItems { get => _totalPOItems; set => SetProperty(ref _totalPOItems, value); }
         public bool IsRefreshing { get => _isrefreshing; set => SetProperty(ref _isrefreshing, value); }
+        public bool ReturnView { get => _returnView; set => SetProperty(ref _returnView, value); }
+        
         public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
         public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
         public string UserRole { get => _userRole; set => SetProperty(ref _userRole, value); }
@@ -53,6 +55,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public AsyncCommand CancelCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand FinalizeCommand { get; }
+        public AsyncCommand ReturnToOngoingCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public OverviewDetailPopupVM()
@@ -67,6 +70,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
             CancelCommand = new AsyncCommand(Cancel);
             TappedCommand = new AsyncCommand(Tapped);
+            ReturnToOngoingCommand = new AsyncCommand(ReturnToOngoing);
             FinalizeCommand = new AsyncCommand(SetStatus);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
@@ -97,14 +101,17 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 case "Check":
                     UserRole = "Checker";
                     ButtonText = "Finalize";
+                    ReturnView = false;
                     break;
                 case "Pick":
                     UserRole = "Picker";
                     ButtonText = "Recieve";
+                    ReturnView = true;
                     break;
                 default:
                     UserRole = "Unassigned";
                     ButtonText = "Unable";
+                    ReturnView = false;
                     break;
             }
             BillDoc = Preferences.Get("PrefBillDoc", string.Empty);
@@ -153,7 +160,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
 
         }
-
         private async Task SetStatus()
         {
             var role = Preferences.Get("PrefUserRole", string.Empty);
@@ -162,7 +168,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 //finalize
                 await Finalize();
             }
-            else if(role == "Pick")
+            else if (role == "Pick")
             {
                 //recieved
                 await Recieve();
@@ -174,16 +180,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
         }
-
-
-        /*var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
-                        if (poStatus == "Ongoing")
-                        {
-                        }*/
         private async Task Finalize()
         {
-            bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the item?", "Yes", "No");
-            if (proceed == true)
+            if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
             {
 
                 try
@@ -204,6 +203,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         item.TimesUpdated += 2;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
+                        //totals all the qty of partial details where po and item code is equal to item
+                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
+                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
+                        var totalCqty = 0;
+                        foreach (var pardet in partialdet)
+                        {
+                            totalCqty += pardet.PartialCQTY;
+                        }
+                        //-----------------------------------------------------------------------------
+                        item.Cqty = totalCqty;
                         await localDbIncomingDetailService.Update("Common", item);
 
                         string[] s = { item.ItemCode };
@@ -236,9 +245,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         string[] strinfilter = { PONumber };
                         await updaterservice.UpdateAllIncomingTrans();
                         await notifService.StaticToastNotif("Success", "Item sync successfully.");
-                        
+
                     }
-                    
+
                 }
                 catch
                 {
@@ -254,8 +263,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         }
         private async Task Recieve()
         {
-            bool proceed = await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the item?", "Yes", "No");
-            if(proceed == true)
+            if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the P.O?", "Yes", "No") == true)
             {
                 try
                 {
@@ -275,6 +283,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         item.TimesUpdated += 20;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
+                        //totals all the qty of partial details where po and item code is equal to item
+                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
+                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
+                        var totalCqty = 0;
+                        foreach (var pardet in partialdet)
+                        {
+                            totalCqty += pardet.PartialCQTY;
+                        }
+                        //-----------------------------------------------------------------------------
+                        item.Cqty = totalCqty;
                         await localDbIncomingDetailService.Update("Common", item);
 
                         string[] s = { item.ItemCode };
@@ -286,6 +304,89 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             paritem.TimesUpdated += 20;
                             paritem.UserId = userId;
                             paritem.Status = "Recieved";
+                            paritem.DateFinalized = DateTime.Now;
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
+                        }
+                    }
+                    Preferences.Remove("PrefPONumber");
+                    Preferences.Remove("PrefBillDoc");
+                    Preferences.Remove("PrefCvan");
+                    Preferences.Remove("PrefShipNo");
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Something went wrong");
+                }
+                try
+                {
+                    bool busy = Preferences.Get("PrefISMSyncing", false);
+                    if (busy == false)
+                    {
+                        string[] strinfilter = { PONumber };
+                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
+                        if (poStatus == "Finalized")
+                        {
+                            await updaterservice.UpdateAllIncomingTrans();
+                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
+                        }
+                    }
+
+                }
+                catch
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+                await PopupNavigation.Instance.PopAllAsync(true);
+                await notifService.LoadingProcess("End", "");
+                var route = $"..";
+                await Shell.Current.GoToAsync(route);
+            }
+        }
+        private async Task ReturnToOngoing()
+        {
+            if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to return the P.O?", "Yes", "No") == true)
+            {
+                try
+                {
+                    await notifService.LoadingProcess("Begin", "Processing...");
+                    var userId = Preferences.Get("PrefUserId", 0);
+                    IncomingHeaderModel e = new IncomingHeaderModel
+                    {
+                        RecUserId = userId,
+                        INCstatus = "Ongoing",
+                        PONumber = PONumber,
+                        TimesUpdated = 15
+
+                    };
+                    await localDbIncomingHeaderService.Update("PONumber1", e);
+                    foreach (var item in IncomingDetailList)
+                    {
+                        item.TimesUpdated += 15;
+                        item.UserId = userId;
+                        item.QTYStatus = string.Empty;
+
+                        //totals all the qty of partial details where po and item code is equal to item
+                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
+                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
+                        var totalCqty = 0;
+                        foreach(var pardet in partialdet)
+                        {
+                            totalCqty += pardet.PartialCQTY;
+                        }
+                        //-----------------------------------------------------------------------------
+                        item.Cqty = totalCqty;
+
+                        await localDbIncomingDetailService.Update("Common", item);
+
+                        string[] s = { item.ItemCode };
+                        int[] i = { item.INCDetId };
+
+                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                        foreach (var paritem in retpardet)
+                        {
+                            paritem.TimesUpdated += 15;
+                            paritem.UserId = userId;
+                            paritem.Status = "Ongoing";
                             paritem.DateFinalized = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }

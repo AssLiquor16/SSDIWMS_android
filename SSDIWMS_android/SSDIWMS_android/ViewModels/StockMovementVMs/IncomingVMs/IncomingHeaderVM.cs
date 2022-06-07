@@ -31,6 +31,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
         public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
 
+        public AsyncCommand GenBactchCodeNavCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -43,11 +44,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
             IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
 
+            GenBactchCodeNavCommand = new AsyncCommand(GenBactchCodeNav);
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
         }
+        private async Task GenBactchCodeNav() =>
         private async Task Tapped()
         {
             if(SelectedHeader != null)
@@ -77,6 +80,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         private async Task ColViewRefresh()
         {
             IsRefreshing = true;
+            IncomingHeaderList.Clear();
             var syncing = Preferences.Get("PrefISMSyncing", false);
             if (syncing == false)
             {

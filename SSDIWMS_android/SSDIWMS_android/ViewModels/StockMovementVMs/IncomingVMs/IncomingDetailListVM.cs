@@ -83,6 +83,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
                 var route = $"{nameof(EditDetailModulePages)}?DataSender=DetailList&INCParDetId={SelectedDetail.INCParDetId}&RefId={SelectedDetail.RefId}";
                 Preferences.Set("PrefINCParDetDateCreated", SelectedDetail.DateCreated);
+                Preferences.Remove("PrefIncomingInitialRefresh");
                 await Shell.Current.GoToAsync(route);
             }
         }

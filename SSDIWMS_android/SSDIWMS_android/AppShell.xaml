@@ -110,7 +110,7 @@
         </FlyoutItem.FlyoutIcon>
         <ShellContent Route="DashBoardPage" ContentTemplate="{DataTemplate local:DashBoardPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Stock Movement" IsVisible="{Binding StockMovementVisible}">
+    <FlyoutItem Title="WMS" IsVisible="{Binding StockMovementVisible}">
         <FlyoutItem.FlyoutIcon>
             <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Box}" Color="{StaticResource Primary}"/>
         </FlyoutItem.FlyoutIcon>

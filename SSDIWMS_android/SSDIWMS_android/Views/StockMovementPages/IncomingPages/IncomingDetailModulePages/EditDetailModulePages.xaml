@@ -80,16 +80,17 @@
                                     </StackLayout>
                                 </Frame>
 
+                                <!-- IsVisible="{Binding LocationVisible}" -->
                                 <Frame BackgroundColor="{StaticResource PriorityColor}"
                                        Margin="5,3" 
                                        Padding="5,3"
-                                       IsVisible="{Binding LocationVisible}"
-                                       >
+                                       IsVisible="false"
+                                    >
                                     <StackLayout BackgroundColor="Transparent" 
                                                  Orientation="Horizontal">
                                         <StackLayout BackgroundColor="Transparent" 
                                                      Orientation="Vertical">
-                                            <Label Text="Location:" 
+                                            <Label Text="Warehouse Location:" 
                                                    TextColor="DarkGray"/>
                                             <Entry Text="{Binding WarehouseLocation}" 
                                                    WidthRequest="220" 
@@ -98,7 +99,7 @@
                                         </StackLayout>
                                         <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" 
                                                 BackgroundColor="Transparent" 
-                                                Command="{Binding NavPalletListCommand}"
+                                                Command="{Binding NavWarehouseLocationListCommand}"
                                                 CornerRadius="10" 
                                                 TextColor="{StaticResource TextColor}" 
                                                 FontSize="Title" 
@@ -108,7 +109,9 @@
 
                                 <Frame BackgroundColor="{StaticResource PriorityColor}"
                                        Margin="5,3" 
-                                       Padding="5,3">
+                                       Padding="5,3"
+                                       IsVisible="false"
+                                       >
                                     <StackLayout BackgroundColor="Transparent" 
                                                  Orientation="Horizontal">
                                         <StackLayout BackgroundColor="Transparent" 
@@ -132,7 +135,9 @@
 
                                 <Frame BackgroundColor="{StaticResource PriorityColor}" 
                                        Margin="5,3" 
-                                       Padding="5,3">
+                                       Padding="5,3"
+                                       IsVisible="false"
+                                       >
                                     <StackLayout BackgroundColor="Transparent">
                                         <Label Text="Expiry Date:" 
                                                TextColor="DarkGray"/>
@@ -154,7 +159,7 @@
                                     </StackLayout>
                                 </Frame>
 
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="5,0">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="5,0" IsVisible="{Binding CheckerVisible}">
 
                                     <Button Text="Back" 
                                             CornerRadius="5"

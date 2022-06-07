@@ -24,5 +24,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public DateTime DateCreated { get; set; }
         public DateTime DateFinalized { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public string WarehouseLocation { get; set; }
     }
 }

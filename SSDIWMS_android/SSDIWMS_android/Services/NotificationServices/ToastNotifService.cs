@@ -62,13 +62,12 @@ namespace SSDIWMS_android.Services.NotificationServices
             await Task.CompletedTask;
         }
 
-        public Task LoadingProcess(string type, string msg)
+        public Task LoadingProcess(string type, string msg = null)
         {
             var load = UserDialogs.Instance.Loading(msg);
             switch (type)
             {
                 case "Begin":
-                    
                     load.Show();
                     break;
                 case "End":

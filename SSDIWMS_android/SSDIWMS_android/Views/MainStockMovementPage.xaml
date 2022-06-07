@@ -5,7 +5,7 @@
              xmlns:fontAwsome="clr-namespace:FontAwesome"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms"
-             Title="Stock Movement"
+             Title="Modules"
              x:Class="SSDIWMS_android.Views.MainStockMovementPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
@@ -45,7 +45,7 @@
                                  VerticalOptions="StartAndExpand" 
                                  HorizontalOptions="CenterAndExpand" 
                                  Margin="0,2">
-                        <Label Text="Stock Movement" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="WMS" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
                         <Label>
                             Sonic Sales And Distribution Inc is an enterprise located in Philippines, with the main office in Davao City. It operates in the Merchant Wholesalers, Durable Goods industry.
                         </Label>
