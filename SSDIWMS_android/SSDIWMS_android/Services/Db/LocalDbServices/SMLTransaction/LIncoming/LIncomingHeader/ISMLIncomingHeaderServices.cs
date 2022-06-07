@@ -8,7 +8,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
 {
     public interface ISMLIncomingHeaderServices
     {
-        Task<IEnumerable<IncomingHeaderModel>> GetList(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter);
+        Task<IEnumerable<IncomingHeaderModel>> GetList(string type = null, string[] stringfilter = null, int[] intfilter = null, DateTime[] datefilter = null, IncomingHeaderModel obj = null);
         Task<IncomingHeaderModel> GetModel(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter);
         Task Insert(string type, IncomingHeaderModel data);
         Task Update(string type, IncomingHeaderModel data);

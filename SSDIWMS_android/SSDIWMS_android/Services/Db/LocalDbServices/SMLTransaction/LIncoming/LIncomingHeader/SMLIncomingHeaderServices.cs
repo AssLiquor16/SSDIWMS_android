@@ -33,7 +33,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
 
         }
 
-        public async Task<IEnumerable<IncomingHeaderModel>> GetList(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter)
+        public async Task<IEnumerable<IncomingHeaderModel>> GetList(string type = null, string[] stringfilter = null, int[] intfilter = null, DateTime[] datefilter = null, IncomingHeaderModel obj = null)
         {
             await Init();
             switch (type)
@@ -47,6 +47,10 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var retcontents = await db_.Table<IncomingHeaderModel>().ToListAsync();
                     var filtercontents = retcontents.Where(x =>x.WarehouseId == WhId && x.ActRecDate == datenow).ToList();
                     return filtercontents;
+                case "WhId/CurDate/RecievedIncStat":
+                    var retcontents2 = await db_.Table<IncomingHeaderModel>().ToListAsync();
+                    var filtercontents2 = retcontents2.Where(x => x.WarehouseId == obj.WarehouseId && x.ActRecDate == DateTime.Today && x.INCstatus == "Recieved").ToList();
+                    return filtercontents2;
                 default: return null;
 
             }
@@ -110,6 +114,12 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     o.RecUserId = data.RecUserId;
                     o.TimesUpdated += data.TimesUpdated;
                     await db_.UpdateAsync(o);
+                    break;
+                case "BatchCode":
+                    var p = await db_.Table<IncomingHeaderModel>().Where(x=>x.PONumber == data.PONumber && x.INCId == data.INCId).FirstOrDefaultAsync();
+                    p.BatchCode = data.BatchCode;
+                    p.TimesUpdated = data.TimesUpdated;
+                    await db_.UpdateAsync(p);
                     break;
             }
         }

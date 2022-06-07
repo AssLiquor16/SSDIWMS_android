@@ -22,6 +22,9 @@ namespace SSDIWMS_android.Helpers
         public async Task LiveTimer()
         {
             await Task.Delay(1);
+            var userfullname = Preferences.Get("PrefUserFullname", "");
+            var name = userfullname.Split(' ');
+            UserFullName = name[0];
             Device.StartTimer(TimeSpan.FromSeconds(_datetimeTick), () => {
                 Task.Run(async () =>
                 {

@@ -7,6 +7,7 @@ using SSDIWMS_android.ViewModels.PopUpVMs;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
 using System;
@@ -75,7 +76,11 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
             Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));
+
+            Routing.RegisterRoute(nameof(BatchGenPOListPage), typeof(BatchGenPOListPage));
             
+
+
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);

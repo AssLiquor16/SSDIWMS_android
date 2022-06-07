@@ -23,14 +23,21 @@
            >
         <StackLayout HorizontalOptions="FillAndExpand" 
                      VerticalOptions="FillAndExpand">
-            <Button FontFamily="FAS" FontSize="Subtitle"   Text="{x:Static fontAwsome:FontAwesomeIcons.Times}"
-                    HorizontalOptions="End" WidthRequest="30" HeightRequest="20" Margin="0"
-                                BackgroundColor="Transparent" TextColor="Red"
-                                Command="{Binding CancelCommand}">
-            </Button>
+
+
             <StackLayout HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
                 <StackLayout Padding="10" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <Label HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Times}" FontSize="Title" FontFamily="FAS" FontAttributes="Bold" TextColor="Red"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CancelCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                     <Frame Padding="10,5">
                         <StackLayout>
                             <StackLayout Orientation="Vertical">
@@ -138,11 +145,9 @@
                                                             <ColumnDefinition Width="120*"/>
                                                             <ColumnDefinition Width="50*"/>
                                                         </Grid.ColumnDefinitions>
-
                                                         <Label Text="{Binding ItemCode}" Grid.Column="0"/>
                                                         <Label Text="{Binding ItemDesc}" Grid.Column="1"/>
                                                         <Label Text="{Binding QTYStatus}" Grid.Column="2" TextColor="{Binding Color}"/>
-
                                                     </Grid>
                                                 </StackLayout>
                                             </Frame>
@@ -154,22 +159,21 @@
                         </StackLayout>
                     </Frame>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="-5,0,0,0">
-                        <Button Text="Return" TextColor="Red" IsVisible="{Binding ReturnView}"
+                        <Button Text="Return" IsVisible="{Binding ReturnView}"
+                                BackgroundColor="Red"
                                 CornerRadius="5"
                                 Command="{Binding ReturnToOngoingCommand}">
                             <Button.ImageSource>
-                                <FontImageSource FontFamily="FAS" Color="Red"
+                                <FontImageSource FontFamily="FAS"
                                                  Glyph="{x:Static fontAwsome:FontAwesomeIcons.TimesCircle}"/>
                             </Button.ImageSource>
                         </Button>
-                        <Button Text="{Binding ButtonText}" 
+                        <Button Text="{Binding ButtonText}" BackgroundColor="Green"
                                 CornerRadius="5" Padding="52,0" 
                                 Command="{Binding FinalizeCommand}"
-                                TextColor="Green"
                                 WidthRequest="225">
                             <Button.ImageSource>
-                                <FontImageSource FontFamily="FAS" 
-                                                 Color="Green"
+                                <FontImageSource FontFamily="FAS"
                                                  Glyph="{x:Static fontAwsome:FontAwesomeIcons.Check}"/>
                             </Button.ImageSource>
                         </Button>

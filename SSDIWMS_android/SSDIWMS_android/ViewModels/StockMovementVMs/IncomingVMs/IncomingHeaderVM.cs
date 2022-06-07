@@ -6,6 +6,7 @@ using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         IToastNotifService notifService;
 
         IncomingHeaderModel _selectedHeader;
-        bool _isRefreshing;
+        bool _isRefreshing, _genBatchVisible;
 
 
         public IncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
+        
+        public bool GenBatchVisible { get => _genBatchVisible; set => SetProperty(ref _genBatchVisible, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
 
         public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
@@ -50,7 +53,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
         }
-        private async Task GenBactchCodeNav() =>
+        private async Task GenBactchCodeNav() => await Shell.Current.GoToAsync($"{nameof(BatchGenPOListPage)}"); 
         private async Task Tapped()
         {
             if(SelectedHeader != null)
@@ -68,8 +71,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                         await Shell.Current.GoToAsync(route);
                         break;
                     case "Pick":
-                        var route1 = $"{nameof(IncomingDetailListPage)}";
-                        await Shell.Current.GoToAsync(route1);
+                        if (SelectedHeader.INCstatus == "Finalized")
+                        {
+                            var route1 = $"{nameof(IncomingDetailListPage)}";
+                            await Shell.Current.GoToAsync(route1);
+                        }
+                        else
+                        {
+
+                        }
                         break;
                 }
 
@@ -113,7 +123,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
@@ -133,13 +143,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
+                    GenBatchVisible = false;
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
+                    GenBatchVisible = true;
                     break;
-                default: break;
+                default: GenBatchVisible = false; break;
             }
             var userfullname = Preferences.Get("PrefUserFullname", "");
             var name = userfullname.Split(' ');
