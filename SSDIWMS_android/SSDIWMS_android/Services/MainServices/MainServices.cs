@@ -81,8 +81,8 @@ namespace SSDIWMS_android.Services.MainServices
             await incDetService.Clear();
             await incHeadService.Clear();
             await incParDetService.Clear();
-            await batchHeadservice.Remove("All");
-            await batchDetailservice.Remove("All");
+            await batchHeadservice.Remove(null, "All");
+            await batchDetailservice.Remove(null, "All");
         }
         public async Task ClearAlldata()
         {

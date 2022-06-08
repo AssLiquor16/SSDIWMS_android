@@ -12,6 +12,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
         Task<BatchHeaderModel> GetFirstOrDefault(BatchHeaderModel obj = null, string type = null);
         Task<BatchHeaderModel> Insert(BatchHeaderModel obj = null, string type = null);
         Task<BatchHeaderModel> Update(BatchHeaderModel obj = null, string type = null);
-        Task Remove(object obj = null, string type = null);
+        Task Remove(object obj, string type = null);
     }
 }

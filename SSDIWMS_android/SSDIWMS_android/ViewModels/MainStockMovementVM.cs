@@ -23,6 +23,7 @@ namespace SSDIWMS_android.ViewModels
         private async Task Navigation()
         {
             var route = $"{nameof(IncomingHeaderPage)}";
+            Preferences.Remove("PrefIncomingHeaderPagepartialRefresh");
             await Shell.Current.GoToAsync(route);
         }
         private async Task PageRefresh()

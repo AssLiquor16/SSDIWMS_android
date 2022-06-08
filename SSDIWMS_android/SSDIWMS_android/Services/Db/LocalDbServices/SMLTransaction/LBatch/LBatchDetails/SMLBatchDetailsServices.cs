@@ -53,7 +53,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                     default: return null;
 
                 }
-            }
+        }
 
         public async Task<BatchDetailsModel> Insert(BatchDetailsModel obj = null, string type = null)
         {
@@ -89,7 +89,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             }
         }
 
-        public async Task Remove(object obj = null, string type = null)
+        public async Task Remove(object obj, string type = null)
         {
             var model = (obj as BatchDetailsModel);
             await Init();

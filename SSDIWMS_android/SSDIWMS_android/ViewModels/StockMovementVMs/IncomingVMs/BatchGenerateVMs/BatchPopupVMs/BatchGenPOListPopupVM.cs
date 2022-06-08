@@ -94,22 +94,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     foreach (var ipo in selectedPO)
                     {
                         string[] skufilter = { ipo.PONumber };
-                        var skuPerPO = await localDbIncomingDetailService.GetList("PONumber", skufilter, null);
+                        var skuPerPO = await localDbIncomingDetailService.GetList("PONumber2", skufilter, null);
                         SKUInAllSelectedPOList.AddRange(skuPerPO);
-                        foreach (var sku in SKUInAllSelectedPOList)
-                        {
-                            var batchdetContents = new BatchDetailsModel
-                            {
-                                BatchId = insertBc.BatchId,
-                                BatchCode = insertBc.BatchCode,
-                                ItemCode = sku.ItemCode,
-                                ItemDesc = sku.ItemDesc,
-                                Qty = sku.Cqty,
-                                DateAdded = DateTime.Now,
-                                TimesUpdated = 0
-                            };
-                            await localDbbatchDetailsService.Insert(batchdetContents);
-                        }
                         var icontent = new IncomingHeaderModel
                         {
                             INCId = ipo.INCId,
@@ -119,8 +105,26 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                         };
                         await localDbIncomingHeaderService.Update("BatchCode", icontent);
                     }
-                    await notifService.StaticToastNotif("Success", "BatchCode generate succesfully");
-                    MessagingCenter.Send(this, "RefreshBatchList");
+                    var btdetcont = new BatchDetailsModel();
+                    var groupbysku = SKUInAllSelectedPOList.GroupBy(l => l.ItemCode).Select(cl => new BatchDetailsModel
+                    {
+                        BatchId = insertBc.BatchId,
+                        BatchCode = insertBc.BatchCode,
+                        ItemCode = cl.Key,
+                        ItemDesc = cl.Where(x=>x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
+                        Qty = cl.Sum(c => c.Cqty),
+                        DateAdded = DateTime.Now,
+                        TimesUpdated = 0
+                    }).ToList();
+                    foreach(var gbs in groupbysku)
+                    {
+                        await localDbbatchDetailsService.Insert(gbs);
+                    }
+                   
+                    await notifService.StaticToastNotif("Success", $"BatchCode generate succesfully.");
+
+                    MessagingCenter.Send(this, "RefreshIncomingHeaderList");
+                    //MessagingCenter.Send(this, "RefreshBatchList");
                     await Task.Delay(500);
                     await Close();
 

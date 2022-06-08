@@ -16,6 +16,13 @@
     <ContentPage.BindingContext>
         <viewmodels:IncomingHeaderVM/>
     </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding GenBactchCodeNavCommand}" IsEnabled="{Binding GenBatchVisible}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Cog}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -140,21 +147,6 @@
                                     </CollectionView>
 
                                 </RefreshView>
-
-                                <StackLayout HorizontalOptions="FillAndExpand">
-                                    <Button
-                                            Text="Batch codes"
-                                            IsVisible="{Binding GenBatchVisible}"
-                                            HorizontalOptions="FillAndExpand"
-                                            CornerRadius="5" 
-                                            Command="{Binding GenBactchCodeNavCommand}" >
-                                        <Button.ImageSource>
-                                            <FontImageSource FontFamily="FAS" 
-                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.CaretRight}"/>
-                                        </Button.ImageSource>
-                                    </Button>
-
-                                </StackLayout>
                             </StackLayout>
                         </Frame>
                     </StackLayout>

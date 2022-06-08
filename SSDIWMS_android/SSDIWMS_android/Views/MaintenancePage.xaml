@@ -40,176 +40,178 @@
                         </Label>
                     </StackLayout>
                     <BoxView/>
-                    <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">
-                        <Label Text="Maintenance" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+                    <ScrollView>
 
-                        <StackLayout>
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                        <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">
+                            <Label Text="Maintenance" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
+
+                            <StackLayout>
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Archive}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Archive}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Article master" 
+                                        <Label Text="Article master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <StackLayout Margin="0" Padding="0" HorizontalOptions="EndAndExpand" Orientation="Horizontal">
+                                        <StackLayout Margin="0" Padding="0" HorizontalOptions="EndAndExpand" Orientation="Horizontal">
 
-                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                            <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding ArticleMasterUpdateCommand}"
                                                 CornerRadius="5"
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
+                                        </StackLayout>
                                     </StackLayout>
-                                </StackLayout>
-                            </Frame>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Pallet master" 
+                                        <Label Text="Pallet master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding PalletMasterUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Site master" 
+                                        <Label Text="Site master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding AreaMasterUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.MapMarkerAlt}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="WarehouseLocation master" 
+                                        <Label Text="WarehouseLocation master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding WarehouseLocationUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Warehouse}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Warehouse}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Warehouse master" 
+                                        <Label Text="Warehouse master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding WarehouseUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.User}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.User}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="User master" 
+                                        <Label Text="User master" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding UserMasterUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
-                                <StackLayout Orientation="Horizontal" 
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Copy}" 
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Copy}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="All"
+                                        <Label Text="All"
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding AllUpdateCommand}"
                                                 CornerRadius="5" Margin="0" 
                                                 HorizontalOptions="EndAndExpand" 
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
-                            </Frame>
+                                    </StackLayout>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
+                                <Frame Style="{StaticResource Framegrouping}">
 
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.TrashAlt}" 
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.TrashAlt}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Clear transactions" 
+                                        <Label Text="Clear transactions" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
                                                 FontFamily="FAS" Command="{Binding ClearTransactionCommand}" 
                                                 CornerRadius="5" Margin="0" 
                                                 BackgroundColor="Red"
@@ -217,21 +219,21 @@
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
+                                    </StackLayout>
 
-                            </Frame>
+                                </Frame>
 
-                            <Frame Style="{StaticResource Framegrouping}">
+                                <Frame Style="{StaticResource Framegrouping}">
 
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.TrashAlt}" 
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.TrashAlt}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
-                                    <Label Text="Clear All" 
+                                        <Label Text="Clear All" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>
 
-                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" 
                                                 FontFamily="FAS" Command="{Binding ClearAllCommand}" 
                                                 CornerRadius="5" Margin="0" 
                                                 BackgroundColor="Red"
@@ -239,11 +241,13 @@
                                                 Padding="0" 
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>
-                                </StackLayout>
+                                    </StackLayout>
 
-                            </Frame>
+                                </Frame>
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
+
+                    </ScrollView>
                 </StackLayout>
             </Frame>
         </StackLayout>

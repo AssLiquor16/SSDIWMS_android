@@ -5,9 +5,11 @@ using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateVMs.BatchPopupVMs;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages.BatchPopupPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
@@ -53,9 +55,25 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
+            ;
 
+            MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefreshRetOnGoing", async (page) =>
+            {
+                await ColViewRefresh();
+            });
+
+            MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefresh", async (page) =>
+            {
+                await ColViewRefresh();
+            });
+
+            MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
+            {
+                await ColViewRefresh();
+            });
         }
-        private async Task GenBactchCodeNav() => await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
+        private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());    
+        //await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
         private async Task Tapped()
         {
             if(SelectedHeader != null)
@@ -125,7 +143,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     IncomingHeaderList.AddRange(checkerContents);
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized"|| x.INCstatus == "Recieved").ToList();
+                    pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
                     break;
@@ -136,28 +155,34 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         private async Task PageRefresh()
         {
-            await LiveTimer();
-            var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
-            var filter = Preferences.Get("PrefUserRole", "");
-            switch (filter)
+            if(Preferences.Get("PrefIncomingHeaderPagepartialRefresh", false) == false)
             {
-                case "Check":
-                    var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
-                    IncomingHeaderList.Clear();
-                    IncomingHeaderList.AddRange(checkerContents);
-                    GenBatchVisible = false;
-                    break;
-                case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
-                    IncomingHeaderList.Clear();
-                    IncomingHeaderList.AddRange(pickerContents);
-                    GenBatchVisible = true;
-                    break;
-                default: GenBatchVisible = false; break;
+                await LiveTimer();
+                var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
+                var filter = Preferences.Get("PrefUserRole", "");
+                switch (filter)
+                {
+                    case "Check":
+                        var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                        IncomingHeaderList.Clear();
+                        IncomingHeaderList.AddRange(checkerContents);
+                        GenBatchVisible = false;
+                        break;
+                    case "Pick":
+                        var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
+                        pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
+                        IncomingHeaderList.Clear();
+                        IncomingHeaderList.AddRange(pickerContents);
+                        GenBatchVisible = true;
+                        break;
+                    default: GenBatchVisible = false; break;
+                }
+                var userfullname = Preferences.Get("PrefUserFullname", "");
+                var name = userfullname.Split(' ');
+                UserFullName = name[0];
+                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", true);
             }
-            var userfullname = Preferences.Get("PrefUserFullname", "");
-            var name = userfullname.Split(' ');
-            UserFullName = name[0];
+                
         }
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;

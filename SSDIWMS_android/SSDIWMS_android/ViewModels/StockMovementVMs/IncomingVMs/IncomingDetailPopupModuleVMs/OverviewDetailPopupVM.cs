@@ -169,7 +169,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 //finalize
                 if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
                 {
-                    if(await App.Current.MainPage.DisplayAlert("Alert", "Alert some SKU have variance.", "Proceed", "Cancel") == true)
+                    if(await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Proceed", "Cancel") == true)
                     {
                         await Finalize();
                     }
@@ -188,7 +188,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 //recieved
                 if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
                 {
-                    if (await App.Current.MainPage.DisplayAlert("Alert", "Alert some SKU have variance.", "Proceed", "Cancel") == true)
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Proceed", "Cancel") == true)
                     {
                         await Recieve();
                     }
@@ -208,6 +208,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await mainServices.RemovePreferences();
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
+            MessagingCenter.Send(this, "ColviewRefresh");
+            await PopupNavigation.Instance.PopAllAsync(true);
+            await notifService.LoadingProcess("End", "");
+            var route = $"..";
+            await Shell.Current.GoToAsync(route);
         }
         private async Task Finalize()
         {
@@ -263,7 +268,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
-                try
+
+
+                /*try
                 {
                     bool busy = Preferences.Get("PrefISMSyncing", false);
                     if (busy == false)
@@ -278,12 +285,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 catch
                 {
                     await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }
-                await PopupNavigation.Instance.PopAllAsync(true);
-                await notifService.LoadingProcess("End", "");
-                var route = $"..";
-                await Shell.Current.GoToAsync(route);
-
+                }*/
+                
         }
         private async Task Recieve()
         {
@@ -339,7 +342,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
-                try
+
+
+                /*try
                 {
                     bool busy = Preferences.Get("PrefISMSyncing", false);
                     if (busy == false)
@@ -357,11 +362,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 catch
                 {
                     await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }
-                await PopupNavigation.Instance.PopAllAsync(true);
-                await notifService.LoadingProcess("End", "");
-                var route = $"..";
-                await Shell.Current.GoToAsync(route);
+                }*/
+                
         }
         private async Task ReturnToOngoing()
         {
@@ -421,7 +423,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
-                try
+
+                /*try
                 {
                     bool busy = Preferences.Get("PrefISMSyncing", false);
                     if (busy == false)
@@ -439,7 +442,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 catch
                 {
                     await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }
+                }*/
+
+                MessagingCenter.Send(this, "ColviewRefreshRetOnGoing");
                 await PopupNavigation.Instance.PopAllAsync(true);
                 await notifService.LoadingProcess("End", "");
                 var route = $"..";

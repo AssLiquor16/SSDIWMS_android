@@ -26,6 +26,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreference
             Preferences.Remove("PrefINCParDetDateCreated");
             Preferences.Remove("PrefBatchCode");
             Preferences.Set("PrefLoggedIn", false);
+            Preferences.Remove("PrefISMSyncing");
             await Task.CompletedTask;
         }
     }
