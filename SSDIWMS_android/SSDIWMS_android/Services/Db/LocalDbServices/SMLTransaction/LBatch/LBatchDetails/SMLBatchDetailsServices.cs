@@ -1,12 +1,15 @@
 ﻿using SQLite;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchDetails;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(SMLBatchDetailsServices))]
 namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchDetails
 {
     public class SMLBatchDetailsServices : ISMLBatchDetailsServices
@@ -46,6 +49,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                 switch (type)
                 {
                     case null: return await db_.Table<BatchDetailsModel>().ToListAsync();
+                    case "BatchCode": return await db_.Table<BatchDetailsModel>().Where(x => x.BatchCode == obj.BatchCode).ToListAsync();
                     default: return null;
 
                 }
@@ -82,6 +86,17 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                     return caseA;
                 default: return null;
 
+            }
+        }
+
+        public async Task Remove(object obj = null, string type = null)
+        {
+            var model = (obj as BatchDetailsModel);
+            await Init();
+            switch (type)
+            {
+                case null: await db_.DeleteAsync(model); break;
+                case "All": await db_.DeleteAllAsync<BatchDetailsModel>(); break;
             }
         }
     }

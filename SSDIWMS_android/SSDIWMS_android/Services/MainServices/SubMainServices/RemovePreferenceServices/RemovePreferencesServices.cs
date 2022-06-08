@@ -24,6 +24,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.RemovePreference
             Preferences.Remove("PrefShipNo");
             Preferences.Remove("PrefShipLine");
             Preferences.Remove("PrefINCParDetDateCreated");
+            Preferences.Remove("PrefBatchCode");
             Preferences.Set("PrefLoggedIn", false);
             await Task.CompletedTask;
         }

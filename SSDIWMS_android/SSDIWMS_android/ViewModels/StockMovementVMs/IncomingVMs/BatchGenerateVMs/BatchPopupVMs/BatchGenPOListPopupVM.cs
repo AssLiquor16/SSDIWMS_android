@@ -1,9 +1,11 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming.Temp;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchDetails;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
@@ -16,13 +18,14 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateVMs
+namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateVMs.BatchPopupVMs
 {
-    public class BatchGenPOListVM : ViewModelBase 
+    public class BatchGenPOListPopupVM : ViewModelBase
     {
         ISMLIncomingDetailServices localDbIncomingDetailService;
         IToastNotifService notifService;
         ISMLBatchHeaderServices localDbBatchHeaderService;
+        ISMLBatchDetailsServices localDbbatchDetailsService;
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
         public LiveTime livetime { get; } = new LiveTime();
 
@@ -30,7 +33,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         bool _isRefreshing, _generatebtnEnable;
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
         public bool GeneratebtnEnable { get => _generatebtnEnable; set => SetProperty(ref _generatebtnEnable, value); }
-        
+
         public string TotalSelected { get => _totalSelected; set => SetProperty(ref _totalSelected, value); }
 
         public ObservableRangeCollection<SelectedIncomingPartialHeaderModel> PartialModelRecievePOList { get; set; }
@@ -41,11 +44,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         public AsyncCommand PageRefreshCommand { get; }
 
 
-        public BatchGenPOListVM()
+        public BatchGenPOListPopupVM()
         {
             notifService = DependencyService.Get<IToastNotifService>();
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbBatchHeaderService = DependencyService.Get<ISMLBatchHeaderServices>();
+            localDbbatchDetailsService = DependencyService.Get<ISMLBatchDetailsServices>();
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
             SKUInAllSelectedPOList = new ObservableRangeCollection<IncomingDetailModel>();
             PartialModelRecievePOList = new ObservableRangeCollection<SelectedIncomingPartialHeaderModel>();
@@ -53,14 +57,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-       public async Task TotalAllSelected()
+        public async Task TotalAllSelected()
         {
             await Task.Delay(1);
             var totCount = PartialModelRecievePOList.Where(x => x.IsSelected == true).Count();
             TotalSelected = $"Total selected Item(s): {totCount}";
-            
+
         }
-       private async Task Generate()
+        private async Task Generate()
         {
             await notifService.LoadingProcess("Begin", "Generating...");
             if (PartialModelRecievePOList.Where(x => x.IsSelected == true).Count() != 0)
@@ -70,14 +74,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     var selectedPO = PartialModelRecievePOList.Where(x => x.IsSelected == true).ToList();
                     var lastdig = "";
                     var remarks = "";
-                    foreach(var po in selectedPO)
+                    foreach (var po in selectedPO)
                     {
                         lastdig += po.ShipCode[po.ShipCode.Length - 1];
                         lastdig += po.Delcode[po.Delcode.Length - 1];
                         lastdig += po.BillDoc[po.BillDoc.Length - 1];
                         remarks += $"{po.PONumber}-"; // naa ni dash ha
-
-                        
                     }
                     var batchcode = $"{DateTime.Today.Date.ToString("MMddy")}{lastdig}";
                     var bcontent = new BatchHeaderModel
@@ -89,12 +91,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                         TimesUpdated = 0,
                     };
                     var insertBc = await localDbBatchHeaderService.Insert(bcontent, "GenerateBatchCode");
-                    foreach(var ipo in selectedPO)
+                    foreach (var ipo in selectedPO)
                     {
                         string[] skufilter = { ipo.PONumber };
                         var skuPerPO = await localDbIncomingDetailService.GetList("PONumber", skufilter, null);
                         SKUInAllSelectedPOList.AddRange(skuPerPO);
-                        foreach(var sku in SKUInAllSelectedPOList)
+                        foreach (var sku in SKUInAllSelectedPOList)
                         {
                             var batchdetContents = new BatchDetailsModel
                             {
@@ -106,6 +108,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                                 DateAdded = DateTime.Now,
                                 TimesUpdated = 0
                             };
+                            await localDbbatchDetailsService.Insert(batchdetContents);
                         }
                         var icontent = new IncomingHeaderModel
                         {
@@ -117,7 +120,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                         await localDbIncomingHeaderService.Update("BatchCode", icontent);
                     }
                     await notifService.StaticToastNotif("Success", "BatchCode generate succesfully");
-                    await PageRefresh();
+                    MessagingCenter.Send(this, "RefreshBatchList");
+                    await Task.Delay(500);
+                    await Close();
+
                 }
             }
             else
@@ -126,7 +132,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             }
             await notifService.LoadingProcess("End");
         }
-
         private async Task ColViewRefresh()
         {
             IsRefreshing = true;
@@ -142,9 +147,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             {
                 WarehouseId = Preferences.Get("PrefUserWarehouseAssignedId", 0)
             };
-            var datas = await localDbIncomingHeaderService.GetList("WhId/CurDate/RecievedIncStat",null ,null ,null , filters);
+            var datas = await localDbIncomingHeaderService.GetList("WhId/CurDate/RecievedIncStat", null, null, null, filters);
             datas = datas.Where(x => x.BatchCode == null).ToList();
-            foreach(var data in datas)
+            foreach (var data in datas)
             {
                 var model = new SelectedIncomingPartialHeaderModel
                 {
@@ -160,7 +165,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                 };
                 PartialModelRecievePOList.Add(model);
             }
-            TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x=>x.IsSelected).Count()}";
+            TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x => x.IsSelected).Count()}";
         }
+        public async Task Close() => await PopupNavigation.Instance.PopAsync(true);
+       
     }
 }

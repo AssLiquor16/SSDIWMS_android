@@ -2,9 +2,11 @@
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Helpers;
+using SSDIWMS_android.Models;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.UserMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
@@ -15,6 +17,7 @@ using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.PalletMaster;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Services.ServerDbServices.Users;
 using SSDIWMS_android.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,6 +31,8 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
     {
         PercentageCalculator percalc = new PercentageCalculator();
         IMainServices mainServices;
+        ILocalUserServices localDbUserMasterService;
+        IServerUserServices serverDbUserMasterService;
         ILocalArticleMasterServices localDbArticleMasterService;
         IServerArticleMasterServices serverDbArticleMasterService;
         ILocalPalletMasterServices localDbPalletMasterService;
@@ -47,6 +52,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         public string LoadingText { get => _loadingText; set => SetProperty(ref _loadingText, value); }
         public string ErrorText { get => _errorText; set => SetProperty(ref _errorText, value); }
 
+        public ObservableRangeCollection<UsermasterModel> UserMasterList { get; set; }
         public ObservableRangeCollection<ArticleMasterModel> ArticleMasterList { get; set; }
         public ObservableRangeCollection<PalletMasterModel> PalletMasterList { get; set; }
         public ObservableRangeCollection<SitesModel> SitesList { get; set; }
@@ -57,6 +63,9 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         public AllMasterfileUpdaterPopupVM()
         {
             mainServices = DependencyService.Get<IMainServices>();
+            localDbUserMasterService = DependencyService.Get<ILocalUserServices>();
+            serverDbUserMasterService = DependencyService.Get<IServerUserServices>();
+
             localDbArticleMasterService = DependencyService.Get<ILocalArticleMasterServices>();
             serverDbArticleMasterService = DependencyService.Get<IServerArticleMasterServices>();
             localDbPalletMasterService = DependencyService.Get<ILocalPalletMasterServices>();
@@ -69,6 +78,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             serverDbWarehouseMasterService = DependencyService.Get<IServerWarehouseMasterServices>();
             notifService = DependencyService.Get<IToastNotifService>();
 
+            UserMasterList = new ObservableRangeCollection<UsermasterModel>();
             ArticleMasterList = new ObservableRangeCollection<ArticleMasterModel>();
             PalletMasterList = new ObservableRangeCollection<PalletMasterModel>();
             WarehouseLocationList = new ObservableRangeCollection<WarehouseLocationModel>();
@@ -80,12 +90,45 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         public async Task PageRefresh()
         {
             StaticLoadingText = "Processing...";
+            await UpdateUserMaster();
             await UpdateSiteMaster();
             await UpdateArticleMaster();
             await UpdatePalletMaster();
             await UpdateWarehouseLocationMaster();
             await UpdateWarehouseMaster();
             await PopupNavigation.Instance.PopAsync(true);
+        }
+        private async Task UpdateUserMaster()
+        {
+            try
+            {
+                UserMasterList.Clear();
+                var retdata = await serverDbUserMasterService.ReturnList("All", null, null);
+                UserMasterList.AddRange(retdata);
+                decimal totcount = UserMasterList.Count;
+                decimal foreachcount = 0;
+                foreach (var item in retdata)
+                {
+                    var localDataCheck = await localDbUserMasterService.GetFirstOrDefault(item);
+                    if (localDataCheck == null)
+                    {
+                        await localDbUserMasterService.Insert(item);
+                    }
+                    else
+                    {
+                        await localDbUserMasterService.Update(item);
+                    }
+                    foreachcount++;
+                    decimal[] decArray = { foreachcount, totcount };
+                    LoadingText = await percalc.GetPercentage("PalletMaster", decArray);
+                    await Task.Delay(50);
+                }
+                await notifService.ToastNotif("Success", "User master downloaded succesfully.");
+            }
+            catch
+            {
+                await notifService.ToastNotif("Error", ErrorText);
+            }
         }
         private async Task UpdateArticleMaster()
         {
@@ -168,7 +211,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     }
                     foreachcount++;
                     decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await percalc.GetPercentage("PalletMaster", decArray);
+                    LoadingText = await percalc.GetPercentage("Users", decArray);
                     await Task.Delay(50);
                 }
                 await notifService.ToastNotif("Success", "Pallet master downloaded succesfully.");

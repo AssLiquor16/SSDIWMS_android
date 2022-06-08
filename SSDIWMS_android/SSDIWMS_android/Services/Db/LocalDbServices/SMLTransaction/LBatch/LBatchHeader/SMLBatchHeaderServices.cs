@@ -1,12 +1,15 @@
 ﻿using SQLite;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHeader;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
+[assembly: Dependency(typeof(SMLBatchHeaderServices))]
 namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHeader
 {
     public class SMLBatchHeaderServices : ISMLBatchHeaderServices
@@ -83,6 +86,17 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                     await db_.UpdateAsync(caseB);
                     return caseB;
                 default: return null;
+            }
+        }
+
+        public async Task Remove(object obj = null, string type = null)
+        {
+            var model = (obj as BatchHeaderModel);
+            await Init();
+            switch (type)
+            {
+                case null: await db_.DeleteAsync(model); break;
+                case "All": await db_.DeleteAllAsync<BatchHeaderModel>(); break;
             }
         }
     }

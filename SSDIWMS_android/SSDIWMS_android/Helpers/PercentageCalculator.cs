@@ -39,6 +39,9 @@ namespace SSDIWMS_android.Helpers
                 case "Warehouse":
                     msg = "Warehouse Master: " + g + " %";
                     break;
+                case "Users":
+                    msg = "User Master: " + g + " %";
+                    break;
                 default: return null;
             }
             return msg;

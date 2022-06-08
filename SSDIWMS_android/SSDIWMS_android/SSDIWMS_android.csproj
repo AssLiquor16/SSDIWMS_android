@@ -40,6 +40,9 @@
     <EmbeddedResource Update="Updater\MasterDatas\UpdateAllMaster\AllMasterfileUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateAllUserMaster\UserMasterUpdaterPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Updater\MasterDatas\UpdateArticleMaster\ArticleMasterUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -76,7 +79,13 @@
     <EmbeddedResource Update="Views\SettingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchGenPOListPage.xaml">
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchDetailListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchHeaderListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchPopupPages\BatchGenPOListPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailListPage.xaml">
@@ -98,6 +107,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\OverviewDetailPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingDetailPopupModulePages\RecievedOverViewDetailsPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingHeaderPage.xaml">

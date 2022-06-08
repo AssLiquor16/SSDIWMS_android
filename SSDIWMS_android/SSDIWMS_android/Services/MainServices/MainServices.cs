@@ -1,5 +1,7 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchDetails;
+using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
@@ -36,6 +38,8 @@ namespace SSDIWMS_android.Services.MainServices
         ISMLIncomingDetailServices incDetService;
         ISMLIncomingHeaderServices incHeadService;
         ISMLIncomingPartialDetailServices incParDetService;
+        ISMLBatchHeaderServices batchHeadservice;
+        ISMLBatchDetailsServices batchDetailservice;
         public MainServices()
         {
             onstartPrefService = DependencyService.Get<ISetPreferenceService>();
@@ -52,6 +56,8 @@ namespace SSDIWMS_android.Services.MainServices
             incDetService = DependencyService.Get<ISMLIncomingDetailServices>();
             incHeadService = DependencyService.Get<ISMLIncomingHeaderServices>();
             incParDetService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
+            batchHeadservice = DependencyService.Get<ISMLBatchHeaderServices>();
+            batchDetailservice = DependencyService.Get<ISMLBatchDetailsServices>();
         }
 
         public async Task CheckUser()
@@ -75,6 +81,8 @@ namespace SSDIWMS_android.Services.MainServices
             await incDetService.Clear();
             await incHeadService.Clear();
             await incParDetService.Clear();
+            await batchHeadservice.Remove("All");
+            await batchDetailservice.Remove("All");
         }
         public async Task ClearAlldata()
         {

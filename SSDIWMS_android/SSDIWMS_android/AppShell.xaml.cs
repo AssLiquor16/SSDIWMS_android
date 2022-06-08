@@ -77,8 +77,10 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
             Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));
 
-            Routing.RegisterRoute(nameof(BatchGenPOListPage), typeof(BatchGenPOListPage));
+            Routing.RegisterRoute(nameof(BatchHeaderListPage), typeof(BatchHeaderListPage));
+            Routing.RegisterRoute(nameof(BatchDetailListPage), typeof(BatchDetailListPage));
             
+
 
 
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);

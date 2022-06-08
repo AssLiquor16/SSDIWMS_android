@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
@@ -7,6 +8,7 @@ using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +55,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
         }
-        private async Task GenBactchCodeNav() => await Shell.Current.GoToAsync($"{nameof(BatchGenPOListPage)}"); 
+        private async Task GenBactchCodeNav() => await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
         private async Task Tapped()
         {
             if(SelectedHeader != null)
@@ -78,7 +80,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                         }
                         else
                         {
-
+                            await PopupNavigation.Instance.PushAsync(new RecievedOverViewDetailsPopupPage());
                         }
                         break;
                 }

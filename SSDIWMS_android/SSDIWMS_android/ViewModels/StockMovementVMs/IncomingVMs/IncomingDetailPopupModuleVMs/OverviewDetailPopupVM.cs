@@ -13,6 +13,7 @@ using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -166,12 +167,40 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             if (role == "Check")
             {
                 //finalize
-                await Finalize();
+                if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
+                {
+                    if(await App.Current.MainPage.DisplayAlert("Alert", "Alert some SKU have variance.", "Proceed", "Cancel") == true)
+                    {
+                        await Finalize();
+                    }
+                }
+                else
+                {
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the P.O?", "Yes", "No") == true)
+                    {
+                        await Finalize();
+                    }
+                }
+
             }
             else if (role == "Pick")
             {
                 //recieved
-                await Recieve();
+                if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
+                {
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Alert some SKU have variance.", "Proceed", "Cancel") == true)
+                    {
+                        await Recieve();
+                    }
+                }
+                else
+                {
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
+                    {
+                        await Recieve();
+                    }
+                }
+                
             }
             else
             {
@@ -182,9 +211,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         }
         private async Task Finalize()
         {
-            if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
-            {
-
                 try
                 {
                     await notifService.LoadingProcess("Begin", "Processing...");
@@ -258,13 +284,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 var route = $"..";
                 await Shell.Current.GoToAsync(route);
 
-            }
-
         }
         private async Task Recieve()
         {
-            if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the P.O?", "Yes", "No") == true)
-            {
                 try
                 {
                     await notifService.LoadingProcess("Begin", "Processing...");
@@ -340,7 +362,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await notifService.LoadingProcess("End", "");
                 var route = $"..";
                 await Shell.Current.GoToAsync(route);
-            }
         }
         private async Task ReturnToOngoing()
         {

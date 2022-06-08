@@ -19,5 +19,6 @@ namespace SSDIWMS_android.Models
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
         public string LoginStatus { get; set; }
+        public string Salesmancode { get; set; }
     }
 }
