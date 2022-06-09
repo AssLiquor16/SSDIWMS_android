@@ -105,6 +105,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     n.INCstatus = data.INCstatus;
                     n.FinalUserId = data.FinalUserId;
                     n.TimesUpdated += data.TimesUpdated;
+                    n.DateSync = data.DateSync;
                     await db_.UpdateAsync(n);
                     break;
                 case "PONumber1":
@@ -113,12 +114,14 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     o.INCstatus = data.INCstatus;
                     o.RecUserId = data.RecUserId;
                     o.TimesUpdated += data.TimesUpdated;
+                    o.DateSync = data.DateSync;
                     await db_.UpdateAsync(o);
                     break;
                 case "BatchCode":
                     var p = await db_.Table<IncomingHeaderModel>().Where(x=>x.PONumber == data.PONumber && x.INCId == data.INCId).FirstOrDefaultAsync();
                     p.BatchCode = data.BatchCode;
                     p.TimesUpdated = data.TimesUpdated;
+                    p.DateSync = data.DateSync;
                     await db_.UpdateAsync(p);
                     break;
             }

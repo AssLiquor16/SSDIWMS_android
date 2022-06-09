@@ -20,5 +20,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public string POHeaderNumber { get; set; }
         public string QTYStatus { get; set; }
         public string Color { get; set; }
+        public DateTime DateSync { get; set; }
     }
 }

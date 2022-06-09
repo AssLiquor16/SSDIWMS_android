@@ -209,8 +209,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
             MessagingCenter.Send(this, "ColviewRefresh");
+            await Task.Delay(1000);
             await PopupNavigation.Instance.PopAllAsync(true);
-            await notifService.LoadingProcess("End", "");
             var route = $"..";
             await Shell.Current.GoToAsync(route);
         }
@@ -218,15 +218,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
                 try
                 {
-                    await notifService.LoadingProcess("Begin", "Processing...");
+                    await notifService.LoadingProcess("Begin", "Attempting to sync...");
                     var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
                         FinalUserId = userId,
                         INCstatus = "Finalized",
                         PONumber = PONumber,
-                        TimesUpdated = 1
-
+                        TimesUpdated = 1,
+                        DateSync = DateTime.Now
+                        
                     };
                     await localDbIncomingHeaderService.Update("PONumber", e);
                     foreach (var item in IncomingDetailList)
@@ -234,6 +235,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         item.TimesUpdated += 2;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
+                        item.DateSync = DateTime.Now;
                         //totals all the qty of partial details where po and item code is equal to item
                         string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
                         var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
@@ -256,6 +258,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             paritem.UserId = userId;
                             paritem.Status = "Finalized";
                             paritem.DateFinalized = DateTime.Now;
+                            paritem.DateSync = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }
                     }
@@ -292,14 +295,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
                 try
                 {
-                    await notifService.LoadingProcess("Begin", "Processing...");
+                    await notifService.LoadingProcess("Begin", "Attempting to sync...");
                     var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
                         RecUserId = userId,
                         INCstatus = "Recieved",
                         PONumber = PONumber,
-                        TimesUpdated = 20
+                        TimesUpdated = 20,
+                        DateSync = DateTime.Now
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber1", e);
@@ -308,6 +312,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         item.TimesUpdated += 20;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
+                        item.DateSync = DateTime.Now;
                         //totals all the qty of partial details where po and item code is equal to item
                         string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
                         var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
@@ -371,14 +376,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             {
                 try
                 {
-                    await notifService.LoadingProcess("Begin", "Processing...");
+                    await notifService.LoadingProcess("Begin", "Attempting to sync...");
                     var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
                         RecUserId = userId,
                         INCstatus = "Ongoing",
                         PONumber = PONumber,
-                        TimesUpdated = 15
+                        TimesUpdated = 15,
+                        DateSync = DateTime.Now
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber1", e);
@@ -387,7 +393,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         item.TimesUpdated += 15;
                         item.UserId = userId;
                         item.QTYStatus = string.Empty;
-
+                        item.DateSync = DateTime.Now;
                         //totals all the qty of partial details where po and item code is equal to item
                         string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
                         var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
@@ -398,9 +404,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         }
                         //-----------------------------------------------------------------------------
                         item.Cqty = totalCqty;
-
                         await localDbIncomingDetailService.Update("Common", item);
-
                         string[] s = { item.ItemCode };
                         int[] i = { item.INCDetId };
 
@@ -411,6 +415,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             paritem.UserId = userId;
                             paritem.Status = "Ongoing";
                             paritem.DateFinalized = DateTime.Now;
+                            paritem.DateSync = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }
                     }
@@ -445,8 +450,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 }*/
 
                 MessagingCenter.Send(this, "ColviewRefreshRetOnGoing");
+                await Task.Delay(1000);
                 await PopupNavigation.Instance.PopAllAsync(true);
-                await notifService.LoadingProcess("End", "");
                 var route = $"..";
                 await Shell.Current.GoToAsync(route);
             }

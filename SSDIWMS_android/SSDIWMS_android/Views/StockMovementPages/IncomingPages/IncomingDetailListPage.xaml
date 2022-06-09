@@ -13,9 +13,9 @@
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="ToolbarItem_Clicked">
+        <ToolbarItem Command="{Binding SyncCommand}">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Plus}"/>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.SyncAlt}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -142,29 +142,26 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
-
                         </RefreshView>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="5,0">
 
-                        <Button
-                                            CornerRadius="5"
-                                            Command="{Binding SyncCommand}">
-                            <Button.ImageSource>
-                                <FontImageSource FontFamily="FAS" 
-                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.SyncAlt}"/>
-                            </Button.ImageSource>
-                        </Button>
                         <Button Text="Summary" 
                                             CornerRadius="5" 
                                             Padding="55,0"
                                             Command="{Binding ShowOverViewCommand}"
-                                            WidthRequest="200">
+                                            WidthRequest="220">
                             <Button.ImageSource>
                                 <FontImageSource FontFamily="FAS" 
                                                              Glyph="{x:Static fontAwsome:FontAwesomeIcons.ClipboardList}"/>
                             </Button.ImageSource>
                         </Button>
+
+                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Plus}" FontSize="Title" IsVisible="{Binding AddBtnVisbile}"
+                                            CornerRadius="5"
+                                            Clicked="ToolbarItem_Clicked">
+                        </Button>
+                        
                     </StackLayout>
                 </StackLayout>
             </Frame>

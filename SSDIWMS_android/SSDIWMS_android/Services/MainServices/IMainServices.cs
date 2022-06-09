@@ -9,8 +9,8 @@ namespace SSDIWMS_android.Services.MainServices
     {
         Task OnstartSetDefaulPreferences();
         Task RemovePreferences();
-        Task SyncIncomingTransaction();
-        Task CheckUser();
+        Task TimerSyncAlltransaction();
+        Task TimerCheckUser();
         Task ClearTransactionData();
         Task ClearAlldata();
         Task DateCheckTimerInit();

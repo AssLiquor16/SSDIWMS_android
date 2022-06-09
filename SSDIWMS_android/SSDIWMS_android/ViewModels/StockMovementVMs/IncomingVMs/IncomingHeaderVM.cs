@@ -4,11 +4,11 @@ using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.SMTransactions;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateVMs.BatchPopupVMs;
 using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages.BatchPopupPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
 using System;
@@ -23,16 +23,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 {
     public class IncomingHeaderVM : ViewModelBase
     {
+        IMainTransactionSync mainTransactionSync;
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
-        IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
-
         IncomingHeaderModel _selectedHeader;
         bool _isRefreshing, _genBatchVisible;
 
 
         public IncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
-        
         public bool GenBatchVisible { get => _genBatchVisible; set => SetProperty(ref _genBatchVisible, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
 
@@ -45,8 +43,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
         public IncomingHeaderVM()
         {
+            mainTransactionSync = DependencyService.Get<IMainTransactionSync>();
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
-            transactionUpdateService = DependencyService.Get<IUpdateAllIncomingtransaction>();
             notifService = DependencyService.Get<IToastNotifService>();
 
             IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
@@ -60,16 +58,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefreshRetOnGoing", async (page) =>
             {
                 await ColViewRefresh();
+                await notifService.LoadingProcess("End");
             });
 
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefresh", async (page) =>
             {
                 await ColViewRefresh();
+                await notifService.LoadingProcess("End");
             });
 
             MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
             {
                 await ColViewRefresh();
+                await notifService.LoadingProcess("End");
             });
         }
         private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());    
@@ -109,32 +110,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         }
         private async Task ColViewRefresh()
         {
-            IsRefreshing = true;
             IncomingHeaderList.Clear();
-            var syncing = Preferences.Get("PrefISMSyncing", false);
-            if (syncing == false)
-            {
-                Preferences.Set("PrefISMSyncing", true);
-                try
-                {
-                    await transactionUpdateService.UpdateAllIncomingTrans();
-                    await notifService.ToastNotif("Success", "Items updated succesfully.");
-                }
-                catch
-                {
-                    await notifService.ToastNotif("Error", "Cannot connect to server.");
-                }
-                
-                Preferences.Set("PrefISMSyncing", false);
-            }
-            else
-            {
-                await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
-            }
-
-
+            await Sync();
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
             var filter = Preferences.Get("PrefUserRole", "");
+            IsRefreshing = false;
             switch (filter)
             {
                 case "Check":
@@ -150,11 +130,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     break;
                 default: break;
             }
-            IsRefreshing = false;
-
         }
         private async Task PageRefresh()
         {
+
             if(Preferences.Get("PrefIncomingHeaderPagepartialRefresh", false) == false)
             {
                 await LiveTimer();
@@ -184,6 +163,33 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             }
                 
         }
+        private async Task Sync()
+        {
+            if (Preferences.Get("PrefISMSyncing", false) == false)
+            {
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await mainTransactionSync.UpdateAllTransactions("Incoming");
+                    await notifService.ToastNotif("Success", "Items updated succesfully.");
+                }
+                catch
+                {
+                    await notifService.ToastNotif("Error", "Cannot connect to server.");
+                }
+
+                Preferences.Set("PrefISMSyncing", false);
+                await Task.Delay(500);
+                return;
+            }
+            else
+            {
+                await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
+            }
+        }
+
+
+
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);

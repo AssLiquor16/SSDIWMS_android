@@ -50,6 +50,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             {
                 case null:
                     return await db_.Table<BatchHeaderModel>().ToListAsync();
+                case "UserId":
+                    return await db_.Table<BatchHeaderModel>().Where(x => x.UserCreated == obj.UserCreated).ToListAsync();
                 default: return null;
             }
         }

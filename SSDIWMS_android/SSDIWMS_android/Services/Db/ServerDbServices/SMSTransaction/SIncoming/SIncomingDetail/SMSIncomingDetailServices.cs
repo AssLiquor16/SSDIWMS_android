@@ -72,7 +72,9 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                             UserId = data.UserId,
                             Amount = data.Amount,
                             TimesUpdated = data.TimesUpdated,
-                            POHeaderNumber = data.POHeaderNumber
+                            POHeaderNumber = data.POHeaderNumber,
+                            DateSync = data.DateSync
+                            
                         };
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
@@ -109,6 +111,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public string POHeaderNumber { get; set; }
 
+        public DateTime DateSync { get; set; }
 
     }
 }

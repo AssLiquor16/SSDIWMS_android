@@ -136,7 +136,7 @@
                         </Frame>
                     </StackLayout>
                     <StackLayout HorizontalOptions="FillAndExpand">
-                        <StackLayout HorizontalOptions="FillAndExpand">
+                        <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                             <Button
                                             Text="Generate Batch Code"
                                             HorizontalOptions="FillAndExpand"
@@ -145,6 +145,17 @@
                                 <Button.ImageSource>
                                     <FontImageSource FontFamily="FAS" 
                                                              Glyph="{x:Static fontAwsome:FontAwesomeIcons.Cogs}"/>
+                                </Button.ImageSource>
+                            </Button>
+
+                            <Button
+                                            Text="Show BCodes"
+                                            HorizontalOptions="FillAndExpand"
+                                            CornerRadius="5" 
+                                            Command="{Binding ShowListCommand}" >
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
                                 </Button.ImageSource>
                             </Button>
 

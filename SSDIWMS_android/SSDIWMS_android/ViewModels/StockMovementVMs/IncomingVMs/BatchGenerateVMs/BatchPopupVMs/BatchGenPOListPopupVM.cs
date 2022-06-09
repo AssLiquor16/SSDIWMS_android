@@ -10,6 +10,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHe
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
 
+        public AsyncCommand ShowListCommand { get; }
+
 
         public BatchGenPOListPopupVM()
         {
@@ -56,6 +59,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             GenerateCommand = new AsyncCommand(Generate);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
+
+            ShowListCommand = new AsyncCommand(ShowList);
         }
         public async Task TotalAllSelected()
         {
@@ -89,6 +94,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                         DateCreated = DateTime.Now,
                         Remarks = remarks,
                         TimesUpdated = 0,
+                        DateSync = DateTime.Now,
                     };
                     var insertBc = await localDbBatchHeaderService.Insert(bcontent, "GenerateBatchCode");
                     foreach (var ipo in selectedPO)
@@ -102,6 +108,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                             PONumber = ipo.PONumber,
                             BatchCode = insertBc.BatchCode,
                             TimesUpdated = ipo.TimesUpdated + 5,
+                            DateSync = DateTime.Now,
                         };
                         await localDbIncomingHeaderService.Update("BatchCode", icontent);
                     }
@@ -114,18 +121,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                         ItemDesc = cl.Where(x=>x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
                         Qty = cl.Sum(c => c.Cqty),
                         DateAdded = DateTime.Now,
-                        TimesUpdated = 0
+                        TimesUpdated = 0,
+                        DateSync = DateTime.Now
                     }).ToList();
                     foreach(var gbs in groupbysku)
                     {
                         await localDbbatchDetailsService.Insert(gbs);
                     }
-                   
-                    await notifService.StaticToastNotif("Success", $"BatchCode generate succesfully.");
-
                     MessagingCenter.Send(this, "RefreshIncomingHeaderList");
                     //MessagingCenter.Send(this, "RefreshBatchList");
-                    await Task.Delay(500);
+                    await Task.Delay(1000);
                     await Close();
 
                 }
@@ -134,7 +139,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             {
                 await App.Current.MainPage.DisplayAlert("Alert", "No selected P.O", "Ok");
             }
-            await notifService.LoadingProcess("End");
         }
         private async Task ColViewRefresh()
         {
@@ -172,6 +176,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x => x.IsSelected).Count()}";
         }
         public async Task Close() => await PopupNavigation.Instance.PopAsync(true);
-       
+        private async Task ShowList()
+        {
+            await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); await Close();
+        }
     }
 }

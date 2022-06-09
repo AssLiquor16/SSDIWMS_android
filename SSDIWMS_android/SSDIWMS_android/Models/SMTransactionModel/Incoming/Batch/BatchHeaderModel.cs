@@ -14,5 +14,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch
         public DateTime DateCreated{get;set;}
         public string Remarks { get; set; }
         public int TimesUpdated { get; set; }
-}
+        public DateTime DateSync { get; set; }
+    }
 }

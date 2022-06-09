@@ -28,11 +28,11 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
             Device.StartTimer(TimeSpan.FromSeconds(rmin), () => {
                 Task.Run(async () =>
                 {
-                    var prefUserId  = Preferences.Get("PrefUserId",0);
+                    var prefUserId = Preferences.Get("PrefUserId", 0);
                     var prefUserRole = Preferences.Get("PrefUserRole", string.Empty);
-                    var prefWhId = Preferences.Get("PrefUserWarehouseAssignedId",0);
+                    var prefWhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
 
-                    if(prefUserId != 0 && !string.IsNullOrWhiteSpace(prefUserRole) && prefWhId != 0)
+                    if (prefUserId != 0 && !string.IsNullOrWhiteSpace(prefUserRole) && prefWhId != 0)
                     {
                         var busy = Preferences.Get("PrefISMSyncing", false);
                         if (busy == false)

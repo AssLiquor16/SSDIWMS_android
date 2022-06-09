@@ -93,10 +93,11 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
             {
                 case "Common":
                     var content = await db_.Table<IncomingDetailModel>().Where(x => x.INCDetId == item.INCDetId).FirstOrDefaultAsync();
+                    content = item;
                     content.TimesUpdated = item.TimesUpdated;
                     content.UserId = item.UserId;
                     content.Cqty = item.Cqty;
-                    content = item;
+                    content.DateSync = item.DateSync;
 
                     await db_.UpdateAsync(content);
                     break;

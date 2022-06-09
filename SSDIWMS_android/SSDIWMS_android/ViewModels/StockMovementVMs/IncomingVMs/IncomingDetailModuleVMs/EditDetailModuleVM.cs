@@ -80,7 +80,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
         private async Task NavPalletList() => 
             await Shell.Current.GoToAsync($"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
-
         private async Task PageRefresh()
         {
             if (Preferences.Get("PrefIncomingInitialRefresh", false) == false)
@@ -158,6 +157,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             E.PalletCode = PalletCode;
                             E.PartialCQTY = PartialCQTY;
                             E.ExpiryDate = ExpiryDate;
+                            E.DateSync = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
                             await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                             MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
@@ -171,13 +171,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             E.PartialCQTY = PartialCQTY;
                             E.WarehouseLocation = WarehouseLocation;
                             E.ExpiryDate = ExpiryDate;
+                            E.DateSync = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", E);
                             await notifyService.StaticToastNotif("Success", "Detail updated succesfully");
                             MessagingCenter.Send(this, "FromDetailsEditMSG", "EditRefresh");
                             await Shell.Current.GoToAsync("..");
                     }
                 }
-
             }else
             {
                 await notifyService.StaticToastNotif("Error", "Passed data is null.");

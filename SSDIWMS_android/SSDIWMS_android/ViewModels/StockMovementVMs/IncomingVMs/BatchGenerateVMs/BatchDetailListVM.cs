@@ -36,6 +36,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
 
         private async Task Tapped()
         {
+            await Task.Delay(1);
             if(SelectedItem != null)
             {
                 SelectedItem = null;

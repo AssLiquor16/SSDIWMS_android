@@ -60,11 +60,11 @@ namespace SSDIWMS_android.Services.MainServices
             batchDetailservice = DependencyService.Get<ISMLBatchDetailsServices>();
         }
 
-        public async Task CheckUser()
+        public async Task TimerCheckUser()
         {
             await userCheckerService.CheckLoginStatus();
         }
-        public async Task SyncIncomingTransaction()
+        public async Task TimerSyncAlltransaction()
         {
             await incomingstocksyncer.ISMLSyncer();
         }

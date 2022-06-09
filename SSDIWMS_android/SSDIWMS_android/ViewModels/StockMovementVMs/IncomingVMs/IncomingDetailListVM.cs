@@ -30,10 +30,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         IToastNotifService notifService;
 
         string _toolbarColor, _role;
-        bool _isRefreshing;
+        bool _isRefreshing, _addBtnVisbile;
         IncomingPartialDetailModel _selectedDetail;
         public string Role { get => _role; set => SetProperty(ref _role, value); }
         public string ToolbarColor { get => _toolbarColor; set => SetProperty(ref _toolbarColor, value); }
+        public bool AddBtnVisbile { get => _addBtnVisbile; set => SetProperty(ref _addBtnVisbile, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
         public IncomingPartialDetailModel SelectedDetail { get => _selectedDetail; set => SetProperty(ref _selectedDetail, value); }
 
@@ -136,16 +137,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var checklist = detailList.Where(x => x.Status == "Ongoing" || x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                AddBtnVisbile = true;
             }
             else if (Role == "Pick")
             {
                 var checklist = detailList.Where(x => x.Status == "Finalized").ToList();
                 IncomingParDetailList.Clear();
                 IncomingParDetailList.AddRange(checklist);
+                AddBtnVisbile = false;
             }
             else
             {
                 IncomingParDetailList.Clear();
+                AddBtnVisbile = false;
             }
             await LiveTimer();
             var userfullname = Preferences.Get("PrefUserFullname", "");

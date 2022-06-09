@@ -37,7 +37,10 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             await Init();
             switch (type)
             {
-                case null: return await db_.Table<BatchDetailsModel>().Where(x=>x.BatchDetId == obj.BatchDetId && x.DateAdded == obj.DateAdded).FirstOrDefaultAsync();
+                case null: 
+                    return await db_.Table<BatchDetailsModel>().Where(x=>x.BatchDetId == obj.BatchDetId && x.DateAdded == obj.DateAdded).FirstOrDefaultAsync();
+                case "BatchDetId/DateCreated":
+                    return await db_.Table<BatchDetailsModel>().Where(x => x.BatchDetId == obj.BatchDetId && x.DateAdded == obj.DateAdded).FirstOrDefaultAsync();
                 default: return null;
 
             }

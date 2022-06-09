@@ -28,10 +28,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         IMainServices mainService;
         IToastNotifService notifyService;
         IncomingDetailModel _e;
+        ItemMasterModel _selectedItem;
         DateTime _expiryDate = DateTime.Now.Date;
         string _scannedCode, _poNumber, _itemCode, _itemDesc, _palletCode, _amount, _errorText;
         int _partialCQTY;
-        bool _errorView, _succesView;
+        bool _errorView, _succesView, _multipleRowVisible;
         public IncomingDetailModel E { get => _e; set => SetProperty(ref _e, value); }
         public string ScannedCode { get => _scannedCode; set => SetProperty(ref _scannedCode, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
@@ -42,12 +43,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public DateTime ExpiryDate { get => _expiryDate; set => SetProperty(ref _expiryDate, value); }
         public string ErrorText { get => _errorText; set => SetProperty(ref _errorText, value); }
         public int PartialCQTY { get => _partialCQTY; set => SetProperty(ref _partialCQTY, value); }
+        public bool MultipleRowVisible { get => _multipleRowVisible; set => SetProperty(ref _multipleRowVisible, value); }
         public bool ErrorView { get => _errorView; set => SetProperty(ref _errorView, value); }
         public bool SuccessView { get => _succesView; set => SetProperty(ref _succesView, value); }
 
+        public ItemMasterModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
+
+
         public ObservableRangeCollection<ItemMasterModel> ItemMasterList { get; set; }
         public ObservableRangeCollection<IncomingDetailModel> IncomingDetailList { get; set; }
+        public ObservableRangeCollection<ItemMasterModel> MultipleItemMasterList { get; set; }
 
+        public AsyncCommand TappedCommand { get; }
         public AsyncCommand NavPalletListCommand { get; }
         public AsyncCommand CancelCommand { get; }
         public AsyncCommand AddDetailCommand { get; }
@@ -62,7 +69,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             ItemMasterList = new ObservableRangeCollection<ItemMasterModel>();
             IncomingDetailList = new ObservableRangeCollection<IncomingDetailModel>();
+            MultipleItemMasterList = new ObservableRangeCollection<ItemMasterModel>();
 
+            TappedCommand = new AsyncCommand(Tapped);
             NavPalletListCommand = new AsyncCommand(NavPalletList);
             AddDetailCommand = new AsyncCommand(AddDetail);
             CancelCommand = new AsyncCommand(Cancel);
@@ -75,16 +84,37 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             });
 
         }
+        private async Task Tapped()
+        {
+            var selected = SelectedItem;
+            if(selected != null)
+            {
+                string[] b = { PONumber, SelectedItem.ItemCode };
+                var retIncomingItem = await localDbIncomingDetailService.GetModel("PO,ItemCode", b, null);
+                if(retIncomingItem != null)
+                {
+                    PONumber = retIncomingItem.POHeaderNumber;
+                    ItemCode = retIncomingItem.ItemCode;
+                    ItemDesc = retIncomingItem.ItemDesc;
+                    Amount = "Pesos :" + retIncomingItem.Amount; ;
+                    E = retIncomingItem;
+                    ErrorView = false;
+                    SuccessView = true;
+                }
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Alert", "Selected item is null.", "Ok");
+                await Cancel();
+            }
+        }
         private async Task NavPalletList()
         {
 
             var route = $"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=AddDetail";
             await Shell.Current.GoToAsync(route);
         }
-        private async Task Cancel()
-        {
-            await Shell.Current.GoToAsync("..");
-        }
+        private async Task Cancel() => await Shell.Current.GoToAsync("..");
         private async Task AddDetail()
         {
             var loggedInUser = Preferences.Get("PrefUserId", 0);
@@ -115,14 +145,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             TimesUpdated = 0,
                             POHeaderNumber = E.POHeaderNumber,
                             Status = "Ongoing",
-                            WarehouseLocation = string.Empty
+                            WarehouseLocation = string.Empty,
+                            DateSync = DateTime.Now,
                         };
                         await localDbIncomingParDetailService.Insert("RefIdAutoGenerate", data);
                         await notifyService.StaticToastNotif("Success", "Item added.");
                         MessagingCenter.Send(this, "FromDetailsAddMSG", "AddRefresh");
                         await Shell.Current.GoToAsync("..");
                     }
-
                 }
             }
             else
@@ -162,6 +192,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 }
                 if (IncomingDetailList.Count == 1)
                 {
+                    // success
                     PONumber = IncomingDetailList[0].POHeaderNumber;
                     ItemCode = IncomingDetailList[0].ItemCode;
                     ItemDesc = IncomingDetailList[0].ItemDesc;
@@ -174,6 +205,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     // mutiple item detected
                     ErrorText = "Multiple items detected";
+                    MultipleRowVisible = false;
+                    MultipleItemMasterList.AddRange(ItemMasterList);
                     ErrorView = true;
                     SuccessView = false;
                 }
@@ -181,6 +214,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     // item not found in incoming detail
                     ErrorText = "Item not found in this P.O";
+                    MultipleRowVisible = true;
                     ErrorView = true;
                     SuccessView = false;
                 }
@@ -190,11 +224,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 // item not found in item master
                 ErrorText = "Item not found in masterlist";
                 ErrorView = true;
+                MultipleRowVisible = true;
                 SuccessView = false;
             }
         }
-
-
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);

@@ -47,11 +47,92 @@
                                  IsEnabled="{Binding ErrorView}" 
                                  VerticalOptions="CenterAndExpand" 
                                  HorizontalOptions="CenterAndExpand">
-                            <Label Text="{Binding ErrorText}" 
+                            <Label Text="{Binding ErrorText}" IsVisible="{Binding MultipleRowVisible}"
                                FontSize="Title" 
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="CenterAndExpand" 
                                TextColor="Red"/>
+
+                            <CollectionView 
+                                        ItemsSource="{Binding MultipleItemMasterList}"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                                <CollectionView.EmptyView>
+                                    <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                        <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                                    </StackLayout>
+                                </CollectionView.EmptyView>
+                                <CollectionView.Header>
+                                    <StackLayout>
+
+                                        <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="90*"/>
+                                                <ColumnDefinition Width="160*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="Bill Doc" FontSize="Small" Grid.Column="0" 
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            <Label Text="P.O Number" FontSize="Small" Grid.Column="1"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+
+                                        </Grid>
+
+                                    </StackLayout>
+                                </CollectionView.Header>
+                                <CollectionView.Footer>
+                                    <StackLayout>
+                                        <Label Text="Nothing to follow." 
+                                                       HorizontalOptions="CenterAndExpand"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                    </StackLayout>
+                                </CollectionView.Footer>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                            <StackLayout BackgroundColor="Transparent">
+
+                                                <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="90*"/>
+                                                        <ColumnDefinition Width="160*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackLayout Grid.Column="0" >
+                                                        <StackLayout>
+                                                            <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Column="1">
+                                                        <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <Label Text="Case Code:" FontSize="Small"/>
+                                                            <Label Text="{Binding CaseCode}" FontSize="Small"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                   
+
+                                                </Grid>
+
+                                            </StackLayout>
+
+                                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </StackLayout>
                         <StackLayout IsVisible="{Binding SuccessView}" IsEnabled="{Binding SuccessView}" Padding="10,5">
                             <StackLayout VerticalOptions="CenterAndExpand">

@@ -140,7 +140,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                         Status = item.Status,
                         ExpiryDate = item.ExpiryDate,
                         DateFinalized = DateTime.MinValue,
-                        WarehouseLocation = item.WarehouseLocation
+                        WarehouseLocation = item.WarehouseLocation,
+                        DateSync = item.DateSync
                     };
                     await db_.InsertAsync(initialData);
                     break;
@@ -177,6 +178,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     conte.DateFinalized = item.DateFinalized;
                     conte.ExpiryDate = item.ExpiryDate;
                     conte.WarehouseLocation = item.WarehouseLocation;
+                    conte.DateSync = item.DateSync;
                     await db_.UpdateAsync(conte);
                     break;
                 default: break;

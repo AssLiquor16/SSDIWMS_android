@@ -14,11 +14,17 @@ namespace SSDIWMS_android.ViewModels
     {
 
         public AsyncCommand PageRefreshCommand { get; }
+        public AsyncCommand TestCommand { get; }
         public DashBoardVM()
         {
+            TestCommand = new AsyncCommand(Test);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
 
+        private async Task Test()
+        {
+            await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Proceed", "Cancel");
+        }
         private async Task PageRefresh()
         {
             bool login = Preferences.Get("PrefLoggedIn", false);

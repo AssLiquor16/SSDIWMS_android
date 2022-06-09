@@ -33,5 +33,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public int RecUserId { get; set; }
         public int TimesUpdated { get; set; }
         public string BatchCode { get; set; }
+        public DateTime DateSync { get; set; }
     }
 }
