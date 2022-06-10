@@ -157,9 +157,11 @@
                             </Button.ImageSource>
                         </Button>
 
+                        <!--Add Clicked to direct in scanner (Code behind)-->
+                        <!--Clicked="ToolbarItem_Clicked"-->
                         <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Plus}" FontSize="Title" IsVisible="{Binding AddBtnVisbile}"
                                             CornerRadius="5"
-                                            Clicked="ToolbarItem_Clicked">
+                                            Command="{Binding NavToAddCommand}"> 
                         </Button>
                         
                     </StackLayout>

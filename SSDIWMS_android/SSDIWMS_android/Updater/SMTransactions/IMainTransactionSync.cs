@@ -8,5 +8,6 @@ namespace SSDIWMS_android.Updater.SMTransactions
     public interface IMainTransactionSync
     {
         Task UpdateAllTransactions(string transactionTable);
+        Task UpdateSpecificTransactions(string transactionTable);
     }
 }

@@ -53,7 +53,7 @@
                                HorizontalOptions="CenterAndExpand" 
                                TextColor="Red"/>
 
-                            <CollectionView 
+                            <CollectionView IsVisible="{Binding MultipleRowVisibleColView}"
                                         ItemsSource="{Binding MultipleItemMasterList}"
                                         SelectionMode="Single"
                                         SelectedItem="{Binding SelectedItem}"

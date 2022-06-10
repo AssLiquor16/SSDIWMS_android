@@ -38,7 +38,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             switch (type)
             {
                 case null:
-                    return await db_.Table<BatchHeaderModel>().Where(x => x.BatchId == obj.BatchId).FirstOrDefaultAsync();
+                    return await db_.Table<BatchHeaderModel>().Where(x => x.BatchLocalID == obj.BatchLocalID && x.DateCreated == obj.DateCreated).FirstOrDefaultAsync();
                 default: return null;
             }
         }
@@ -52,6 +52,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                     return await db_.Table<BatchHeaderModel>().ToListAsync();
                 case "UserId":
                     return await db_.Table<BatchHeaderModel>().Where(x => x.UserCreated == obj.UserCreated).ToListAsync();
+                case "ZeroServerId":
+                    return await db_.Table<BatchHeaderModel>().Where(x => x.BatchId == 0).ToListAsync();
                 default: return null;
             }
         }
@@ -78,13 +80,23 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             switch (type)
             {
                 case null:
+                    var caseA = await db_.Table<BatchHeaderModel>().Where(x=>x.BatchLocalID == obj.BatchLocalID && x.DateCreated == obj.DateCreated).FirstOrDefaultAsync();
+                    caseA.BatchId = obj.BatchId;
+                    caseA.BatchCode = obj.BatchCode;
+                    caseA.UserCreated = obj.UserCreated;
+                    caseA.Remarks = obj.Remarks;
+                    caseA.TimesUpdated = obj.TimesUpdated;
+                    caseA.DateSync = obj.DateSync;
+                    await db_.UpdateAsync(caseA);
                     return null;
                 case "GenerateBatchCode":
-                    var caseB = await db_.Table<BatchHeaderModel>().Where(x => x.BatchId == obj.BatchId && x.DateCreated == obj.DateCreated).FirstOrDefaultAsync();
-                    caseB.BatchCode = $"{obj.BatchCode}{obj.BatchId}";
+                    var caseB = await db_.Table<BatchHeaderModel>().Where(x => x.BatchLocalID == obj.BatchLocalID && x.DateCreated == obj.DateCreated).FirstOrDefaultAsync();
+                    caseB.BatchId = obj.BatchId;
+                    caseB.BatchCode = $"{obj.BatchCode}{obj.BatchLocalID}";
                     caseB.UserCreated = obj.UserCreated;
                     caseB.Remarks = obj.Remarks;
                     caseB.TimesUpdated = obj.TimesUpdated;
+                    caseB.DateSync = obj.DateSync;
                     await db_.UpdateAsync(caseB);
                     return caseB;
                 default: return null;

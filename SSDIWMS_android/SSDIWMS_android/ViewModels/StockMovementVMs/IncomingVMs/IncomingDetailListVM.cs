@@ -44,6 +44,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ShowOverViewCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
+        public AsyncCommand NavToAddCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public IncomingDetailListVM()
         {
@@ -55,6 +56,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
             IncomingParDetailList = new ObservableRangeCollection<IncomingPartialDetailModel>();
 
+            NavToAddCommand = new AsyncCommand(NavToAdd);
             SyncCommand = new AsyncCommand(Sync);
             ShowOverViewCommand = new AsyncCommand(ShowOverView);
             TappedCommand = new AsyncCommand(Tapped);
@@ -117,6 +119,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         private async Task ShowOverView()
         {
             await PopupNavigation.Instance.PushAsync(new OverviewDetailPopupPage(PONumber));
+        }
+        private async Task NavToAdd()
+        {
+            Preferences.Remove("PrefAddPartialDetail2InitialRefresh");
+            await Shell.Current.GoToAsync($"{nameof(AddDetailModule2Page)}");
         }
         public async Task AddPopupNav(string scannedCode)
         {

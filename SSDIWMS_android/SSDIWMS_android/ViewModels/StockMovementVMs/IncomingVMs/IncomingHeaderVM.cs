@@ -60,16 +60,32 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await ColViewRefresh();
                 await notifService.LoadingProcess("End");
             });
-
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefresh", async (page) =>
             {
                 await ColViewRefresh();
                 await notifService.LoadingProcess("End");
             });
-
             MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
             {
-                await ColViewRefresh();
+                IncomingHeaderList.Clear();
+                var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
+                var filter = Preferences.Get("PrefUserRole", "");
+                IsRefreshing = false;
+                switch (filter)
+                {
+                    case "Check":
+                        var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
+                        IncomingHeaderList.Clear();
+                        IncomingHeaderList.AddRange(checkerContents);
+                        break;
+                    case "Pick":
+                        var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
+                        pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
+                        IncomingHeaderList.Clear();
+                        IncomingHeaderList.AddRange(pickerContents);
+                        break;
+                    default: break;
+                }
                 await notifService.LoadingProcess("End");
             });
         }
@@ -187,8 +203,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
             }
         }
-
-
 
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;

@@ -73,6 +73,7 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
             Routing.RegisterRoute(nameof(IncomingDetailListPage), typeof(IncomingDetailListPage));
             Routing.RegisterRoute(nameof(AddDetailModulePage), typeof(AddDetailModulePage));
+            Routing.RegisterRoute(nameof(AddDetailModule2Page), typeof(AddDetailModule2Page));
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
             Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));

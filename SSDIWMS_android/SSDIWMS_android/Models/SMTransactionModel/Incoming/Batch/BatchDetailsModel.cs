@@ -7,7 +7,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch
 {
     public class BatchDetailsModel
     {
-        [PrimaryKey][AutoIncrement]
+        
         public int BatchDetId { get; set; }
         public int BatchId { get; set; }
         public string BatchCode { get; set; }
@@ -17,5 +17,8 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming.Batch
         public DateTime DateAdded{get;set;}
         public int TimesUpdated { get; set; }
         public DateTime DateSync { get; set; }
+        [PrimaryKey]
+        [AutoIncrement]
+        public int BatchLocalID { get; set; }
     }
 }

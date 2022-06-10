@@ -53,6 +53,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
                 {
                     case null: return await db_.Table<BatchDetailsModel>().ToListAsync();
                     case "BatchCode": return await db_.Table<BatchDetailsModel>().Where(x => x.BatchCode == obj.BatchCode).ToListAsync();
+                    case "ZeroServerId": return await db_.Table<BatchDetailsModel>().Where(x => x.BatchDetId == 0).ToListAsync();
                     default: return null;
 
                 }
@@ -78,13 +79,15 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBat
             switch (type)
             {
                 case null:
-                    var caseA = await db_.Table<BatchDetailsModel>().Where(x => x.BatchDetId == obj.BatchDetId && x.DateAdded == obj.DateAdded).FirstOrDefaultAsync();
+                    var caseA = await db_.Table<BatchDetailsModel>().Where(x => x.BatchLocalID == obj.BatchLocalID && x.DateAdded == obj.DateAdded).FirstOrDefaultAsync();
+                    caseA.BatchDetId = obj.BatchDetId;
                     caseA.BatchId = obj.BatchId;
                     caseA.BatchCode = obj.BatchCode;
                     caseA.ItemCode = obj.ItemCode;
                     caseA.ItemDesc = obj.ItemDesc;
                     caseA.Qty = obj.Qty;
                     caseA.TimesUpdated = obj.TimesUpdated;
+                    caseA.DateSync = obj.DateSync;
                     await db_.UpdateAsync(caseA);
                     return caseA;
                 default: return null;

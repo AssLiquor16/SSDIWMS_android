@@ -3,6 +3,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchDe
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHeader;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBatchDetails;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBatchHeader;
+using SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+[assembly: Dependency(typeof(UpdateAllBatchTransaction))]
 namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
 {
     public class UpdateAllBatchTransaction : IUpdateAllBatchTransaction
@@ -44,6 +46,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
         }
         private async Task TimesUpdateUpdatedHeader()
         {
+
             var bheaderFilter = new BatchHeaderModel
             {
                 UserCreated = Preferences.Get("PrefUserId", 0)
@@ -51,17 +54,62 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
             var sbatchHeaders = await serverDbBatchHeaderService.GetList(bheaderFilter, "UserId");
             foreach (var sbatchHeader in sbatchHeaders)
             {
-                var sbdetailsListFilter = new BatchDetailsModel
+                    await TimesUpdateUpdateDetails(sbatchHeader);
+                    var sbdetailsListFilter = new BatchDetailsModel
+                    {
+                        BatchCode = sbatchHeader.BatchCode,
+                    };
+                    var lbatchHeader = await localDbBatchHeaderService.GetFirstOrDefault(sbatchHeader);
+                    if (lbatchHeader == null)
+                    {
+                        await localDbBatchHeaderService.Insert(sbatchHeader);
+                    }
+                    else
+                    {
+                        if (lbatchHeader.TimesUpdated > sbatchHeader.TimesUpdated)
+                        {
+                            // update server
+                            await serverDbBatchDetailsService.Update(lbatchHeader);
+                        }
+                        else if (lbatchHeader.TimesUpdated < sbatchHeader.TimesUpdated)
+                        {
+                            // update local
+                            await localDbBatchHeaderService.Update(sbatchHeader);
+                        }
+            }
+            }
+            var lbatchHeaders = await localDbBatchHeaderService.GetList();
+            foreach(var lbatchHeader in lbatchHeaders)
+            {
+                var sbatchhead = sbatchHeaders.Where(x=>x.BatchLocalID == lbatchHeader.BatchLocalID && x.DateCreated == lbatchHeader.DateCreated).FirstOrDefault();
+                if(sbatchhead == null)
                 {
-                    BatchCode = sbatchHeader.BatchCode,
-                };
-                await TimesUpdateUpdateDetails(sbdetailsListFilter);
+                    var retval = await serverDbBatchHeaderService.Insert(lbatchHeader, "ReturnInsertedItem");
+                    await localDbBatchHeaderService.Update(retval);
+                }
+            }
+            var lbatchHeaders1 = await localDbBatchHeaderService.GetList(bheaderFilter, "ZeroServerId");
+            foreach(var sbatchHeader1 in sbatchHeaders)
+            {
+                var sbatchHead1 = lbatchHeaders1.Where(x=>x.BatchId == sbatchHeader1.BatchId && x.DateCreated == sbatchHeader1.DateCreated).FirstOrDefault();
+                if(sbatchHead1 != null)
+                {
+                    await localDbBatchHeaderService.Update(sbatchHeader1);
+                }
+            }
 
+            if(sbatchHeaders.Count() == 0)
+            {
+                await TimesUpdateUpdatedHeader();
             }
         }
-        private async Task TimesUpdateUpdateDetails(object ob = null)
+        private async Task TimesUpdateUpdateDetails(object o = null)
         {
-            var obj = (ob as BatchDetailsModel);
+            var ob = (o as BatchHeaderModel);
+            var obj = new BatchDetailsModel
+            {
+                BatchCode = ob.BatchCode
+            };
             var sbatchDetails = await serverDbBatchDetailsService.GetList(obj, "BatchCode");
             foreach (var sbatchDetail in sbatchDetails)
             {
@@ -89,17 +137,25 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
                     }
                 }
             }
-
             var lbatchDetails = await localDbBatchDetailsService.GetList();
             foreach(var lbatchDetail in lbatchDetails)
             {
                 var sBatchDet = sbatchDetails.Where(x => x.BatchDetId == lbatchDetail.BatchDetId && x.DateAdded == lbatchDetail.DateAdded).FirstOrDefault();
                 if(sBatchDet == null)
                 {
-                    await serverDbBatchDetailsService.Insert(lbatchDetail);
+                    var retitm = await serverDbBatchDetailsService.Insert(lbatchDetail, "ReturnInsertedItem");
+                    await localDbBatchDetailsService.Update(retitm);
                 }
             }
-            var lbatchDetails1 = await localDbBatchDetailsService.GetList(obj, "ZeroServerId"); // to be continue;
+            var lbatchDetails1 = await localDbBatchDetailsService.GetList(obj, "ZeroServerId");
+            foreach(var sbatchDetail1 in sbatchDetails)
+            {
+                var sbatchDet1 = lbatchDetails1.Where(x => x.BatchLocalID == sbatchDetail1.BatchLocalID && x.DateAdded == sbatchDetail1.DateAdded);
+                if(sbatchDet1 != null)
+                {
+                    await localDbBatchDetailsService.Update(sbatchDetail1);
+                }
+            }
         }
     }
 }

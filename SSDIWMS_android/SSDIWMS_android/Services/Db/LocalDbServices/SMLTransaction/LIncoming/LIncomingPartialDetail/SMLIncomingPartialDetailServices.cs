@@ -147,7 +147,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     break;
             }
         }
-
         /*case "INCParDetId&RefId&DCreated":
                     var cont = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == item.INCParDetId && x.RefId == item.RefId &&x.DateCreated == item.DateCreated).FirstOrDefaultAsync();
                     cont.PartialCQTY = item.PartialCQTY;

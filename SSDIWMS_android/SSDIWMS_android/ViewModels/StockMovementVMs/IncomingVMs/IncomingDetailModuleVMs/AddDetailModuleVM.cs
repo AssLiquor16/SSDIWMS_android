@@ -32,7 +32,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         DateTime _expiryDate = DateTime.Now.Date;
         string _scannedCode, _poNumber, _itemCode, _itemDesc, _palletCode, _amount, _errorText;
         int _partialCQTY;
-        bool _errorView, _succesView, _multipleRowVisible;
+        bool _errorView, _succesView, _multipleRowVisible, _multipleRowVisibleColView;
         public IncomingDetailModel E { get => _e; set => SetProperty(ref _e, value); }
         public string ScannedCode { get => _scannedCode; set => SetProperty(ref _scannedCode, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
@@ -46,6 +46,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public bool MultipleRowVisible { get => _multipleRowVisible; set => SetProperty(ref _multipleRowVisible, value); }
         public bool ErrorView { get => _errorView; set => SetProperty(ref _errorView, value); }
         public bool SuccessView { get => _succesView; set => SetProperty(ref _succesView, value); }
+        public bool MultipleRowVisibleColView { get => _multipleRowVisibleColView; set => SetProperty(ref _multipleRowVisibleColView, value); }
 
         public ItemMasterModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
 
@@ -200,6 +201,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     E = IncomingDetailList[0];
                     ErrorView = false;
                     SuccessView = true;
+                    MultipleRowVisibleColView = false;
                 }
                 else if (IncomingDetailList.Count > 1)
                 {
@@ -207,8 +209,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     ErrorText = "Multiple items detected";
                     MultipleRowVisible = false;
                     MultipleItemMasterList.AddRange(ItemMasterList);
+                    MultipleRowVisibleColView = true;
                     ErrorView = true;
                     SuccessView = false;
+                    
                 }
                 else
                 {
@@ -217,6 +221,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     MultipleRowVisible = true;
                     ErrorView = true;
                     SuccessView = false;
+                    MultipleRowVisibleColView = false;
                 }
             }
             else
@@ -226,6 +231,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 ErrorView = true;
                 MultipleRowVisible = true;
                 SuccessView = false;
+                MultipleRowVisibleColView = false;
             }
         }
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);

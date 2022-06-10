@@ -10,6 +10,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LBatch.LBatchHe
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.SMTransactions;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
 {
     public class BatchGenPOListPopupVM : ViewModelBase
     {
+        IMainTransactionSync mainTransactionSync;
         ISMLIncomingDetailServices localDbIncomingDetailService;
         IToastNotifService notifService;
         ISMLBatchHeaderServices localDbBatchHeaderService;
@@ -49,6 +51,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
 
         public BatchGenPOListPopupVM()
         {
+            mainTransactionSync = DependencyService.Get<IMainTransactionSync>();
             notifService = DependencyService.Get<IToastNotifService>();
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();
             localDbBatchHeaderService = DependencyService.Get<ISMLBatchHeaderServices>();
@@ -115,7 +118,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     var btdetcont = new BatchDetailsModel();
                     var groupbysku = SKUInAllSelectedPOList.GroupBy(l => l.ItemCode).Select(cl => new BatchDetailsModel
                     {
-                        BatchId = insertBc.BatchId,
+                        BatchId = insertBc.BatchLocalID,
                         BatchCode = insertBc.BatchCode,
                         ItemCode = cl.Key,
                         ItemDesc = cl.Where(x=>x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
@@ -128,16 +131,29 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     {
                         await localDbbatchDetailsService.Insert(gbs);
                     }
+                    try
+                    {
+                        await mainTransactionSync.UpdateAllTransactions("Batch");
+                        await mainTransactionSync.UpdateSpecificTransactions("IncomingHeader");
+                    }
+                    catch(Exception ex)
+                    {
+                        await notifService.StaticToastNotif("Error", ex.Message);
+                    }
                     MessagingCenter.Send(this, "RefreshIncomingHeaderList");
-                    //MessagingCenter.Send(this, "RefreshBatchList");
                     await Task.Delay(1000);
                     await Close();
 
+                }
+                else
+                {
+                    await notifService.LoadingProcess("End");
                 }
             }
             else
             {
                 await App.Current.MainPage.DisplayAlert("Alert", "No selected P.O", "Ok");
+                await notifService.LoadingProcess("End");
             }
         }
         private async Task ColViewRefresh()
@@ -176,9 +192,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x => x.IsSelected).Count()}";
         }
         public async Task Close() => await PopupNavigation.Instance.PopAsync(true);
-        private async Task ShowList()
+        private async Task ShowList() 
         {
             await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); await Close();
         }
+
     }
 }

@@ -48,7 +48,15 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
         }
 
 
-        // you can make another sync methods and put the method in this main method.
+
+
+        /// <summary>
+        ///  UpdateAllIncomingTrans == is the main method in updating incomingheaders/incomingdetails/incomingpartial details
+        ///  UpdateALlIncomingTrans has 2 method reference which are TimesUpdated & DateSync.
+        ///  You can change the method reference at Setup.cs
+        /// </summary>
+        /// <returns></returns>
+        #region UpdateAllIncoming
         public async Task UpdateAllIncomingTrans()
         {
             await Task.Delay(1);
@@ -62,7 +70,6 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                     break;
             }
         }
-
         #region TimesUpdatedSync
         public async Task TimesUpdateUpdateHeader()
         {
@@ -105,9 +112,9 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
         {
 
             var sDetails = await serverDbIncomingDetailService.GetList("PONumber", poFilter, null);
-            foreach(var sDetail in sDetails)
+            foreach (var sDetail in sDetails)
             {
-                int[] vs = { sDetail.INCDetId};
+                int[] vs = { sDetail.INCDetId };
                 var lDetail = await localDbIncomingDetailService.GetModel("INCDetId", null, vs);
                 string[] PoIcFilter = { sDetail.POHeaderNumber, sDetail.ItemCode };
                 await TimesUpdateUpdatePartialDetail(PoIcFilter);
@@ -117,71 +124,69 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                 }
                 else
                 {
-                    if(lDetail.TimesUpdated > sDetail.TimesUpdated)
+                    if (lDetail.TimesUpdated > sDetail.TimesUpdated)
                     {
                         //update server
                         await serverDbIncomingDetailService.Update("Common", lDetail);
                     }
-                    else if(lDetail.TimesUpdated < sDetail.TimesUpdated)
+                    else if (lDetail.TimesUpdated < sDetail.TimesUpdated)
                     {
                         //update local
                         await localDbIncomingDetailService.Update("Common", sDetail);
                     }
                 }
-                
             }
-
         }
         public async Task TimesUpdateUpdatePartialDetail(string[] PoIcFilter)
         {
-            var spardetails = await serverDbIncomingParDetailService.GetList("GetItemCodePO",PoIcFilter, null);
-            foreach(var spardetail in spardetails)
+            var spardetails = await serverDbIncomingParDetailService.GetList("GetItemCodePO", PoIcFilter, null);
+            foreach (var spardetail in spardetails)
             {
                 string[] b = { spardetail.RefId };
                 DateTime[] c = { spardetail.DateCreated };
                 var lpardetail = await localDbIncomingParDetailService.GetModel("RefId&DateCreated", b, null, c);
-                if(lpardetail == null)
+                if (lpardetail == null)
                 {
                     await localDbIncomingParDetailService.Insert("Common", spardetail);
                 }
                 else
                 {
-                    if(lpardetail.TimesUpdated > spardetail.TimesUpdated)
+                    if (lpardetail.TimesUpdated > spardetail.TimesUpdated)
                     {
                         //update server
                         await serverDbIncomingParDetailService.Update("Common", lpardetail);
                     }
-                    else if(lpardetail.TimesUpdated < spardetail.TimesUpdated)
+                    else if (lpardetail.TimesUpdated < spardetail.TimesUpdated)
                     {
                         // update local
                         await localDbIncomingParDetailService.Update("RefId&DateCreated", spardetail);
                     }
                 }
             }
-            var lpardetails = await localDbIncomingParDetailService.GetList("PoIc", PoIcFilter,null);
-            foreach(var lpDet in lpardetails)
+            var lpardetails = await localDbIncomingParDetailService.GetList("PoIc", PoIcFilter, null);
+            foreach (var lpDet in lpardetails)
             {
                 var spDet = spardetails.Where(x => x.RefId == lpDet.RefId && x.DateCreated == lpDet.DateCreated).FirstOrDefault();
-                if(spDet == null)
+                if (spDet == null)
                 {
                     var role = Preferences.Get("PrefUserRole", "");
-                    if(role == "Check")
+                    if (role == "Check")
                     {
                         var retsval = await serverDbIncomingParDetailService.SpecialCaseInsert("ReturnInsertedItem", lpDet);
-                        if(retsval.INCServerId != 0)
+                        if (retsval.INCServerId != 0)
                         {
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", retsval);
                         }
-                       
+
                     }
                 }
             }
-            var zeroServerId = await localDbIncomingParDetailService.GetList("AllZeroServerId", null,null);
-            foreach(var sdata in spardetails)
+            var zeroServerId = await localDbIncomingParDetailService.GetList("AllZeroServerId", null, null);
+            foreach (var sdata in spardetails)
             {
-                var locItem = zeroServerId.Where(x=>x.RefId == sdata.RefId).FirstOrDefault();
+                var locItem = zeroServerId.Where(x => x.RefId == sdata.RefId).FirstOrDefault();
                 {
-                    if(locItem != null)
+                    if (locItem != null)
                     {
                         await localDbIncomingParDetailService.Update("RefId&DateCreated", sdata);
                     }
@@ -190,7 +195,6 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
         }
         #endregion
-
         #region DateSyncSync
         public async Task DateSyncUpdateHeader()
         {
@@ -318,8 +322,113 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
 
         }
         #endregion
+        #endregion
 
-        #region Try
+
+        /// <summary>
+        /// UpdateIncomingHeaderTrans == is the main method in updating incomingheaders only.
+        /// UpdateIncomingHeaderTrans is used at generating batchcode ViewMoels > StockMovementVMs > IncomingVMs > BatchGenerateVMs > BatchGenPoListPopupVM.cs
+        /// UpdateIncomingHeaderTrans has 2 method reference which are TimesUpdated & DateSync.
+        /// You can change the method reference at Setup.cs
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        #region UpdateIncomingHeader Only
+        public async Task UpdateIncomingHeaderTrans()
+        {
+            switch (Setup.transactionSyncRef)
+            {
+                case "TimesUpdated":
+                    await HeaderTimesUpdateUpdateHeader();
+                    break;
+                case "DateSync":
+
+                    break;
+            }
+        }
+        #region TimesUpdatedSync
+        private async Task HeaderTimesUpdateUpdateHeader()
+        {
+            IncomingHeaderList.Clear();
+            var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+            var role = Preferences.Get("PrefUserRole", string.Empty);
+            int[] WhIdFilter = { WhId };
+            var sIncomingFinalizeHeader = await serverDbIncomingHeaderService.GetList("GetActDate", null, WhIdFilter, null);
+            IncomingHeaderList.AddRange(sIncomingFinalizeHeader);
+            foreach (var sHeader in IncomingHeaderList)
+            {
+                int[] x = { sHeader.INCId };
+                string[] y = { sHeader.PONumber };
+                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                if (lHeader == null)
+                {
+                    // insert to local
+                    await localDbIncomingHeaderService.Insert("Common", sHeader);
+
+                }
+                else
+                {
+                    if (lHeader.TimesUpdated > sHeader.TimesUpdated)
+                    {
+                        //update server
+                        await serverDbIncomingHeaderService.Update("Common", lHeader);
+                    }
+                    else if (lHeader.TimesUpdated < sHeader.TimesUpdated)
+                    {
+                        // update local
+                        await localDbIncomingHeaderService.Update("Common", sHeader);
+                    }
+                }
+
+            }
+        }
+        #endregion
+        #region DateSync
+        public async Task HeaderDateSyncUpdateHeader()
+        {
+            IncomingHeaderList.Clear();
+            var WhId = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+            var role = Preferences.Get("PrefUserRole", string.Empty);
+            int[] WhIdFilter = { WhId };
+            var sIncomingFinalizeHeader = await serverDbIncomingHeaderService.GetList("GetActDate", null, WhIdFilter, null);
+            IncomingHeaderList.AddRange(sIncomingFinalizeHeader);
+            foreach (var sHeader in IncomingHeaderList)
+            {
+                int[] x = { sHeader.INCId };
+                string[] y = { sHeader.PONumber };
+                var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
+                if (lHeader == null)
+                {
+                    // insert to local
+                    await localDbIncomingHeaderService.Insert("Common", sHeader);
+
+                }
+                else
+                {
+                    if (lHeader.DateSync > sHeader.DateSync)
+                    {
+                        //update server
+                        await serverDbIncomingHeaderService.Update("Common", lHeader);
+                    }
+                    else if (lHeader.DateSync < sHeader.DateSync)
+                    {
+                        // update local
+                        await localDbIncomingHeaderService.Update("Common", sHeader);
+                    }
+                }
+
+            }
+        }
+        #endregion
+        #endregion
+
+
+
+
+
+
+
+        #region Test
         //pangitaon ang error sa di mu update ang qty sa pikas cp 
         //reject
         public async Task UpdateSpecifiedTrans()
