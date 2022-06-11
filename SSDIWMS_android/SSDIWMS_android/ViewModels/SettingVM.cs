@@ -134,7 +134,7 @@ namespace SSDIWMS_android.ViewModels
             var name = userfullname.Split(' ');
             UserFullName = name[0];
             Role = Preferences.Get("PrefUserRole", "");
-            NotifyIO = Preferences.Get("NotifyIO", false);
+            NotifyIO = Preferences.Get("NotifyIO", true);
             switch (Role)
             {
                 case "Admin":

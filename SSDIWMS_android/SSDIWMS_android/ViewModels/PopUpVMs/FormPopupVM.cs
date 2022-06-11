@@ -1,5 +1,6 @@
 ﻿using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Services.Db.ServerDbServices.Devices;
 using SSDIWMS_android.Services.DeviceServices;
 using SSDIWMS_android.Services.MainServices;
@@ -16,6 +17,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
 {
     public class FormPopupVM : ViewModelBase
     {
+        GlobalDependencyServices dependencies { get; } = new GlobalDependencyServices();
         IMainServices mainService;
         IToastNotifService notifService;
         IDroidDeviceServices deviceService;
@@ -43,6 +45,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         }
         public async Task Login()
         {
+            //await dependencies.dateServices.CheckValidateTime();
             if (TaskType.Contains("Admin"))
             {
                 switch (TaskType)
@@ -55,6 +58,9 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         break;
                     case "ClearAll":
                         await ClearAll();
+                        break;
+                    case "AdminSearchEnable":
+                        await EnableSearch();
                         break;
                     default:
                         break;
@@ -69,7 +75,6 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         {
             await Task.Delay(1);
         }
-
         public async Task RegisterDevice()
         {
             var con = new LoadingPopupVM();
@@ -205,6 +210,43 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             }
             await con.CloseAll();
         }
-        
+        public async Task EnableSearch()
+        {
+            var con = new LoadingPopupVM();
+            await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(string.Empty));
+            if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
+            {
+                await Task.Delay(3000);
+
+                try
+                {
+                    var returnval = await serverDbUserService.ReturnModel("Login", new string[] {Username, Password}, null);
+                    if (returnval != null)
+                    {
+                        if (returnval.UserStatus == "Active" && returnval.UserRole == "Admin")
+                        {
+                            MessagingCenter.Send(this, "SearchEnable", string.Empty);
+                        }
+                        else
+                        {
+                            await notifService.StaticToastNotif("Error", "Credentials are incorrect.");
+                        }
+                    }
+                    else
+                    {
+                        await notifService.StaticToastNotif("Error", "User doesnt exist.");
+                    }
+                }
+                catch (Exception)
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Missing entry.");
+            }
+            await con.CloseAll();
+        }
     }
 }

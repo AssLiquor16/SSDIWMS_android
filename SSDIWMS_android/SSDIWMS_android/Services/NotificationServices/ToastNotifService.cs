@@ -14,7 +14,7 @@ namespace SSDIWMS_android.Services.NotificationServices
     {
         public async Task ToastNotif(string type, string msg)
         {
-            var toastNotif = Preferences.Get("NotifyIO", false);
+            var toastNotif = Preferences.Get("NotifyIO", true);
             if(toastNotif == true)
             {
                 ToastConfig toastcon = new ToastConfig(msg);

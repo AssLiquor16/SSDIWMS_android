@@ -9,5 +9,6 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
     {
         Task DateTimerInitialize();
         Task<string> ValidateDateTime();
+        Task DatetimeValidate();
     }
 }

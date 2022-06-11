@@ -146,7 +146,15 @@
                                                             <ColumnDefinition Width="50*"/>
                                                         </Grid.ColumnDefinitions>
                                                         <Label Text="{Binding ItemCode}" Grid.Column="0"/>
-                                                        <Label Text="{Binding ItemDesc}" Grid.Column="1"/>
+                                                        <StackLayout Grid.Column="1" Orientation="Vertical">
+                                                            <Label Text="{Binding ItemDesc}"/>
+                                                            <StackLayout Orientation="Horizontal" IsVisible="{Binding Show}">
+                                                                <Label Text="QTY:"/>
+                                                                <Label Text="{Binding Qty}"/>
+                                                                <Label Text="CQTY:"/>
+                                                                <Label Text="{Binding Cqty}"/>
+                                                            </StackLayout>
+                                                        </StackLayout>
                                                         <Label Text="{Binding QTYStatus}" Grid.Column="2" TextColor="{Binding Color}"/>
                                                     </Grid>
                                                 </StackLayout>

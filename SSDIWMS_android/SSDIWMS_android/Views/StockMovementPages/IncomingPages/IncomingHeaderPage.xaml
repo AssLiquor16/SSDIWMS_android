@@ -16,6 +16,7 @@
     <ContentPage.BindingContext>
         <viewmodels:IncomingHeaderVM/>
     </ContentPage.BindingContext>
+    
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -139,7 +140,7 @@
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </RefreshView>
-                                <StackLayout HorizontalOptions="FillAndExpand">
+                                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                                     <Button IsVisible="{Binding GenBatchVisible}"
                                             Text="Generate Batch Code"
                                             HorizontalOptions="FillAndExpand"
@@ -149,6 +150,13 @@
                                             <FontImageSource FontFamily="FAS" 
                                                              Glyph="{x:Static fontAwsome:FontAwesomeIcons.Cog}"/>
                                         </Button.ImageSource>
+                                    </Button>
+                                    <Button IsVisible="{Binding SummaryBtnVisible}"
+                                            Text="{x:Static fontAwsome:FontAwesomeIcons.FileAlt}"
+                                            HorizontalOptions="FillAndExpand"
+                                            CornerRadius="5" 
+                                            FontSize="Title"
+                                            Command="{Binding NavToSummaryCommand}" >
                                     </Button>
                                 </StackLayout>
                             </StackLayout>

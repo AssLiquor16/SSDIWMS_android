@@ -118,5 +118,11 @@
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingHeaderPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\SummaryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\SummaryPopupModulePages\SummaryPopupSubPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

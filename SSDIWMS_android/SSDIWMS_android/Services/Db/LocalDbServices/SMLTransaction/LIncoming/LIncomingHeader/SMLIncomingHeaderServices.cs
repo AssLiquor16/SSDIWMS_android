@@ -51,6 +51,10 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var retcontents2 = await db_.Table<IncomingHeaderModel>().ToListAsync();
                     var filtercontents2 = retcontents2.Where(x => x.WarehouseId == obj.WarehouseId && x.ActRecDate == DateTime.Today && x.INCstatus == "Recieved").ToList();
                     return filtercontents2;
+                case "WhId/CurDate/FinalizedIncStat":
+                    var case3 = await db_.Table<IncomingHeaderModel>().ToListAsync();
+                    var filteredCase3 = case3.Where(x => x.WarehouseId == obj.WarehouseId && x.ActRecDate == DateTime.Today && x.INCstatus == "Finalized").ToList();
+                    return filteredCase3;
                 default: return null;
 
             }

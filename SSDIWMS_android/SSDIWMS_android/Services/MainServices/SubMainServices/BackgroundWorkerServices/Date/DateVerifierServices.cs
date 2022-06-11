@@ -33,10 +33,10 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                     switch (status)
                     {
                         case "Advance":
-                            await notifyService.ToastNotif("Error", "Your device time is advance.");
+                            await notifyService.StaticToastNotif("Error", "Your device time is advance.");
                             break;
                         case "Delay":
-                            await notifyService.ToastNotif("Error", "Your device time is delay.");
+                            await notifyService.StaticToastNotif("Error", "Your device time is delay.");
                             break;
                         default: break;
                             
@@ -46,7 +46,25 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
 
             });
         }
-
+        public async Task DatetimeValidate()
+        {
+            if(Setup.transactionSyncRef == "DateSync")
+            {
+                switch (await ValidateDateTime())
+                {
+                    case "Synced":
+                        break;
+                    case null:
+                        break;
+                    default:
+                        var sertime = await serverDbDeviceService.GetServerDate();
+                        var stringsertime = sertime.ToString("MM/dd/yyyy h:mm tt");
+                        await App.Current.MainPage.DisplayAlert("Alert", $"Your phone time is not synced with server time, please update the device time first. Server Time is : { stringsertime }", "Ok");
+                        System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+                        break;
+                }
+            }
+        }
         public async Task<string> ValidateDateTime()
         {
             try
@@ -54,8 +72,8 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                 var serverTime = await serverDbDeviceService.GetServerDate();
                 var localDate = DateTime.Now;
 
-                var delayDate = serverTime.AddMinutes(-2);
-                var advanceDate = serverTime.AddMinutes(2);
+                var delayDate = serverTime.AddMinutes(-1.5);
+                var advanceDate = serverTime.AddMinutes(1.5);
 
                 if (localDate < advanceDate && localDate > delayDate)
                 {

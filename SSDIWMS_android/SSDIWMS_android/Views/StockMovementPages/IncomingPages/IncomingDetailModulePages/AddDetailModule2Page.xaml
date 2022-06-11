@@ -41,30 +41,117 @@
                     </StackLayout>
                     <BoxView/>
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
-                            <StackLayout BackgroundColor="Transparent">
-                                <Label Text="Search:" 
-                                               TextColor="DarkGray"/>
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                                    <Entry Text="{Binding SearchCode}" 
+                        <StackLayout Orientation="Horizontal">
+                            <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                <StackLayout Orientation="Horizontal">
+
+                                    <StackLayout Orientation="Vertical">
+                                        <Label IsVisible="{Binding SearchEnableFalse}" 
+                                           Text="{x:Static fontAwsome:FontAwesomeIcons.Lock}" 
+                                           TextColor="Gray" FontSize="Title" 
+                                           VerticalOptions="CenterAndExpand" 
+                                           HorizontalOptions="Start">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding SearchEnableCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Label IsVisible="{Binding SearchEnableTrue}" 
+                                           Text="{x:Static fontAwsome:FontAwesomeIcons.Unlock}" 
+                                           TextColor="Gray" FontSize="Title" 
+                                           VerticalOptions="CenterAndExpand" 
+                                           HorizontalOptions="Start">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding SearchEnableCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>
+
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Entry Text="{Binding SearchCode}" 
                                                FontSize="Subtitle" 
                                                FontFamily="FAS"
-                                               IsEnabled="{Binding }"
+                                               IsEnabled="{Binding SearchEnableTrue}"
                                                PlaceholderColor="Gray"
-                                               Placeholder="{x:Static fontAwsome:FontAwesomeIcons.Search}"
-                                               WidthRequest="290"
+                                               Placeholder="Search the code here"
+                                               WidthRequest="220"
                                                FontAttributes="Bold"/>
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Camera}" FontSize="Title" VerticalOptions="CenterAndExpand">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                                        </Label.GestureRecognizers>
-                                    </Label>
+                                    </StackLayout>
+
                                 </StackLayout>
-                            </StackLayout>
-                        </Frame>
-                        <StackLayout>
-                            <StackLayout IsVisible="{Binding FormView}">
-                                <Label Text="FormView"/>
+                            </Frame>
+                            <Frame BackgroundColor="{StaticResource MySecondary}" Margin="2,3" Padding="10,3" CornerRadius="50">
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Camera}" FontSize="Title" VerticalOptions="CenterAndExpand">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Frame>
+                        </StackLayout>
+                        <StackLayout VerticalOptions="Fill" HorizontalOptions="Fill">
+                            <StackLayout IsVisible="{Binding FormView}" VerticalOptions="FillAndExpand">
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="Item Code:" TextColor="DarkGray"/>
+                                        <Entry Text="{Binding SelectedItem.ItemCode}" 
+                                               FontSize="Subtitle" 
+                                               FontAttributes="Bold" 
+                                               IsEnabled="False"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource MySecondary}" 
+                                       Margin="5,3" 
+                                       Padding="5,3"
+                                       >
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="Item Description:" 
+                                               TextColor="DarkGray"/>
+                                        <Editor Text="{Binding SelectedItem.ItemDesc}" 
+                                                FontSize="Subtitle" 
+                                                HeightRequest="70"
+                                                FontAttributes="Bold" 
+                                                IsEnabled="False"
+                                                />
+                                    </StackLayout>
+                                </Frame>
+
+                                <Frame BackgroundColor="{StaticResource PriorityColor}" 
+                                       Margin="5,3" 
+                                       Padding="5,3">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Label Text="QTY:" 
+                                               TextColor="DarkGray"/>
+                                        <Entry Text="{Binding PartialCQTY}" 
+                                               FontSize="Subtitle" FontAttributes="Bold"  
+                                               Keyboard="Numeric"/>
+                                    </StackLayout>
+                                </Frame>
+
+                                <StackLayout Orientation="Horizontal" VerticalOptions="End" Margin="5,3" Padding="5,3">
+
+                                    <Button Text="Back" 
+                                            CornerRadius="5"
+                                            Command="{Binding CancelCommand}">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.AngleLeft}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+                                    <Button Text="Insert" 
+                                            CornerRadius="5" 
+                                            Padding="55,0"
+                                            Command="{Binding AddItemCommand}"
+                                            WidthRequest="200">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.Save}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+
+
+
+                                </StackLayout>
                             </StackLayout>
                             <StackLayout IsVisible="{Binding ColView}">
                                 <CollectionView

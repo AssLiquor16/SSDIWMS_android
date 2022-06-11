@@ -1,4 +1,5 @@
-﻿using SSDIWMS_android.Updater.SMTransactions;
+﻿using SSDIWMS_android.Helpers;
+using SSDIWMS_android.Updater.SMTransactions;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using System;
@@ -20,6 +21,8 @@ namespace SSDIWMS_android.Updater.SMTransactions
         /// -BatchHeader
         /// -BatchDetails
         /// </summary>
+
+        GlobalDependencyServices dependencies { get; } = new GlobalDependencyServices();
         IUpdateAllBatchTransaction updateBatchServices;
         IUpdateAllIncomingtransaction updateIncomingServices;
         public MainTransactionSync()
@@ -40,6 +43,8 @@ namespace SSDIWMS_android.Updater.SMTransactions
         #region Update All Transactions
         public async Task UpdateAllTransactions(string transactionTable)
         {
+
+            await dependencies.dateServices.DatetimeValidate();
             switch (transactionTable)
             {
                 case "Incoming":
@@ -65,6 +70,8 @@ namespace SSDIWMS_android.Updater.SMTransactions
         #region UpdateSpecific Transactions
         public async Task UpdateSpecificTransactions(string transactionTable)
         {
+
+            await dependencies.dateServices.DatetimeValidate();
             switch (transactionTable)
             {
                 case "IncomingHeader":

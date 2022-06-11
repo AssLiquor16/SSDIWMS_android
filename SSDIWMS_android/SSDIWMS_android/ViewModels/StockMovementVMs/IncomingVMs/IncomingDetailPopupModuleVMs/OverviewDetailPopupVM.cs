@@ -8,6 +8,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingHeader;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
+using SSDIWMS_android.Updater.SMTransactions;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
@@ -23,6 +24,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 {
     public class OverviewDetailPopupVM : ViewModelBase
     {
+        IMainTransactionSync mainTransactionSync;
         IMainServices mainServices;
         IToastNotifService notifService;
         IUpdateAllIncomingtransaction updaterservice;
@@ -37,13 +39,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
         IncomingDetailModel _selectedItem;
         string _poNumber, _totalPOItems, _buttonText;
-        bool _isrefreshing, _returnView;
+        bool _isrefreshing, _returnView,_showQTY;
         public IncomingDetailModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
         public string TotalPOItems { get => _totalPOItems; set => SetProperty(ref _totalPOItems, value); }
         public bool IsRefreshing { get => _isrefreshing; set => SetProperty(ref _isrefreshing, value); }
         public bool ReturnView { get => _returnView; set => SetProperty(ref _returnView, value); }
-        
+        public bool ShowQTY { get => _showQTY; set => SetProperty(ref _showQTY, value); }
+
         public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
         public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
         public string UserRole { get => _userRole; set => SetProperty(ref _userRole, value); }
@@ -61,6 +64,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public AsyncCommand PageRefreshCommand { get; }
         public OverviewDetailPopupVM()
         {
+            mainTransactionSync = DependencyService.Get<IMainTransactionSync>();
             mainServices = DependencyService.Get<IMainServices>();
             notifService = DependencyService.Get<IToastNotifService>();
             updaterservice = DependencyService.Get<IUpdateAllIncomingtransaction>();
@@ -126,11 +130,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public async Task QueryAll()
         {
             IncomingDetailList.Clear();
-
             var totalpartialcqty = 0;
             var AllItemInThisPo = await localDbIncomingDetailService.GetList("PONumber", null, null);
             foreach (var item in AllItemInThisPo)
             {
+
                 int[] g = { item.INCDetId };
                 var e = await localDbIncomingParDetailService.GetList("PONumber&INCId", null, g);
                 foreach (var ite in e)
@@ -154,6 +158,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 }
                 item.Cqty = totalpartialcqty;
                 totalpartialcqty = 0;
+                if (Preferences.Get("PrefUserRole", string.Empty) == "Pick")
+                {
+                    item.Show = true;
+                }
+                else
+                {
+                    item.Show = false;
+                }
             }
             IncomingDetailList.AddRange(AllItemInThisPo);
             var n = IncomingDetailList.Count;
@@ -169,9 +181,33 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 //finalize
                 if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
                 {
-                    if(await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Proceed", "Cancel") == true)
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Ok", "Cancel") == true)
                     {
-                        await Finalize();
+                        if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
+                        {
+                            await Finalize();
+                            try
+                            {
+                                await Sync();
+                            }
+                            catch
+                            {
+                                await notifService.StaticToastNotif("Error", "Cannot connect to server");
+                            }
+                            MessagingCenter.Send(this, "ColviewRefresh");
+                            await Task.Delay(500);
+                            await PopupNavigation.Instance.PopAllAsync(true);
+                            var route = $"..";
+                            await Shell.Current.GoToAsync(route);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+
                     }
                 }
                 else
@@ -179,6 +215,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to recieve the P.O?", "Yes", "No") == true)
                     {
                         await Finalize();
+                        try
+                        {
+                            await Sync();
+                        }
+                        catch
+                        {
+                            await notifService.StaticToastNotif("Error", "Cannot connect to server");
+                        }
+                        MessagingCenter.Send(this, "ColviewRefresh");
+                        await Task.Delay(500);
+                        await PopupNavigation.Instance.PopAllAsync(true);
+                        var route = $"..";
+                        await Shell.Current.GoToAsync(route);
                     }
                 }
 
@@ -188,9 +237,25 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 //recieved
                 if (IncomingDetailList.Where(x => x.QTYStatus == "Short" || x.QTYStatus == "Over").Count() > 0)
                 {
-                    if (await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Proceed", "Cancel") == true)
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Some SKU have variance.", "Ok", "Cancel") == true)
                     {
-                        await Recieve();
+                        if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
+                        {
+                            await Recieve();
+                            MessagingCenter.Send(this, "ColviewRefresh");
+                            await Task.Delay(1000);
+                            await PopupNavigation.Instance.PopAllAsync(true);
+                            var route = $"..";
+                            await Shell.Current.GoToAsync(route);
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+
                     }
                 }
                 else
@@ -198,6 +263,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
                     {
                         await Recieve();
+                        MessagingCenter.Send(this, "ColviewRefresh");
+                        await Task.Delay(1000);
+                        await PopupNavigation.Instance.PopAllAsync(true);
+                        var route = $"..";
+                        await Shell.Current.GoToAsync(route);
                     }
                 }
                 
@@ -208,11 +278,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await mainServices.RemovePreferences();
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
-            MessagingCenter.Send(this, "ColviewRefresh");
-            await Task.Delay(1000);
-            await PopupNavigation.Instance.PopAllAsync(true);
-            var route = $"..";
-            await Shell.Current.GoToAsync(route);
         }
         private async Task Finalize()
         {
@@ -272,24 +337,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
 
-
-                /*try
-                {
-                    bool busy = Preferences.Get("PrefISMSyncing", false);
-                    if (busy == false)
-                    {
-                        string[] strinfilter = { PONumber };
-                        await updaterservice.UpdateAllIncomingTrans();
-                        await notifService.StaticToastNotif("Success", "Item sync successfully.");
-
-                    }
-
-                }
-                catch
-                {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }*/
-                
         }
         private async Task Recieve()
         {
@@ -429,31 +476,23 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
 
-                /*try
+                try
                 {
-                    bool busy = Preferences.Get("PrefISMSyncing", false);
-                    if (busy == false)
-                    {
-                        string[] strinfilter = { PONumber };
-                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
-                        if (poStatus == "Finalized")
-                        {
-                            await updaterservice.UpdateAllIncomingTrans();
-                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
-                        }
-                    }
-
+                    await Sync();
                 }
                 catch
                 {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }*/
-
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server");
+                }
                 MessagingCenter.Send(this, "ColviewRefreshRetOnGoing");
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 await PopupNavigation.Instance.PopAllAsync(true);
                 var route = $"..";
                 await Shell.Current.GoToAsync(route);
+            }
+            else
+            {
+
             }
         }
         private async Task LiveTimer()
@@ -469,5 +508,30 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             });
         }
+        private async Task Sync()
+        {
+            if (Preferences.Get("PrefISMSyncing", false) == false)
+            {
+                Preferences.Set("PrefISMSyncing", true);
+                try
+                {
+                    await mainTransactionSync.UpdateAllTransactions("Incoming");
+                    await notifService.ToastNotif("Success", "Items updated succesfully.");
+                }
+                catch
+                {
+                    await notifService.ToastNotif("Error", "Cannot connect to server.");
+                }
+
+                Preferences.Set("PrefISMSyncing", false);
+                await Task.Delay(500);
+                return;
+            }
+            else
+            {
+                await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
+            }
+        }
     }
 }
+

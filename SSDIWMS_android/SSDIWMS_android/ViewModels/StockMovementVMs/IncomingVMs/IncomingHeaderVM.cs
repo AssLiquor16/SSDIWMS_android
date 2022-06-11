@@ -27,15 +27,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
         IToastNotifService notifService;
         IncomingHeaderModel _selectedHeader;
-        bool _isRefreshing, _genBatchVisible;
+        bool _isRefreshing, _genBatchVisible, _summaryBtnVisible;
 
 
         public IncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
         public bool GenBatchVisible { get => _genBatchVisible; set => SetProperty(ref _genBatchVisible, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
-
+        public bool SummaryBtnVisible { get => _summaryBtnVisible; set => SetProperty(ref _summaryBtnVisible, value); }
         public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
 
+        public AsyncCommand NavToSummaryCommand { get; }
         public AsyncCommand GenBactchCodeNavCommand { get; }
         public AsyncCommand TappedCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
@@ -49,51 +50,33 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
             IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
 
+            NavToSummaryCommand = new AsyncCommand(NavToSummary);
             GenBactchCodeNavCommand = new AsyncCommand(GenBactchCodeNav);
             TappedCommand = new AsyncCommand(Tapped);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
-            ;
-
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefreshRetOnGoing", async (page) =>
             {
-                await ColViewRefresh();
+                await ViewChanger();
                 await notifService.LoadingProcess("End");
             });
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefresh", async (page) =>
             {
-                await ColViewRefresh();
+                await ViewChanger();
                 await notifService.LoadingProcess("End");
             });
             MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
             {
-                IncomingHeaderList.Clear();
-                var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
-                var filter = Preferences.Get("PrefUserRole", "");
-                IsRefreshing = false;
-                switch (filter)
-                {
-                    case "Check":
-                        var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
-                        IncomingHeaderList.Clear();
-                        IncomingHeaderList.AddRange(checkerContents);
-                        break;
-                    case "Pick":
-                        var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
-                        pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
-                        IncomingHeaderList.Clear();
-                        IncomingHeaderList.AddRange(pickerContents);
-                        break;
-                    default: break;
-                }
+                await ViewChanger();
                 await notifService.LoadingProcess("End");
             });
         }
-        private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());    
+        private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());
+        private async Task NavToSummary() => await Shell.Current.GoToAsync($"{nameof(SummaryPage)}");
         //await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
         private async Task Tapped()
         {
-            if(SelectedHeader != null)
+            if (SelectedHeader != null)
             {
                 var filter = Preferences.Get("PrefUserRole", "");
                 Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
@@ -120,7 +103,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                         break;
                 }
 
-                
+
             }
             SelectedHeader = null;
         }
@@ -128,6 +111,25 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         {
             IncomingHeaderList.Clear();
             await Sync();
+            await ViewChanger();
+        }
+        private async Task PageRefresh()
+        {
+
+            if (Preferences.Get("PrefIncomingHeaderPagepartialRefresh", false) == false)
+            {
+                await LiveTimer();
+                await ViewChanger();
+                var userfullname = Preferences.Get("PrefUserFullname", "");
+                var name = userfullname.Split(' ');
+                UserFullName = name[0];
+                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", true);
+            }
+
+        }
+        private async Task ViewChanger()
+        {
+            IncomingHeaderList.Clear();
             var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
             var filter = Preferences.Get("PrefUserRole", "");
             IsRefreshing = false;
@@ -137,47 +139,26 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(checkerContents);
+                    GenBatchVisible = false;
+                    SummaryBtnVisible = false;
                     break;
                 case "Pick":
-                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized"|| x.INCstatus == "Recieved").ToList();
+                    var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
                     pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
+                    GenBatchVisible = true;
+                    if (pickerContents.Where(x => x.INCstatus == "Finalized").Count() > 0)
+                    {
+                        SummaryBtnVisible = true;
+                    }
+                    else
+                    {
+                        SummaryBtnVisible = false;
+                    }
                     break;
                 default: break;
             }
-        }
-        private async Task PageRefresh()
-        {
-
-            if(Preferences.Get("PrefIncomingHeaderPagepartialRefresh", false) == false)
-            {
-                await LiveTimer();
-                var listItems = await localDbIncomingHeaderService.GetList("WhId,CurDate,OngoingIncStat", null, null, null);
-                var filter = Preferences.Get("PrefUserRole", "");
-                switch (filter)
-                {
-                    case "Check":
-                        var checkerContents = listItems.Where(x => x.INCstatus == "Ongoing").ToList();
-                        IncomingHeaderList.Clear();
-                        IncomingHeaderList.AddRange(checkerContents);
-                        GenBatchVisible = false;
-                        break;
-                    case "Pick":
-                        var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
-                        pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
-                        IncomingHeaderList.Clear();
-                        IncomingHeaderList.AddRange(pickerContents);
-                        GenBatchVisible = true;
-                        break;
-                    default: GenBatchVisible = false; break;
-                }
-                var userfullname = Preferences.Get("PrefUserFullname", "");
-                var name = userfullname.Split(' ');
-                UserFullName = name[0];
-                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", true);
-            }
-                
         }
         private async Task Sync()
         {
@@ -203,7 +184,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
             }
         }
-
         static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
         static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
         string _liveDate = DateTime.Now.ToString(_datetimeFormat);
