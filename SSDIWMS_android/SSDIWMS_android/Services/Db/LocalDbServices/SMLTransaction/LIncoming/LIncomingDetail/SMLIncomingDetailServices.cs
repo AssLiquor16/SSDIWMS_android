@@ -50,7 +50,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     return POTimesUpdateFilterDatas;
                 case "PONumber2":
                     var POFilter2 = stringfilter[0];
-                    var alls2 = await db_.Table<IncomingDetailModel>().ToListAsync();
                     var POFilterDatas2 = await db_.Table<IncomingDetailModel>().Where(x => x.POHeaderNumber == POFilter2).ToListAsync();
                     return POFilterDatas2;
                 default: return null;

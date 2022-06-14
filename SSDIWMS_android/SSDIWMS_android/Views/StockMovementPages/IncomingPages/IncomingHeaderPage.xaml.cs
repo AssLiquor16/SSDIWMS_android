@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,20 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
         public IncomingHeaderPage()
         {
             InitializeComponent();
+        }
+
+        private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            var con = BindingContext as IncomingHeaderVM;
+            var n = con.DummyIncomingHeaderList.Where(x => x.IsSelected == true).ToList();
+            if(n.Count > 0)
+            {
+                con.SummaryBtnVisible = true;
+            }
+            else
+            {
+                con.SummaryBtnVisible=false;
+            }
         }
     }
 }

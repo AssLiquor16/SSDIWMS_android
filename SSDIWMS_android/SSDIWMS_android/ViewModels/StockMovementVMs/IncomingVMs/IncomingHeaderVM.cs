@@ -1,7 +1,9 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
+using SSDIWMS_android.Models.SMTransactionModel.Incoming.Temp;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions;
@@ -23,18 +25,38 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 {
     public class IncomingHeaderVM : ViewModelBase
     {
+        public LiveTime liveTime { get; } = new LiveTime();
         IMainTransactionSync mainTransactionSync;
         ISMLIncomingHeaderServices localDbIncomingHeaderService;
         IToastNotifService notifService;
-        IncomingHeaderModel _selectedHeader;
-        bool _isRefreshing, _genBatchVisible, _summaryBtnVisible;
 
 
-        public IncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
+
+
+        DummyIncomingHeaderModel _selectedHeader;
+        bool _isRefreshing, _genBatchVisible, _summaryBtnVisible, _isShowConsolidation;
+        public DummyIncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
         public bool GenBatchVisible { get => _genBatchVisible; set => SetProperty(ref _genBatchVisible, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
         public bool SummaryBtnVisible { get => _summaryBtnVisible; set => SetProperty(ref _summaryBtnVisible, value); }
         public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
+        public ObservableRangeCollection<DummyIncomingHeaderModel> DummyIncomingHeaderList { get; set; }
+
+        public bool IsShowConsolidation
+        {
+            get => _isShowConsolidation;
+            set
+            {
+                if (value == _isShowConsolidation)
+                    return;
+                _isShowConsolidation = value;
+                foreach(var a in DummyIncomingHeaderList)
+                {
+                    a.IsConsoLidation = value;
+                }
+                OnPropertyChanged();
+            }
+        }
 
         public AsyncCommand NavToSummaryCommand { get; }
         public AsyncCommand GenBactchCodeNavCommand { get; }
@@ -49,6 +71,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             notifService = DependencyService.Get<IToastNotifService>();
 
             IncomingHeaderList = new ObservableRangeCollection<IncomingHeaderModel>();
+            DummyIncomingHeaderList = new ObservableRangeCollection<DummyIncomingHeaderModel>();
 
             NavToSummaryCommand = new AsyncCommand(NavToSummary);
             GenBactchCodeNavCommand = new AsyncCommand(GenBactchCodeNav);
@@ -81,7 +104,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 var filter = Preferences.Get("PrefUserRole", "");
                 Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
                 Preferences.Set("PrefBillDoc", SelectedHeader.BillDoc);
-                Preferences.Set("PrefCvan", SelectedHeader.CVAN);
+                Preferences.Set("PrefCvan", SelectedHeader.CVan);
                 Preferences.Set("PrefShipNo", SelectedHeader.ShipNo);
                 Preferences.Set("PrefShipLine", SelectedHeader.ShipLine);
                 switch (filter)
@@ -118,11 +141,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
             if (Preferences.Get("PrefIncomingHeaderPagepartialRefresh", false) == false)
             {
-                await LiveTimer();
+                await liveTime.LiveTimer();
                 await ViewChanger();
                 var userfullname = Preferences.Get("PrefUserFullname", "");
-                var name = userfullname.Split(' ');
-                UserFullName = name[0];
                 Preferences.Set("PrefIncomingHeaderPagepartialRefresh", true);
             }
 
@@ -141,21 +162,47 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     IncomingHeaderList.AddRange(checkerContents);
                     GenBatchVisible = false;
                     SummaryBtnVisible = false;
+                    DummyIncomingHeaderList.Clear();
+                    foreach(var c in IncomingHeaderList)
+                    {
+                        DummyIncomingHeaderList.Add(new DummyIncomingHeaderModel
+                        {
+                            INCId = c.INCId,
+                            PONumber = c.PONumber,
+                            BillDoc = c.BillDoc,
+                            CVan = c.CVAN,
+                            ShipNo = c.ShipNo,
+                            ShipLine = c.ShipLine,
+                            INCstatus = c.INCstatus,
+                            ShipCode = c.ShipCode,
+                            IsConsoLidation = false,
+                            IsSelected = false
+                            
+                        });
+    }
                     break;
                 case "Pick":
                     var pickerContents = listItems.Where(x => x.INCstatus == "Finalized" || x.INCstatus == "Recieved").ToList();
                     pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
+                    foreach(var p in IncomingHeaderList)
+                    {
+                        DummyIncomingHeaderList.Add(new DummyIncomingHeaderModel
+                        {
+                            INCId = p.INCId,
+                            PONumber = p.PONumber,
+                            BillDoc = p.BillDoc,
+                            CVan = p.CVAN,
+                            ShipNo = p.ShipNo,
+                            ShipLine = p.ShipLine,
+                            INCstatus = p.INCstatus,
+                            ShipCode = p.ShipCode,
+                            IsConsoLidation = false,
+                            IsSelected = false
+                        });
+                    }
                     GenBatchVisible = true;
-                    if (pickerContents.Where(x => x.INCstatus == "Finalized").Count() > 0)
-                    {
-                        SummaryBtnVisible = true;
-                    }
-                    else
-                    {
-                        SummaryBtnVisible = false;
-                    }
                     break;
                 default: break;
             }
@@ -184,23 +231,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 await notifService.ToastNotif("Error", "Syncing busy, please try again later.");
             }
         }
-        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname;
-        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
-        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
-        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
-        private async Task LiveTimer()
-        {
-            await Task.Delay(1);
-            Device.StartTimer(TimeSpan.FromSeconds(_datetimeTick), () => {
-                Task.Run(async () =>
-                {
-                    await Task.Delay(1);
-                    LiveDate = DateTime.Now.ToString(_datetimeFormat);
-                });
-                return true; //use this to run continuously // false if you want to stop 
-
-            });
-        }
+        
     }
+
 }

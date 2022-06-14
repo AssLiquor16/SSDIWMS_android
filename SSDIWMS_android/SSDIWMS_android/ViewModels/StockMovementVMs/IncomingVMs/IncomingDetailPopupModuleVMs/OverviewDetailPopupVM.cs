@@ -132,9 +132,21 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             IncomingDetailList.Clear();
             var totalpartialcqty = 0;
             var AllItemInThisPo = await localDbIncomingDetailService.GetList("PONumber", null, null);
-            foreach (var item in AllItemInThisPo)
+            var groupedAllItemInThisPo = AllItemInThisPo.GroupBy(l => l.ItemCode).Select(cl => new IncomingDetailModel
             {
-
+                INCDetId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCDetId,
+                INCHeaderId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCHeaderId,
+                ItemCode = cl.Key,
+                ItemDesc = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
+                Qty = cl.Sum(x => x.Qty),
+                UserId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().UserId,
+                Amount = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Amount,
+                TimesUpdated = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TimesUpdated,
+                POHeaderNumber = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().POHeaderNumber,
+                DateSync = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().DateSync,
+            }).ToList();
+            foreach (var item in groupedAllItemInThisPo)
+            {
                 int[] g = { item.INCDetId };
                 var e = await localDbIncomingParDetailService.GetList("PONumber&INCId", null, g);
                 foreach (var ite in e)
@@ -167,7 +179,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     item.Show = false;
                 }
             }
-            IncomingDetailList.AddRange(AllItemInThisPo);
+            IncomingDetailList.AddRange(groupedAllItemInThisPo);
             var n = IncomingDetailList.Count;
             TotalPOItems = n + " " + "Items";
 
@@ -295,38 +307,97 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         
                     };
                     await localDbIncomingHeaderService.Update("PONumber", e);
-                    foreach (var item in IncomingDetailList)
+                    var incdets = await localDbIncomingDetailService.GetList("PONumber2", new string[] { Preferences.Get("PrefPONumber", string.Empty) }, null);
+                    List<IncomingDetailModel> incdetlist = new List<IncomingDetailModel>();
+                    var multskuiCode = string.Empty;
+                    var rowpardet1 = 0;
+                    incdetlist.Clear();
+                    foreach (var incdet in incdets)
                     {
-                        item.TimesUpdated += 2;
-                        item.UserId = userId;
-                        item.QTYStatus = string.Empty;
-                        item.DateSync = DateTime.Now;
-                        //totals all the qty of partial details where po and item code is equal to item
-                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
-                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
-                        var totalCqty = 0;
-                        foreach (var pardet in partialdet)
+
+                        var multcheck = incdets.Where(x => x.ItemCode == incdet.ItemCode).ToList();
+                        if(multcheck.Count() == 1)
                         {
-                            totalCqty += pardet.PartialCQTY;
+                        var rowcount1pardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", new string[] { incdet.ItemCode }, new int[] { incdet.INCDetId });
+                        foreach (var incpardet in rowcount1pardet)
+                        {
+                            rowpardet1 += incpardet.PartialCQTY;
                         }
-                        //-----------------------------------------------------------------------------
-                        item.Cqty = totalCqty;
-                        await localDbIncomingDetailService.Update("Common", item);
-
-                        string[] s = { item.ItemCode };
-                        int[] i = { item.INCDetId };
-
-                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
-                        foreach (var paritem in retpardet)
+                            multcheck[0].TimesUpdated += 2;
+                            multcheck[0].UserId = userId;
+                            multcheck[0].QTYStatus = string.Empty;
+                            multcheck[0].DateSync = DateTime.Now;
+                            multcheck[0].Cqty = rowpardet1;
+                            await localDbIncomingDetailService.Update("Common", multcheck[0]);
+                            rowpardet1 = 0;
+                            foreach (var incpardet in rowcount1pardet)
+                            {
+                            incpardet.TimesUpdated += 2;
+                            incpardet.UserId = userId;
+                            incpardet.Status = "Finalized";
+                            incpardet.DateFinalized = DateTime.Now;
+                            incpardet.DateSync = DateTime.Now;
+                            await localDbIncomingParDetailService.Update("RefId&DateCreated", incpardet);
+                            }
+                        }
+                        else if(multcheck.Count() > 1)
                         {
-                            paritem.TimesUpdated += 2;
-                            paritem.UserId = userId;
-                            paritem.Status = "Finalized";
-                            paritem.DateFinalized = DateTime.Now;
-                            paritem.DateSync = DateTime.Now;
-                            await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
+                            foreach(var mltcheck in multcheck)
+                        {
+                            var checkifexist = incdetlist.Where(x => x.INCDetId == mltcheck.INCDetId).FirstOrDefault();
+                            if(checkifexist == null)
+                            {
+                                incdetlist.Add(mltcheck);
+                            }
+                        }
                         }
                     }
+                    var l = 0;
+                    var row = 0;
+                    var queried = false;
+                    foreach(var indetlist in incdetlist)
+                    {
+                    if (queried == false)
+                    {
+                        l = IncomingDetailList.Where(x => x.ItemCode == indetlist.ItemCode).FirstOrDefault().Cqty;
+                        queried = true;
+                    }
+                    row++;
+                    indetlist.TimesUpdated += 2;
+                    indetlist.UserId = userId;
+                    indetlist.QTYStatus = string.Empty;
+                    indetlist.DateSync = DateTime.Now;
+                    if (l >= indetlist.Qty)
+                    {
+                        if (row != incdetlist.Count)
+                        {
+                            indetlist.Cqty = indetlist.Qty;
+                            l = l - indetlist.Qty;
+                        }
+                        else
+                        {
+                            indetlist.Cqty = l;
+                            l = l - l;
+                        }
+                    }
+                    else
+                    {
+                        indetlist.Cqty = l;
+                        l = l - l;
+                    }
+                    await localDbIncomingDetailService.Update("Common", indetlist);
+                    var pardetspersku = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", new string[] { indetlist.ItemCode }, new int[] { indetlist.INCDetId });
+                    foreach(var pardet in pardetspersku)
+                    {
+                        pardet.TimesUpdated += 2;
+                        pardet.UserId = userId;
+                        pardet.Status = "Finalized";
+                        pardet.DateFinalized = DateTime.Now;
+                        pardet.DateSync = DateTime.Now;
+                        await localDbIncomingParDetailService.Update("RefId&DateCreated", pardet);
+                    }
+                    }
+
                     Preferences.Remove("PrefPONumber");
                     Preferences.Remove("PrefBillDoc");
                     Preferences.Remove("PrefCvan");
@@ -354,34 +425,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber1", e);
-                    foreach (var item in IncomingDetailList)
-                    {
-                        item.TimesUpdated += 20;
-                        item.UserId = userId;
-                        item.QTYStatus = string.Empty;
-                        item.DateSync = DateTime.Now;
-                        //totals all the qty of partial details where po and item code is equal to item
-                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
-                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
-                        var totalCqty = 0;
-                        foreach (var pardet in partialdet)
-                        {
-                            totalCqty += pardet.PartialCQTY;
-                        }
-                        //-----------------------------------------------------------------------------
-                        item.Cqty = totalCqty;
-                        await localDbIncomingDetailService.Update("Common", item);
-
-                        string[] s = { item.ItemCode };
-                        int[] i = { item.INCDetId };
-
-                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                    var incdets = await localDbIncomingDetailService.GetList("PONumber2", new string[] { Preferences.Get("PrefPONumber", string.Empty) }, null);
+                foreach (var item in incdets)
+                {
+                    item.TimesUpdated += 20;
+                    item.QTYStatus = string.Empty;
+                    item.DateSync = DateTime.Now;
+                    await localDbIncomingDetailService.Update("Common", item);
+                    var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", new string[] { item.ItemCode }, new int[] { item.INCDetId } );
                         foreach (var paritem in retpardet)
                         {
                             paritem.TimesUpdated += 20;
-                            paritem.UserId = userId;
                             paritem.Status = "Recieved";
-                            paritem.DateFinalized = DateTime.Now;
                             await localDbIncomingParDetailService.Update("RefId&DateCreated", paritem);
                         }
                     }
@@ -394,28 +449,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
-
-
-                /*try
-                {
-                    bool busy = Preferences.Get("PrefISMSyncing", false);
-                    if (busy == false)
-                    {
-                        string[] strinfilter = { PONumber };
-                        var poStatus = await serverDbIncomingHeaderService.GetString("ReturnStatus", strinfilter, null);
-                        if (poStatus == "Finalized")
-                        {
-                            await updaterservice.UpdateAllIncomingTrans();
-                            await notifService.StaticToastNotif("Success", "Item sync successfully.");
-                        }
-                    }
-
-                }
-                catch
-                {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }*/
-                
         }
         private async Task ReturnToOngoing()
         {
@@ -435,27 +468,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
                     };
                     await localDbIncomingHeaderService.Update("PONumber1", e);
-                    foreach (var item in IncomingDetailList)
+                    var incdets = await localDbIncomingDetailService.GetList("PONumber2", new string[] { Preferences.Get("PrefPONumber", string.Empty) }, null);
+                    foreach (var item in incdets)
                     {
                         item.TimesUpdated += 15;
-                        item.UserId = userId;
                         item.QTYStatus = string.Empty;
                         item.DateSync = DateTime.Now;
-                        //totals all the qty of partial details where po and item code is equal to item
-                        string[] stringfilter = { item.POHeaderNumber, item.ItemCode };
-                        var partialdet = await localDbIncomingParDetailService.GetList("PoIc", stringfilter, null);
-                        var totalCqty = 0;
-                        foreach(var pardet in partialdet)
-                        {
-                            totalCqty += pardet.PartialCQTY;
-                        }
-                        //-----------------------------------------------------------------------------
-                        item.Cqty = totalCqty;
                         await localDbIncomingDetailService.Update("Common", item);
-                        string[] s = { item.ItemCode };
-                        int[] i = { item.INCDetId };
-
-                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", s, i);
+                        var retpardet = await localDbIncomingParDetailService.GetList("PONumber&ItemCode&INCDetId", new string[] { item.ItemCode }, new int[] {item.INCDetId});
                         foreach (var paritem in retpardet)
                         {
                             paritem.TimesUpdated += 15;
@@ -475,7 +495,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 {
                     await notifService.StaticToastNotif("Error", "Something went wrong");
                 }
-
                 try
                 {
                     await Sync();

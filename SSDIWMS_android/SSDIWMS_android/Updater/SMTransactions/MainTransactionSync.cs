@@ -58,7 +58,7 @@ namespace SSDIWMS_android.Updater.SMTransactions
         }
         #endregion
 
-
+         
         /// <summary>
         /// this.params: (you can add annother param here and set the method in called service (usually in Updater > SmTransactions > UpdateAllBatch.dir || Updater > SmTransactions > UpdateAllIncoming.dir  ))
         /// 

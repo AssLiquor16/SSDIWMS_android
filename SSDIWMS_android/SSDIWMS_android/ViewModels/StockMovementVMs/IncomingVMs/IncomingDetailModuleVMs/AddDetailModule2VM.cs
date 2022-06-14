@@ -191,9 +191,22 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             }
                             else
                             {
-                                SearcheddetailList.ReplaceRange(res);
+                                var t = res.GroupBy(l => l.ItemCode).Select(cl => new IncomingDetailModel
+                                {
+                                    INCDetId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCDetId,
+                                    INCHeaderId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCHeaderId,
+                                    ItemCode = cl.Key,
+                                    ItemDesc = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
+                                    Qty = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Qty,
+                                    Cqty = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Cqty,
+                                    UserId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().UserId,
+                                    Amount = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Amount,
+                                    TimesUpdated = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TimesUpdated,
+                                    POHeaderNumber = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().POHeaderNumber,
+                                    DateSync = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().DateSync,
+                                }).ToList();
+                                SearcheddetailList.ReplaceRange(t);
                             }
-                            
                         }
 
                     }

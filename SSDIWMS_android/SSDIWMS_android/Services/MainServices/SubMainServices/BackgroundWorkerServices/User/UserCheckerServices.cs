@@ -43,19 +43,15 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorker
                     var deviceSerial = deviceServices.GetDeviceInfo("Serial").ToUpperInvariant();
                     if(loggedInUserId != 0)
                     {
-                        int[] intarray = { loggedInUserId };
-                        var user = await serverDbUserServices.ReturnModel("Id", null, intarray);
-                        if(user.LoginStatus != deviceSerial)
+                        var user = await serverDbUserServices.ReturnModel("Id", null, new int[] { loggedInUserId });
+                        if(user.LoginStatus != deviceSerial || string.IsNullOrWhiteSpace(user.LoginStatus))
                         {
                             await removePrefServices.RemovePreference();
                             await notifServices.StaticToastNotif("Error", "Admin forced logout this account.");
                             await Task.Delay(3000);
                             System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
                         }
-                        else if(user == null)
-                        {
-                            System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
-                        }
+                        
                     }
                     
                 });
