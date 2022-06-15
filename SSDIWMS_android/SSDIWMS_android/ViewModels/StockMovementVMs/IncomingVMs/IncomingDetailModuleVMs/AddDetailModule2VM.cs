@@ -81,7 +81,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             {
                 if(Preferences.Get("PrefUserId", 0) != 0)
                 {
-                    if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to add the item?", "Yes", "No") == true)
+                    if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to add the item?", "Yes", "No") == true)
                     {
                         var data = new IncomingPartialDetailModel
                         {
@@ -100,8 +100,19 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         };
                         await Dependencies.localDbIncomingParDetailService.Insert("RefIdAutoGenerate", data);
                         await Dependencies.notifService.StaticToastNotif("Success", "Item added.");
-                        MessagingCenter.Send(this, "FromDetailsAddMSG", "AddRefresh");
-                        await Shell.Current.GoToAsync("..");
+                        if (await App.Current.MainPage.DisplayAlert("Alert", "Item added, do you want to add new another item?", "Yes", "No") == true)
+                        {
+                            SearchCode = ".";
+                            await Task.Delay(100);
+                            SearchCode = string.Empty;
+                            SearchEnableBool = false;
+                            await SearchEnable();
+                        }
+                        else
+                        {
+                            MessagingCenter.Send(this, "FromDetailsAddMSG", "AddRefresh");
+                            await Shell.Current.GoToAsync("..");
+                        }
                     }
                 }
                 else
@@ -180,8 +191,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 var iMasterRes = ItemMasterList.Where(x => x.CaseCode == searchCode || x.ItemCode == searchCode).ToList();
                 if (iMasterRes.Count > 0)
                 {
-                    foreach (var iMasterRe in iMasterRes)
-                    {
                         foreach (var iMaster in iMasterRes)
                         {
                             var res = IncomingDetailList.Where(x => x.ItemCode == iMaster.ItemCode).ToList();
@@ -205,11 +214,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                                     POHeaderNumber = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().POHeaderNumber,
                                     DateSync = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().DateSync,
                                 }).ToList();
-                                SearcheddetailList.ReplaceRange(t);
-                            }
+                                SearcheddetailList.Clear();
+                                SearcheddetailList.AddRange(t);
+                        }
                         }
 
-                    }
                     if (SearcheddetailList.Count == 1)
                     {
                         // formview
@@ -230,6 +239,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 else
                 {
                     // item not found in item master
+                    SearcheddetailList.Clear();
                     DecideView("NotFound");
                 }
             }

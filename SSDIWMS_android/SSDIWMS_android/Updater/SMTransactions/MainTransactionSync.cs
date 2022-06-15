@@ -44,7 +44,7 @@ namespace SSDIWMS_android.Updater.SMTransactions
         public async Task UpdateAllTransactions(string transactionTable)
         {
 
-            await dependencies.dateServices.DatetimeValidate();
+            await dependencies.dateServices.DatetimeValidate(); //Services>MainServices>SubMainServices>BackgroundworkerServices>Date>DateverifierServices.cs
             switch (transactionTable)
             {
                 case "Incoming":

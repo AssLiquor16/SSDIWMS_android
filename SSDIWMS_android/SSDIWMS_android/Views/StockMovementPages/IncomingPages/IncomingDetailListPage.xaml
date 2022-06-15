@@ -33,7 +33,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding LiveDate}"/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -42,7 +42,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding UserFullName}"/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -55,9 +55,25 @@
                         <StackLayout HorizontalOptions="CenterAndExpand">
                             <Label Text="{Binding PONumber}" FontSize="Title"/>
                         </StackLayout>
-                        <Frame Padding="5" Margin="5" BackgroundColor="{StaticResource MySecondary}">
-                            <StackLayout BackgroundColor="Transparent">
-                                <Entry TextChanged="Entry_TextChanged" FontSize="Subtitle" Placeholder="Search item"/>
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout Orientation="Horizontal">
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
+                                           TextColor="Gray" FontSize="Title" 
+                                           VerticalOptions="CenterAndExpand" 
+                                           HorizontalOptions="Start">
+                                    </Label>
+                                </StackLayout>
+                                <StackLayout BackgroundColor="Transparent">
+                                    <Entry TextChanged="Entry_TextChanged"
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="Search the code here"
+                                               WidthRequest="280"
+                                               FontAttributes="Bold"/>
+                                </StackLayout>
+
                             </StackLayout>
                         </Frame>
                         <RefreshView IsRefreshing="{Binding IsRefreshing}" 

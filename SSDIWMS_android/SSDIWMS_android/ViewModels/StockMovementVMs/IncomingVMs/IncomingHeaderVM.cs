@@ -13,6 +13,7 @@ using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopu
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages.BatchPopupPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.SummaryPopupModulePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
 
 
         DummyIncomingHeaderModel _selectedHeader;
-        bool _isRefreshing, _genBatchVisible, _summaryBtnVisible, _isShowConsolidation;
+        bool _isRefreshing, _genBatchVisible, _summaryBtnVisible, _isShowConsolidation, _isconsolidationCbox;
         public DummyIncomingHeaderModel SelectedHeader { get => _selectedHeader; set => SetProperty(ref _selectedHeader, value); }
         public bool GenBatchVisible { get => _genBatchVisible; set => SetProperty(ref _genBatchVisible, value); }
+        public bool IsconsolidationCbox { get => _isconsolidationCbox; set => SetProperty(ref _isconsolidationCbox, value); }
         public bool IsRefreshing { get => _isRefreshing; set => SetProperty(ref _isRefreshing, value); }
         public bool SummaryBtnVisible { get => _summaryBtnVisible; set => SetProperty(ref _summaryBtnVisible, value); }
         public ObservableRangeCollection<IncomingHeaderModel> IncomingHeaderList { get; set; }
@@ -50,8 +52,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 if (value == _isShowConsolidation)
                     return;
                 _isShowConsolidation = value;
-                foreach(var a in DummyIncomingHeaderList)
+                foreach(var a in DummyIncomingHeaderList.Where(x=>x.INCstatus == "Finalized").ToList())
                 {
+                    a.IsSelected = false;
                     a.IsConsoLidation = value;
                 }
                 OnPropertyChanged();
@@ -95,7 +98,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             });
         }
         private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());
-        private async Task NavToSummary() => await Shell.Current.GoToAsync($"{nameof(SummaryPage)}");
+        private async Task NavToSummary()
+        {
+            List<string> pos = new List<string>();
+            pos.Clear();
+            foreach(var itm in DummyIncomingHeaderList.Where(x=>x.IsSelected == true).ToList())
+            {
+                pos.Add(itm.PONumber);
+            }
+            await PopupNavigation.Instance.PushAsync(new SummaryPopupSubPage(pos.ToArray()));
+        }
         //await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
         private async Task Tapped()
         {
@@ -114,6 +126,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                         await Shell.Current.GoToAsync(route);
                         break;
                     case "Pick":
+                        IsShowConsolidation = false;
                         if (SelectedHeader.INCstatus == "Finalized")
                         {
                             var route1 = $"{nameof(IncomingDetailListPage)}";
@@ -186,7 +199,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                     pickerContents = pickerContents.Where(x => x.BatchCode == string.Empty || x.BatchCode == null).ToList();
                     IncomingHeaderList.Clear();
                     IncomingHeaderList.AddRange(pickerContents);
-                    foreach(var p in IncomingHeaderList)
+                    DummyIncomingHeaderList.Clear();
+                    foreach (var p in IncomingHeaderList)
                     {
                         DummyIncomingHeaderList.Add(new DummyIncomingHeaderModel
                         {
@@ -202,6 +216,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                             IsSelected = false
                         });
                     }
+                    IsconsolidationCbox = true;
                     GenBatchVisible = true;
                     break;
                 default: break;

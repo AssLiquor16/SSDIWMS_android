@@ -25,7 +25,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding LiveDate}"/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -34,7 +34,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding UserFullName}"/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -62,6 +62,12 @@
 
                                             <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
                                                 FontFamily="FAS" Command="{Binding ArticleMasterUpdateCommand}"
+                                                CornerRadius="5"
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                            
+                                            <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
+                                                FontFamily="FAS" Command="{Binding ArticleMasterUpdateNavCommand}"
                                                 CornerRadius="5"
                                                 WidthRequest="50" 
                                                 HeightRequest="50"/>

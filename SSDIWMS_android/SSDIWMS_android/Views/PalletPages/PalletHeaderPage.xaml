@@ -4,17 +4,23 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
              xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:fontAwsome="clr-namespace:FontAwesome"
-             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels"
-             Title="Settings"
-             x:Class="SSDIWMS_android.Views.SettingPage">
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.PalletVMs"
+             x:Class="SSDIWMS_android.Views.PalletPages.PalletHeaderPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.BindingContext>
-        <viewmodels:SettingVM/>
+        <viewmodels:PalletHeaderVM/>
     </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddPalletHeaderPopupNavCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Plus}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -40,30 +46,11 @@
                         </Label>
                     </StackLayout>
                     <BoxView/>
-                    <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand" Margin="0,2">
-                        <Label Text="Setting" FontSize="Title" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"/>
-
-                        <StackLayout>
-                            <Frame Style="{StaticResource Framegrouping}">
-
-                                <StackLayout Orientation="Horizontal" 
-                                             Margin="0,5"
-                                             VerticalOptions="CenterAndExpand" 
-                                             HorizontalOptions="FillAndExpand">
-                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Bell}" 
-                                           VerticalOptions="CenterAndExpand" 
-                                               FontSize="Subtitle"
-                                           HorizontalOptions="Start"/>
-
-                                    <Label Text="Notification" 
-                                           VerticalOptions="CenterAndExpand" 
-                                               FontSize="Subtitle"
-                                           HorizontalOptions="StartAndExpand"/>
-
-                                    <CheckBox IsChecked="{Binding NotifyIO}" HorizontalOptions="EndAndExpand"/>
-                                </StackLayout>
-                            </Frame>
-                        </StackLayout>
+                    <StackLayout>
+                        <RefreshView>
+                            <CollectionView>
+                            </CollectionView>
+                        </RefreshView>
                     </StackLayout>
                 </StackLayout>
             </Frame>

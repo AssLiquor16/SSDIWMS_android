@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.BatchGeneratePages
+namespace SSDIWMS_android.Views.PalletPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BatchDetailListPage : ContentPage
+    public partial class PalletHeaderPage : ContentPage
     {
-        public BatchDetailListPage()
+        public PalletHeaderPage()
         {
             InitializeComponent();
         }

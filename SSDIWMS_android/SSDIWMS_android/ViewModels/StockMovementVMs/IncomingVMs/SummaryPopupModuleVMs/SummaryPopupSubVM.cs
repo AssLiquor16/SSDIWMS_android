@@ -14,7 +14,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.SummaryPopupMo
     {
         GlobalDependencyServices dependencies { get; } = new GlobalDependencyServices();
         public LiveTime livetime { get; } = new LiveTime();
+        string _totSku;
         string[] _pos;
+        public string TotSku { get => _totSku; set => SetProperty(ref _totSku, value); }
         public string[] POS { get => _pos; set => SetProperty(ref _pos, value); }
         public ObservableRangeCollection<ConsolidationModel> OverallskuList { get; set; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -30,47 +32,45 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.SummaryPopupMo
             foreach(var po in POS)
             {
                 var incDetails = await dependencies.localDbIncomingDetailService.GetList("PONumber2",new string[] {po} , null );
-                var groupedIncDets = incDetails.GroupBy(l => l.ItemCode).Select(cl => new ConsolidationModel
+                foreach(var incdet in incDetails)
                 {
-                    ItemCode = cl.Key,
-                    ItemDesc = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
-                    Qty = cl.Sum(c => c.Qty),
-                    CQty = cl.Sum(c => c.Cqty)
-                }).ToList();
-                OverallskuList.AddRange(groupedIncDets);
+                    OverallskuList.Add(new ConsolidationModel
+                    {
+                        ItemCode = incdet.ItemCode,
+                        ItemDesc = incdet.ItemDesc,
+                        Qty = incdet.Qty,
+                        CQty = incdet.Cqty
+                    });
+                }
             }
-            foreach(var sku in OverallskuList)
+            var conslist = OverallskuList.GroupBy(x => x.ItemCode).Select(xl => new ConsolidationModel
             {
-                if(sku.Qty > sku.CQty)
+                ItemCode = xl.Key,
+                ItemDesc = xl.Where(x=>x.ItemCode == xl.Key).FirstOrDefault().ItemDesc,
+                Qty = xl.Sum(b=>b.Qty),
+                CQty = xl.Sum(c=>c.CQty)
+            }).ToList();
+            foreach(var sku in conslist)
+            {
+                if (sku.Qty > sku.CQty)
                 {
                     sku.QTYStatus = "Short";
                     sku.Color = "Red";
                 }
-                else if(sku.Qty < sku.CQty)
+                else if (sku.Qty < sku.CQty)
                 {
                     sku.QTYStatus = "Over";
                     sku.Color = "Red";
                 }
-                else if(sku.Qty == sku.CQty)
+                else if (sku.Qty == sku.CQty)
                 {
                     sku.QTYStatus = "Ok";
                     sku.Color = "Green";
                 }
             }
-
-/*
-            (l => l.ItemCode).Select(cl => new BatchDetailsModel
-            {
-                BatchId = insertBc.BatchLocalID,
-                BatchCode = insertBc.BatchCode,
-                ItemCode = cl.Key,
-                ItemDesc = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
-                Qty = cl.Sum(c => c.Cqty),
-                DateAdded = DateTime.Now,
-                TimesUpdated = 0,
-                DateSync = DateTime.Now
-            }).ToList();*/
-
+            OverallskuList.Clear();
+            OverallskuList.AddRange(conslist);
+            TotSku = $"{OverallskuList.Count()} Item(s);";
         }
     }
 

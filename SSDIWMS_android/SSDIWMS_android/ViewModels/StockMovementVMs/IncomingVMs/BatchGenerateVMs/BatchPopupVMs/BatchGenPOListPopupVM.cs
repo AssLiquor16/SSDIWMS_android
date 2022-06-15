@@ -46,8 +46,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
 
-        public AsyncCommand ShowListCommand { get; }
-
 
         public BatchGenPOListPopupVM()
         {
@@ -63,7 +61,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
-            ShowListCommand = new AsyncCommand(ShowList);
         }
         public async Task TotalAllSelected()
         {
@@ -192,10 +189,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x => x.IsSelected).Count()}";
         }
         public async Task Close() => await PopupNavigation.Instance.PopAsync(true);
-        private async Task ShowList() 
-        {
-            await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); await Close();
-        }
+       
 
     }
 }

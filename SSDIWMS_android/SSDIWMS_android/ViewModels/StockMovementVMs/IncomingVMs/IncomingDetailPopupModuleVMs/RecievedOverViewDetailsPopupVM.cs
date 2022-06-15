@@ -12,6 +12,7 @@ using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -115,7 +116,20 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
 
             }
             var AllItemInThisPo = await localDbIncomingDetailService.GetList("PONumber", null, null);
-            foreach (var item in AllItemInThisPo)
+            var groupedAllItemInThisPo = AllItemInThisPo.GroupBy(l => l.ItemCode).Select(cl => new IncomingDetailModel
+            {
+                INCDetId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCDetId,
+                INCHeaderId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().INCHeaderId,
+                ItemCode = cl.Key,
+                ItemDesc = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
+                Qty = cl.Sum(x => x.Qty),
+                UserId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().UserId,
+                Amount = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Amount,
+                TimesUpdated = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TimesUpdated,
+                POHeaderNumber = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().POHeaderNumber,
+                DateSync = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().DateSync,
+            }).ToList();
+            foreach (var item in groupedAllItemInThisPo)
             {
                 int[] g = { item.INCDetId };
                 var e = await localDbIncomingParDetailService.GetList("PONumber&INCId", null, g);
@@ -141,7 +155,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 item.Cqty = totalpartialcqty;
                 totalpartialcqty = 0;
             }
-            IncomingDetailList.AddRange(AllItemInThisPo);
+            IncomingDetailList.AddRange(groupedAllItemInThisPo);
             var n = IncomingDetailList.Count;
             TotalPOItems = n + " " + "Items";
 

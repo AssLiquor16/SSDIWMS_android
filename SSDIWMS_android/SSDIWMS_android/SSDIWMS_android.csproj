@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Db\ServerDbServices\SMSTransaction\Pallet\PalletDetails\" />
     <Folder Include="Services\StockMovementServices\" />
   </ItemGroup>
 
@@ -41,6 +42,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Updater\MasterDatas\UpdateAllUserMaster\UserMasterUpdaterPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Updater\MasterDatas\UpdateArticleMaster\ArticleMasterPickUpdaterPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Updater\MasterDatas\UpdateArticleMaster\ArticleMasterUpdaterPopupPage.xaml">
@@ -70,6 +74,15 @@
     <EmbeddedResource Update="Views\MaintenancePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\PalletPages\PalletHeaderPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PalletPages\PalletSubPages\PAddSubPages\PAddItemListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\PalletPages\PalletSubPages\PalletAddSubPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\PopUpPages\FormPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -77,12 +90,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchDetailListPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchHeaderListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\BatchGeneratePages\BatchPopupPages\BatchGenPOListPopupPage.xaml">
@@ -116,9 +123,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\IncomingHeaderPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\SummaryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\SummaryPopupModulePages\SummaryPopupSubPage.xaml">

@@ -26,7 +26,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding LiveDate}"/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -35,7 +35,7 @@
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
                                     <Span Text=" "/>
-                                    <Span Text="{Binding UserFullName}"/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -52,12 +52,12 @@
 
                         <ScrollView>
 
-                            <StackLayout>
+                            <StackLayout  IsVisible="{Binding ProceedEnable}">
+                                
                                 <Frame Style="{StaticResource Framegrouping1}">
                                     <StackLayout Orientation="Horizontal">
                                         <Label Text="Incoming Stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
                                         <Button
-                                            IsEnabled="{Binding ProceedEnable}"
                                             HorizontalOptions="EndAndExpand"
                                             CornerRadius="5" 
                                             WidthRequest="60"
@@ -71,11 +71,11 @@
                                     </StackLayout>
                                 </Frame>
                                 
-                                <Frame Style="{StaticResource Framegrouping1}">
+                                <Frame Style="{StaticResource Framegrouping1}" IsVisible="{Binding CreatePalletBtnVisible}">
                                     <StackLayout Orientation="Horizontal">
-                                        <Label Text="Bad Stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                        <Label Text="Pallet" FontSize="Title" VerticalOptions="CenterAndExpand"/>
                                         <Button
-                                            IsEnabled="{Binding ProceedEnable}"
+                                            Command="{Binding PalletHeaderNavCommand}"
                                             HorizontalOptions="EndAndExpand"
                                             CornerRadius="5" 
                                             WidthRequest="60">
@@ -87,6 +87,7 @@
 
                                     </StackLayout>
                                 </Frame>
+                                
                             </StackLayout>
 
                         </ScrollView>

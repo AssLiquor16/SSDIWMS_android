@@ -107,7 +107,10 @@ namespace SSDIWMS_android.Updater.UpdateArticleMaster
                         ItemCat2 = item.Category,
                         Barcode = item.Barcode,
                         CaseCode = item.Casecode,
-                        Status = item.Status
+                        Status = item.Status,
+                        Category = item.Category,
+                        Division = item.Division,
+                        Assortment_No = item.Assortment_No,
                     };
                     if (localDataCheck == null)
                     {

@@ -17,5 +17,9 @@ namespace SSDIWMS_android.Models.MasterListModel
         public string CaseCode { get; set; }
         public string Status { get; set; }
         public string PalletCode { get; set; }
+        public string Brand { get; set; }
+        public string Category { get; set; }
+        public string Division { get; set; }
+        public string Assortment_No { get; set; }
     }
 }

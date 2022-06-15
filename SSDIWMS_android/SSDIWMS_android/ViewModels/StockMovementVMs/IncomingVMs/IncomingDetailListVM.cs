@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using Rg.Plugins.Popup.Services;
+using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
@@ -28,10 +29,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
         ISMLIncomingPartialDetailServices localDbIncomingParDetailService;
         IUpdateAllIncomingtransaction transactionUpdateService;
         IToastNotifService notifService;
-
-        string _toolbarColor, _role;
+        public LiveTime livetime { get; } = new LiveTime();
+        string _toolbarColor, _role, _pONumber;
         bool _isRefreshing, _addBtnVisbile;
         IncomingPartialDetailModel _selectedDetail;
+        public string PONumber { get => _pONumber; set => SetProperty(ref _pONumber, value); }
         public string Role { get => _role; set => SetProperty(ref _role, value); }
         public string ToolbarColor { get => _toolbarColor; set => SetProperty(ref _toolbarColor, value); }
         public bool AddBtnVisbile { get => _addBtnVisbile; set => SetProperty(ref _addBtnVisbile, value); }
@@ -158,10 +160,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 IncomingParDetailList.Clear();
                 AddBtnVisbile = false;
             }
-            await LiveTimer();
+            await livetime.LiveTimer();
             var userfullname = Preferences.Get("PrefUserFullname", "");
             var name = userfullname.Split(' ');
-            UserFullName = name[0];
             PONumber = Preferences.Get("PrefPONumber", "");
         }
         public async Task ColViewRefresh()
@@ -188,25 +189,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             }
             IsRefreshing = false;
         }
-        static int _datetimeTick = Preferences.Get("PrefDateTimeTick", 20);
-        static string _datetimeFormat = Preferences.Get("PrefDateTimeFormat", "ddd, dd MMM yyy hh:mm tt"), _userFullname, _pONumber;
-        string _liveDate = DateTime.Now.ToString(_datetimeFormat);
-        public string LiveDate { get => _liveDate; set => SetProperty(ref _liveDate, value); }
-        public string UserFullName { get => _userFullname; set => SetProperty(ref _userFullname, value); }
-        public string PONumber { get => _pONumber; set => SetProperty(ref _pONumber, value); }
-        private async Task LiveTimer()
-        {
-            await Task.Delay(1);
-            Device.StartTimer(TimeSpan.FromSeconds(_datetimeTick), () => {
-                Task.Run(async () =>
-                {
-                    await Task.Delay(1);
-                    LiveDate = DateTime.Now.ToString(_datetimeFormat);
-                });
-                return true; //use this to run continuously // false if you want to stop 
-
-            });
-        }
+        
+       
 
 
 

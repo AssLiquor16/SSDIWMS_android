@@ -46,7 +46,7 @@
                     <StackLayout>
                         <Frame>
                             <StackLayout Padding="0,5">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="End" IsVisible="{Binding IsconsolidationCbox}">
                                     <Label Text="Consolidation:" VerticalOptions="Center"  FontSize="Subtitle"/>
                                     <CheckBox IsChecked="{Binding IsShowConsolidation}" HorizontalOptions="Start"/>
                                 </StackLayout>
@@ -79,9 +79,9 @@
 
                                                 <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="50*"/>
-                                                        <ColumnDefinition Width="180*"/>
-                                                        <ColumnDefinition Width="50*"/>
+                                                        <ColumnDefinition Width="40*"/>
+                                                        <ColumnDefinition Width="175*"/>
+                                                        <ColumnDefinition Width="60*"/>
                                                     </Grid.ColumnDefinitions>
 
                                                     <Label Text="Details" FontSize="Small" Grid.Column="1"
@@ -109,24 +109,24 @@
 
                                                         <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50*"/>
-                                                                <ColumnDefinition Width="180*"/>
-                                                                <ColumnDefinition Width="50*"/>
+                                                                <ColumnDefinition Width="40*"/>
+                                                                <ColumnDefinition Width="175*"/>
+                                                                <ColumnDefinition Width="60*"/>
                                                             </Grid.ColumnDefinitions>
                                                             <StackLayout Grid.Column="0" >
                                                                 <StackLayout Orientation="Horizontal">
-                                                                    <CheckBox CheckedChanged="CheckBox_CheckedChanged" IsChecked="{Binding IsSelected}" IsVisible="{Binding IsConsoLidation}" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                                                    <CheckBox  CheckedChanged="CheckBox_CheckedChanged" IsChecked="{Binding IsSelected}" IsVisible="{Binding IsConsoLidation}"/>
                                                                 </StackLayout>
                                                             </StackLayout>
                                                             <StackLayout Grid.Column="1">
                                                                 <Label Text="{Binding PONumber}" FontSize="Subtitle" FontFamily="FAS" FontAttributes="Bold"/>
                                                                 <StackLayout Orientation="Horizontal">
-                                                                    <Label Text="BillDoc:" FontSize="Small"/>
-                                                                    <Label Text="{Binding BillDoc}" FontSize="Small"/>
+                                                                    <Label Text="BillDoc:" FontSize="Micro"/>
+                                                                    <Label Text="{Binding BillDoc}" FontSize="Micro"/>
                                                                 </StackLayout>
                                                                 <StackLayout Orientation="Horizontal">
-                                                                    <Label Text="Ship Code:" FontSize="Small"/>
-                                                                    <Label Text="{Binding ShipCode}" FontSize="Small"/>
+                                                                    <Label Text="Ship Code:" FontSize="Micro"/>
+                                                                    <Label Text="{Binding ShipCode}" FontSize="Micro"/>
                                                                 </StackLayout>
                                                             </StackLayout>
                                                             <StackLayout Orientation="Horizontal"

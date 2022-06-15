@@ -275,8 +275,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                     if (await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
                     {
                         await Recieve();
+                        try
+                        {
+                            await Sync();
+                        }
+                        catch
+                        {
+                            await notifService.StaticToastNotif("Error", "Cannot connect to server");
+                        }
                         MessagingCenter.Send(this, "ColviewRefresh");
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                         await PopupNavigation.Instance.PopAllAsync(true);
                         var route = $"..";
                         await Shell.Current.GoToAsync(route);
@@ -295,8 +303,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
                 try
                 {
-                    await notifService.LoadingProcess("Begin", "Attempting to sync...");
-                    var userId = Preferences.Get("PrefUserId", 0);
+                await notifService.LoadingProcess("Begin", "Attempting to sync...");
+                var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
                         FinalUserId = userId,
@@ -413,8 +421,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
                 try
                 {
-                    await notifService.LoadingProcess("Begin", "Attempting to sync...");
-                    var userId = Preferences.Get("PrefUserId", 0);
+                await notifService.LoadingProcess("Begin", "Attempting to sync...");
+                var userId = Preferences.Get("PrefUserId", 0);
                     IncomingHeaderModel e = new IncomingHeaderModel
                     {
                         RecUserId = userId,
