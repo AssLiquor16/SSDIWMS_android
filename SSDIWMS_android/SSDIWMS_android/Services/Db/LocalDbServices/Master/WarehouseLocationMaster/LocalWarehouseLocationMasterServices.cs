@@ -52,6 +52,9 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMa
                     return await db_.Table<WarehouseLocationModel>().ToListAsync();
                 case "Area":
                     return await db_.Table<WarehouseLocationModel>().Where(x=>x.Area == obj.Area).ToListAsync();
+                case "Warehouse":
+                    var a = await db_.Table<WarehouseLocationModel>().ToListAsync();
+                    return await db_.Table<WarehouseLocationModel>().Where(x => x.Warehouse == obj.Warehouse).ToListAsync();
                 default: return null;
             }
         }
@@ -84,6 +87,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMa
                     updateA.DateCreated = obj.DateCreated;
                     updateA.DateUpdated = obj.DateUpdated;
                     updateA.MultiplePallet = obj.MultiplePallet;
+                    updateA.IsBlockStock = obj.IsBlockStock;
+                    updateA.MaxPallet = obj.MaxPallet;
                     await db_.UpdateAsync(updateA);
                     break;
                 default:break;

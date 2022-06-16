@@ -18,6 +18,8 @@ namespace SSDIWMS_android.Models.MasterListModel
         public string Final_Location { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateUpdated { get; set; }
-        public int MultiplePallet { get; set; }
+        public bool MultiplePallet { get; set; }
+        public bool IsBlockStock { get; set; }
+        public int MaxPallet { get; set; }
     }
 }

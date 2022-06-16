@@ -202,31 +202,33 @@
                                     </CollectionView.Footer>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+                                            <StackLayout Margin="0,0.5">
+                                                <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
 
-                                                <StackLayout BackgroundColor="Transparent">
+                                                    <StackLayout BackgroundColor="Transparent">
 
-                                                    <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="90*"/>
-                                                            <ColumnDefinition Width="160*"/>
-                                                        </Grid.ColumnDefinitions>
+                                                        <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="90*"/>
+                                                                <ColumnDefinition Width="160*"/>
+                                                            </Grid.ColumnDefinitions>
 
-                                                        <StackLayout Grid.Column="0" >
-                                                            <StackLayout>
-                                                                <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                            <StackLayout Grid.Column="0" >
+                                                                <StackLayout>
+                                                                    <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                                </StackLayout>
                                                             </StackLayout>
-                                                        </StackLayout>
-                                                        <StackLayout Grid.Column="1">
-                                                            <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
-                                                        </StackLayout>
+                                                            <StackLayout Grid.Column="1">
+                                                                <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
+                                                            </StackLayout>
 
 
-                                                    </Grid>
+                                                        </Grid>
 
-                                                </StackLayout>
+                                                    </StackLayout>
 
-                                            </Frame>
+                                                </Frame>
+                                            </StackLayout>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>

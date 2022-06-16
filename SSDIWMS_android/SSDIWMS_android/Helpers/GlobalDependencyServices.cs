@@ -1,4 +1,7 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingHeader;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
@@ -17,6 +20,9 @@ namespace SSDIWMS_android.Helpers
 {
     public class GlobalDependencyServices : ViewModelBase
     {
+        public ILocalWarehouseMasterServices localDbWarehouseService { get; }
+        public ILocalWarehouseLocationMasterServices localDbWarehouseLocationService { get; }
+        public ILocalPalletMasterServices localDbPalletMasterService { get; }
         public IServerDeviceServices serverDbDeviceService { get; }
         public IDateVerifierServices dateServices { get; }
         public IToastNotifService notifService { get; }
@@ -34,6 +40,9 @@ namespace SSDIWMS_android.Helpers
             notifService = DependencyService.Get<IToastNotifService>();
             mainService = DependencyService.Get<IMainServices>();
 
+            localDbWarehouseService = DependencyService.Get<ILocalWarehouseMasterServices>();
+            localDbPalletMasterService = DependencyService.Get<ILocalPalletMasterServices>();
+            localDbWarehouseLocationService = DependencyService.Get<ILocalWarehouseLocationMasterServices>();
             localDbArticleMasterService = DependencyService.Get<ILocalArticleMasterServices>();
             localDbIncomingHeaderService = DependencyService.Get<ISMLIncomingHeaderServices>();
             localDbIncomingDetailService = DependencyService.Get<ISMLIncomingDetailServices>();

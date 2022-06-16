@@ -30,21 +30,6 @@
                 <StackLayout Padding="5" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                     <Frame>
                         <StackLayout>
-                            <Frame CornerRadius="10" BackgroundColor="LightGray" Margin="5">
-
-                                <Picker 
-                                        HorizontalOptions="FillAndExpand"
-                                        FontAttributes="Bold"
-                                        Title="Sort by pallet" 
-                                        FontSize="Subtitle"
-                                        BackgroundColor="Transparent"
-                                        Grid.Column="0"
-                                        TitleColor="Gray"
-                                        ItemsSource="{Binding PList}"
-                                        ItemDisplayBinding="{Binding PalletCode}" 
-                                        SelectedItem="{Binding SelectedPallet}"/>
-
-                            </Frame>
                             <CollectionView 
                                         ItemsSource="{Binding FilterPartialList}"
                                         RemainingItemsThreshold="1"
@@ -106,29 +91,31 @@
                                 </CollectionView.Footer>
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
-                                            <StackLayout BackgroundColor="Transparent">
-                                                <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="70*"/>
-                                                        <ColumnDefinition Width="130*"/>
-                                                        <ColumnDefinition Width="30*"/>
-                                                    </Grid.ColumnDefinitions>
+                                        <StackLayout Margin="0,0.5">
+                                            <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+                                                <StackLayout BackgroundColor="Transparent">
+                                                    <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="70*"/>
+                                                            <ColumnDefinition Width="130*"/>
+                                                            <ColumnDefinition Width="30*"/>
+                                                        </Grid.ColumnDefinitions>
 
-                                                    <Label Text="{Binding ItemCode}" Grid.Column="0"/>
-                                                    <StackLayout Grid.Column="1">
-                                                        <Label Text="{Binding ItemDesc}"/>
-                                                        <StackLayout Orientation="Horizontal">
-                                                            <Label Text="Pallet" FontSize="Micro"/>
-                                                            <Label Text="{Binding PalletCode}" FontSize="Micro"/>
+                                                        <Label Text="{Binding ItemCode}" Grid.Column="0"/>
+                                                        <StackLayout Grid.Column="1">
+                                                            <Label Text="{Binding ItemDesc}"/>
+                                                            <StackLayout Orientation="Horizontal">
+                                                                <Label Text="Pallet" FontSize="Micro"/>
+                                                                <Label Text="{Binding PalletCode}" FontSize="Micro"/>
+                                                            </StackLayout>
                                                         </StackLayout>
-                                                    </StackLayout>
-                                                    <Label Text="{Binding PartialCQTY}" Grid.Column="2"/>
+                                                        <Label Text="{Binding PartialCQTY}" Grid.Column="2"/>
 
-                                                </Grid>
+                                                    </Grid>
 
-                                            </StackLayout>
-                                        </Frame>
+                                                </StackLayout>
+                                            </Frame>
+                                        </StackLayout>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>

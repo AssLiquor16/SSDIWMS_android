@@ -9,7 +9,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming.Temp
     {
         string _poNumber,_incStatus, _delCode,_shipcode, _billDoc, _batchCode;
         int _incId,_timesUpdated;
-        bool _isSelected;
+        bool _isSelected, _allowGenBCode;
         public int INCId { get => _incId; set => SetProperty(ref _incId, value); }
         public string PONumber { get => _poNumber; set => SetProperty(ref _poNumber, value); }
         public int TimesUpdated { get => _timesUpdated; set => SetProperty(ref _timesUpdated, value); }
@@ -19,5 +19,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming.Temp
         public string BillDoc { get => _billDoc; set => SetProperty(ref _billDoc, value); }
         public string BatchCode { get => _batchCode; set => SetProperty(ref _batchCode, value); }
         public bool IsSelected { get => _isSelected; set => SetProperty(ref _isSelected, value); }
+        public bool AllowGenBCode { get => _allowGenBCode; set => SetProperty(ref _allowGenBCode, value); }
     }
 }

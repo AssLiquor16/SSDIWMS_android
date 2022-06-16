@@ -19,7 +19,7 @@
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout Padding="15">
                     <StackLayout Orientation="Horizontal">
-                        <Label FontSize="Subtitle">
+                        <Label  FontSize="Subtitle">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
@@ -28,7 +28,7 @@
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
-                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                        <Label FontSize="Subtitle"  HorizontalOptions="EndAndExpand">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
@@ -42,41 +42,40 @@
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <StackLayout VerticalOptions="Fill" HorizontalOptions="Fill">
                             <StackLayout VerticalOptions="FillAndExpand">
-                                <StackLayout Orientation="Horizontal">
-                                    <Frame BackgroundColor="{StaticResource MySecondary}">
-                                        <StackLayout BackgroundColor="Transparent">
+                                <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                    <Frame BackgroundColor="{StaticResource PutiNgaMedyoItom}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="120"
+                                           >
+                                        <StackLayout Orientation="Vertical" Margin="3,2">
                                             <StackLayout Orientation="Horizontal">
-                                                <Entry Text="{Binding PalletCode}" 
-                                               Placeholder="Pallet code"
-                                               PlaceholderColor="Gray"
-                                               FontSize="Small" 
-                                               WidthRequest="147"
-                                               FontAttributes="Bold" 
-                                               IsEnabled="False"/>
-                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" VerticalOptions="Center" FontSize="Subtitle" FontFamily="FAS">
+                                                <Label Text="Information" FontSize="Subtitle"/>
+                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" FontSize="Subtitle">
                                                     <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding PalletCodeNavCommand}" />
+                                                        <TapGestureRecognizer Command="{Binding EditheadersNavCommand}"/>
                                                     </Label.GestureRecognizers>
                                                 </Label>
                                             </StackLayout>
-                                        </StackLayout>
-                                    </Frame>
-                                    <Frame BackgroundColor="{StaticResource MySecondary}">
-                                        <StackLayout BackgroundColor="Transparent">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Entry Text="{Binding WarehouseLocation}" 
-                                               Placeholder="Warehouse Location"
-                                               PlaceholderColor="Gray"
-                                               FontSize="Small" 
-                                               WidthRequest="147"
-                                               FontAttributes="Bold" 
-                                               IsEnabled="False"/>
-                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" VerticalOptions="Center" Margin="0" FontSize="Subtitle" FontFamily="FAS">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding WarehouseLocationNavCommand}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                            </StackLayout>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="5*"/>
+                                                    <ColumnDefinition Width="160*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <StackLayout Grid.Column="0">
+                                                    <Label Text="Pallet Code" TextColor="{StaticResource DisableColor}"/>
+                                                    <Label Text="Warehouse Location" TextColor="{StaticResource DisableColor}"/>
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="1">
+                                                    <Label Text=":" TextColor="{StaticResource DisableColor}"/>
+                                                    <Label Text=":" TextColor="{StaticResource DisableColor}"/>
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="2">
+                                                    <Label Text="{Binding PalletCode}"/>
+                                                    <Label Text="{Binding WarehouseLocation}"/>
+                                                </StackLayout>
+                                            </Grid>
                                         </StackLayout>
                                     </Frame>
                                 </StackLayout>
@@ -105,20 +104,15 @@
                                             <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="90*"/>
-                                                    <ColumnDefinition Width="180*"/>
+                                                    <ColumnDefinition Width="160*"/>
                                                     <ColumnDefinition Width="50*"/>
                                                 </Grid.ColumnDefinitions>
-
                                                 <Label Text="Item Code" FontSize="Small" Grid.Column="0" 
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
                                                 <Label Text="Item Desc" FontSize="Small" Grid.Column="1"
                                                        TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.PlusCircle}" FontSize="Title" Grid.Column="2"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding ItemListNavCommand}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
+                                                <Label Text="Qty" FontSize="Small" Grid.Column="2"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
                                             </Grid>
 
                                         </StackLayout>
@@ -140,18 +134,19 @@
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="90*"/>
                                                             <ColumnDefinition Width="160*"/>
+                                                            <ColumnDefinition Width="50*"/>
                                                         </Grid.ColumnDefinitions>
-
                                                         <StackLayout Grid.Column="0" >
                                                             <StackLayout>
-                                                                <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                                <Label Text="{Binding Item.ItemCode}" FontSize="Small"/>
                                                             </StackLayout>
                                                         </StackLayout>
                                                         <StackLayout Grid.Column="1">
-                                                            <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
+                                                            <Label Text="{Binding Item.ItemDesc}" FontSize="Subtitle"/>
                                                         </StackLayout>
-
-
+                                                        <StackLayout Grid.Column="2">
+                                                            <Label Text="{Binding Qty}" FontSize="Subtitle"/>
+                                                        </StackLayout>
                                                     </Grid>
 
                                                 </StackLayout>
@@ -160,16 +155,25 @@
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
-                                <StackLayout>
-                                    <Button Text="Insert" 
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                    <Button Text="Save" 
                                             CornerRadius="5" 
                                             Padding="30,0"
                                             Command="{Binding AddCommand}"
-                                            WidthRequest="200">
+                                            HorizontalOptions="FillAndExpand"
+                                            >
                                         <Button.ImageSource>
                                             <FontImageSource FontFamily="FAS" 
                                                              Glyph="{x:Static fontAwsome:FontAwesomeIcons.Save}"/>
                                         </Button.ImageSource>
+                                    </Button>
+                                    <Button Text="{x:Static fontAwsome:FontAwesomeIcons.PlusCircle}" 
+                                            CornerRadius="5" 
+                                            Padding="30,0"
+                                            FontFamily="FAS"
+                                            FontSize="Title"
+                                            Command="{Binding ItemListNavCommand}"
+                                            WidthRequest="90">
                                     </Button>
                                 </StackLayout>
                             </StackLayout>

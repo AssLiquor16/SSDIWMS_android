@@ -83,18 +83,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             PageRefreshCommand = new AsyncCommand(PageRefresh);
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefreshRetOnGoing", async (page) =>
             {
-                await ViewChanger();
-                await notifService.LoadingProcess("End");
+                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", false);
+                await PageRefresh();
             });
             MessagingCenter.Subscribe<OverviewDetailPopupVM>(this, "ColviewRefresh", async (page) =>
             {
-                await ViewChanger();
-                await notifService.LoadingProcess("End");
+                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", false);
+                await PageRefresh();
             });
             MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
             {
-                await ViewChanger();
-                await notifService.LoadingProcess("End");
+                Preferences.Set("PrefIncomingHeaderPagepartialRefresh", false);
+                await PageRefresh();
             });
         }
         private async Task GenBactchCodeNav() => await PopupNavigation.Instance.PushAsync(new BatchGenPOListPopupPage());
@@ -108,40 +108,45 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             }
             await PopupNavigation.Instance.PushAsync(new SummaryPopupSubPage(pos.ToArray()));
         }
-        //await Shell.Current.GoToAsync($"{nameof(BatchHeaderListPage)}"); 
         private async Task Tapped()
         {
-            if (SelectedHeader != null)
+            if(IsShowConsolidation == false)
             {
-                var filter = Preferences.Get("PrefUserRole", "");
-                Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
-                Preferences.Set("PrefBillDoc", SelectedHeader.BillDoc);
-                Preferences.Set("PrefCvan", SelectedHeader.CVan);
-                Preferences.Set("PrefShipNo", SelectedHeader.ShipNo);
-                Preferences.Set("PrefShipLine", SelectedHeader.ShipLine);
-                switch (filter)
+                if (SelectedHeader != null)
                 {
-                    case "Check":
-                        var route = $"{nameof(IncomingDetailListPage)}";
-                        await Shell.Current.GoToAsync(route);
-                        break;
-                    case "Pick":
-                        IsShowConsolidation = false;
-                        if (SelectedHeader.INCstatus == "Finalized")
-                        {
-                            var route1 = $"{nameof(IncomingDetailListPage)}";
-                            await Shell.Current.GoToAsync(route1);
-                        }
-                        else
-                        {
-                            await PopupNavigation.Instance.PushAsync(new RecievedOverViewDetailsPopupPage());
-                        }
-                        break;
+                    var filter = Preferences.Get("PrefUserRole", "");
+                    Preferences.Set("PrefPONumber", SelectedHeader.PONumber);
+                    Preferences.Set("PrefBillDoc", SelectedHeader.BillDoc);
+                    Preferences.Set("PrefCvan", SelectedHeader.CVan);
+                    Preferences.Set("PrefShipNo", SelectedHeader.ShipNo);
+                    Preferences.Set("PrefShipLine", SelectedHeader.ShipLine);
+                    switch (filter)
+                    {
+                        case "Check":
+                            var route = $"{nameof(IncomingDetailListPage)}";
+                            await Shell.Current.GoToAsync(route);
+                            break;
+                        case "Pick":
+                            IsShowConsolidation = false;
+                            if (SelectedHeader.INCstatus == "Finalized")
+                            {
+                                var route1 = $"{nameof(IncomingDetailListPage)}";
+                                await Shell.Current.GoToAsync(route1);
+                            }
+                            else
+                            {
+                                await PopupNavigation.Instance.PushAsync(new RecievedOverViewDetailsPopupPage());
+                            }
+                            break;
+                    }
+
                 }
-
-
+                SelectedHeader = null;
             }
-            SelectedHeader = null;
+            else
+            {
+                SelectedHeader = null;
+            }
         }
         private async Task ColViewRefresh()
         {

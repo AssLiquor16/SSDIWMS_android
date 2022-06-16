@@ -46,10 +46,6 @@
                     <StackLayout>
                         <Frame>
                             <StackLayout Padding="0,5">
-                                <StackLayout Orientation="Horizontal" HorizontalOptions="End" IsVisible="{Binding IsconsolidationCbox}">
-                                    <Label Text="Consolidation:" VerticalOptions="Center"  FontSize="Subtitle"/>
-                                    <CheckBox IsChecked="{Binding IsShowConsolidation}" HorizontalOptions="Start"/>
-                                </StackLayout>
                                 <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                                     <CollectionView 
@@ -83,12 +79,23 @@
                                                         <ColumnDefinition Width="175*"/>
                                                         <ColumnDefinition Width="60*"/>
                                                     </Grid.ColumnDefinitions>
-
-                                                    <Label Text="Details" FontSize="Small" Grid.Column="1"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                    <Label Text="Status" FontSize="Small" Grid.Column="2"
-                                                       HorizontalTextAlignment="Start"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}" Margin="-10,0,0,0"/>
+                                                    <StackLayout Grid.Column="0" 
+                                                                 VerticalOptions="Start" 
+                                                                 IsVisible="{Binding IsconsolidationCbox}">
+                                                        <CheckBox IsChecked="{Binding IsShowConsolidation}"/>
+                                                    </StackLayout>
+                                                    <Label Text="Details" 
+                                                           FontSize="Small" 
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="1"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                                    <Label Text="Status" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="2"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           Margin="-10,0,0,0"/>
 
                                                 </Grid>
 
@@ -103,51 +110,62 @@
                                         </CollectionView.Footer>
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+                                                <StackLayout Margin="0,0.5">
+                                                    <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
 
-                                                    <StackLayout BackgroundColor="Transparent">
+                                                        <StackLayout BackgroundColor="Transparent">
 
-                                                        <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="40*"/>
-                                                                <ColumnDefinition Width="175*"/>
-                                                                <ColumnDefinition Width="60*"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <StackLayout Grid.Column="0" >
-                                                                <StackLayout Orientation="Horizontal">
-                                                                    <CheckBox  CheckedChanged="CheckBox_CheckedChanged" IsChecked="{Binding IsSelected}" IsVisible="{Binding IsConsoLidation}"/>
+                                                            <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="40*"/>
+                                                                    <ColumnDefinition Width="175*"/>
+                                                                    <ColumnDefinition Width="60*"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <StackLayout Grid.Column="0" >
+                                                                    <StackLayout Orientation="Horizontal">
+                                                                        <CheckBox  CheckedChanged="CheckBox_CheckedChanged" 
+                                                                                   IsChecked="{Binding IsSelected}" 
+                                                                                   IsVisible="{Binding IsConsoLidation}"/>
+                                                                    </StackLayout>
                                                                 </StackLayout>
-                                                            </StackLayout>
-                                                            <StackLayout Grid.Column="1">
-                                                                <Label Text="{Binding PONumber}" FontSize="Subtitle" FontFamily="FAS" FontAttributes="Bold"/>
-                                                                <StackLayout Orientation="Horizontal">
-                                                                    <Label Text="BillDoc:" FontSize="Micro"/>
-                                                                    <Label Text="{Binding BillDoc}" FontSize="Micro"/>
+                                                                <StackLayout Grid.Column="1">
+                                                                    <Label Text="{Binding PONumber}" 
+                                                                           FontSize="Subtitle" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                                    <StackLayout Orientation="Horizontal">
+                                                                        <Label Text="BillDoc:" 
+                                                                               FontSize="Micro"/>
+                                                                        <Label Text="{Binding BillDoc}" 
+                                                                               FontSize="Micro"/>
+                                                                    </StackLayout>
+                                                                    <StackLayout Orientation="Horizontal">
+                                                                        <Label Text="Ship Code:" 
+                                                                               FontSize="Micro"/>
+                                                                        <Label Text="{Binding ShipCode}" 
+                                                                               FontSize="Micro"/>
+                                                                    </StackLayout>
                                                                 </StackLayout>
-                                                                <StackLayout Orientation="Horizontal">
-                                                                    <Label Text="Ship Code:" FontSize="Micro"/>
-                                                                    <Label Text="{Binding ShipCode}" FontSize="Micro"/>
-                                                                </StackLayout>
-                                                            </StackLayout>
-                                                            <StackLayout Orientation="Horizontal"
+                                                                <StackLayout Orientation="Horizontal"
                                                                          Grid.Column="2">
-                                                                <Label Text="{Binding INCstatus}" 
+                                                                    <Label Text="{Binding INCstatus}" 
                                                                        FontSize="Small" 
                                                                        HorizontalOptions="StartAndExpand"/>
-                                                            </StackLayout>
+                                                                </StackLayout>
 
-                                                        </Grid>
+                                                            </Grid>
 
-                                                    </StackLayout>
+                                                        </StackLayout>
 
-                                                </Frame>
+                                                    </Frame>
+                                                </StackLayout>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </RefreshView>
                                 <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
                                     <Button IsVisible="{Binding GenBatchVisible}"
-                                            Text="Generate Batch Code"
+                                            Text="Batch Code"
                                             HorizontalOptions="FillAndExpand"
                                             CornerRadius="5" 
                                             Command="{Binding GenBactchCodeNavCommand}" >
@@ -161,6 +179,7 @@
                                             HorizontalOptions="FillAndExpand"
                                             CornerRadius="5" 
                                             FontSize="Title"
+                                            WidthRequest="10"
                                             Command="{Binding NavToSummaryCommand}" >
                                     </Button>
                                 </StackLayout>

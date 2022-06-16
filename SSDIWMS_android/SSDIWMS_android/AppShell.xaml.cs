@@ -82,8 +82,7 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(PalletHeaderPage), typeof(PalletHeaderPage));
             Routing.RegisterRoute(nameof(PalletAddSubPage), typeof(PalletAddSubPage));
             Routing.RegisterRoute(nameof(PAddItemListPage), typeof(PAddItemListPage));
-            
-
+            Routing.RegisterRoute(nameof(PAddPalletAndWhListPage), typeof(PAddPalletAndWhListPage));
 
 
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);

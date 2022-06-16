@@ -15,81 +15,113 @@
         <viewmodels:PAddItemListVM/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            
-            <CollectionView
-                                        ItemsSource="{Binding ItemMasterList}"
-                                        SelectionMode="Single"
-                                        RemainingItemsThreshold="1"
-                                        Margin="7,15">
-                <CollectionView.EmptyView>
-                    <StackLayout VerticalOptions="CenterAndExpand" 
-                                                         HorizontalOptions="CenterAndExpand"
-                                                         Padding="0,100"
-                                                         >
-
-                        <Label Text="Nothing to show." 
-                                                       VerticalOptions="CenterAndExpand" 
-                                                       HorizontalOptions="CenterAndExpand" 
-                                                       FontAttributes="Bold"
-                                                       FontSize="Subtitle"/>
-
-                    </StackLayout>
-                </CollectionView.EmptyView>
-                <CollectionView.Header>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
                     <StackLayout>
-
-                        <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="90*"/>
-                                <ColumnDefinition Width="180*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Text="Item Code" FontSize="Small" Grid.Column="0" 
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                            <Label Text="Item Desc" FontSize="Small" Grid.Column="1"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                        </Grid>
-
-                    </StackLayout>
-                </CollectionView.Header>
-                <CollectionView.Footer>
-                    <StackLayout>
-                        <Label Text="Nothing to follow." 
-                                                       HorizontalOptions="CenterAndExpand"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                    </StackLayout>
-                </CollectionView.Footer>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
-
-                            <StackLayout BackgroundColor="Transparent">
-
-                                <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90*"/>
-                                        <ColumnDefinition Width="160*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackLayout Grid.Column="0" >
-                                        <StackLayout>
-                                            <Label Text="{Binding ItemCode}" FontSize="Small"/>
-                                        </StackLayout>
-                                    </StackLayout>
-                                    <StackLayout Grid.Column="1">
-                                        <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
-                                    </StackLayout>
-
-
-                                </Grid>
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                            <StackLayout Orientation="Horizontal">
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
+                                           TextColor="Gray" FontSize="Title" 
+                                           VerticalOptions="CenterAndExpand" 
+                                           HorizontalOptions="Start">
+                                    </Label>
+                                </StackLayout>
+                                <StackLayout BackgroundColor="Transparent">
+                                    <Entry Text="{Binding SearchCode}"
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="Search the code here"
+                                               WidthRequest="280"
+                                               FontAttributes="Bold"/>
+                                </StackLayout>
 
                             </StackLayout>
-
                         </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        <CollectionView
+                                                ItemsSource="{Binding ItemMasterList}"
+                                                SelectionMode="Single"
+                                                SelectedItem="{Binding SelectedItem}"
+                                                SelectionChangedCommand="{Binding TappedCommand}"
+                                                RemainingItemsThreshold="1"
+                                                Margin="7,15">
+                            <CollectionView.EmptyView>
+                                <StackLayout VerticalOptions="CenterAndExpand" 
+                                                                                 HorizontalOptions="CenterAndExpand"
+                                                                                 Padding="0,100"
+                                                                                 >
+
+                                    <Label Text="Nothing to show." 
+                                                                               VerticalOptions="CenterAndExpand" 
+                                                                               HorizontalOptions="CenterAndExpand" 
+                                                                               FontAttributes="Bold"
+                                                                               FontSize="Subtitle"/>
+
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                            <CollectionView.Header>
+                                <StackLayout>
+
+                                    <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90*"/>
+                                            <ColumnDefinition Width="180*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="Item Code" FontSize="Small" Grid.Column="0" 
+                                                                               TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                        <Label Text="Item Desc" FontSize="Small" Grid.Column="1"
+                                                                               TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                    </Grid>
+
+                                </StackLayout>
+                            </CollectionView.Header>
+                            <CollectionView.Footer>
+                                <StackLayout>
+                                    <Label Text="Nothing to follow." 
+                                                                               HorizontalOptions="CenterAndExpand"
+                                                                               TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                </StackLayout>
+                            </CollectionView.Footer>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Margin="0,0.5">
+                                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+                                            <StackLayout BackgroundColor="Transparent">
+
+                                                <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="90*"/>
+                                                        <ColumnDefinition Width="160*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackLayout Grid.Column="0" >
+                                                        <StackLayout>
+                                                            <Label Text="{Binding ItemCode}" FontSize="Small"/>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Column="1">
+                                                        <Label Text="{Binding ItemDesc}" FontSize="Subtitle"/>
+                                                        <StackLayout>
+                                                            <StackLayout Orientation="Horizontal">
+                                                                <Label Text="Case Code:"/>
+                                                                <Label Text="{Binding CaseCode}"/>
+                                                            </StackLayout>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </Grid>
+
+                                            </StackLayout>
+                                        </Frame>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

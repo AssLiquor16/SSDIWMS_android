@@ -41,7 +41,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
 
         public ObservableRangeCollection<SelectedIncomingPartialHeaderModel> PartialModelRecievePOList { get; set; }
         public ObservableRangeCollection<IncomingDetailModel> SKUInAllSelectedPOList { get; set; }
-
+        public AsyncCommand SyncBatchCommand { get; }
         public AsyncCommand GenerateCommand { get; }
         public AsyncCommand ColViewRefreshCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -58,9 +58,26 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             SKUInAllSelectedPOList = new ObservableRangeCollection<IncomingDetailModel>();
             PartialModelRecievePOList = new ObservableRangeCollection<SelectedIncomingPartialHeaderModel>();
             GenerateCommand = new AsyncCommand(Generate);
+            SyncBatchCommand = new AsyncCommand(SyncBatch);
             ColViewRefreshCommand = new AsyncCommand(ColViewRefresh);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
+        }
+        public async Task SyncBatch()
+        {
+            await notifService.LoadingProcess("Begin", "Syncing...");
+            try
+            {
+                await mainTransactionSync.UpdateAllTransactions("Batch");
+                await mainTransactionSync.UpdateSpecificTransactions("IncomingHeader");
+                await notifService.StaticToastNotif("Success", "Batch synced.");
+                await PageRefresh();
+            }
+            catch(Exception ex)
+            {
+                await notifService.StaticToastNotif("Error","Cannot connect to server.");
+            }
+            await notifService.LoadingProcess("End");
         }
         public async Task TotalAllSelected()
         {
@@ -132,15 +149,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     {
                         await mainTransactionSync.UpdateAllTransactions("Batch");
                         await mainTransactionSync.UpdateSpecificTransactions("IncomingHeader");
+                        await notifService.StaticToastNotif("Success", "Batch generated.");
                     }
                     catch(Exception ex)
                     {
                         await notifService.StaticToastNotif("Error", ex.Message);
                     }
-                    MessagingCenter.Send(this, "RefreshIncomingHeaderList");
-                    await Task.Delay(1000);
-                    await Close();
-
+                    await PageRefresh();
+                    await notifService.LoadingProcess("End");
                 }
                 else
                 {
@@ -155,9 +171,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         }
         private async Task ColViewRefresh()
         {
-            IsRefreshing = true;
             await PageRefresh();
-            IsRefreshing = false;
         }
         private async Task PageRefresh()
         {
@@ -168,10 +182,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
             {
                 WarehouseId = Preferences.Get("PrefUserWarehouseAssignedId", 0)
             };
-            var datas = await localDbIncomingHeaderService.GetList("WhId/CurDate/RecievedIncStat", null, null, null, filters);
-            datas = datas.Where(x => x.BatchCode == null).ToList();
+            var datas = await localDbIncomingHeaderService.GetList("WhId/CurDate/RecievedIncStat&FinalizedIncStat", null, null, null, filters);
             foreach (var data in datas)
             {
+                var allowbCodeGen = false;
+                if(data.INCstatus == "Recieved" && data.BatchCode == null)
+                {
+                    allowbCodeGen = true;
+                }
+                else
+                {
+                    allowbCodeGen = false;
+                }
                 var model = new SelectedIncomingPartialHeaderModel
                 {
                     INCId = data.INCId,
@@ -182,10 +204,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     ShipCode = data.ShipCode,
                     BillDoc = data.BillDoc,
                     BatchCode = data.BatchCode,
-                    IsSelected = false
+                    IsSelected = false,
+                    AllowGenBCode = allowbCodeGen
                 };
                 PartialModelRecievePOList.Add(model);
             }
+            PartialModelRecievePOList.OrderBy(x=>x.AllowGenBCode).ToList();
             TotalSelected = $"Total selected Item(s): {PartialModelRecievePOList.Where(x => x.IsSelected).Count()}";
         }
         public async Task Close() => await PopupNavigation.Instance.PopAsync(true);

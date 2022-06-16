@@ -201,6 +201,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                             try
                             {
                                 await Sync();
+                                await notifService.StaticToastNotif("Success", "PO finalized.");
                             }
                             catch
                             {
@@ -278,6 +279,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         try
                         {
                             await Sync();
+                            await notifService.StaticToastNotif("Success", "PO Recieved.");
                         }
                         catch
                         {
@@ -298,6 +300,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await mainServices.RemovePreferences();
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
+            await notifService.LoadingProcess("End");
         }
         private async Task Finalize()
         {
@@ -506,6 +509,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 try
                 {
                     await Sync();
+                    await notifService.StaticToastNotif("Success", "PO returned.");
                 }
                 catch
                 {
@@ -521,6 +525,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             {
 
             }
+            await notifService.LoadingProcess("End");
         }
         private async Task LiveTimer()
         {
@@ -543,13 +548,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 try
                 {
                     await mainTransactionSync.UpdateAllTransactions("Incoming");
-                    await notifService.ToastNotif("Success", "Items updated succesfully.");
                 }
                 catch
                 {
                     await notifService.ToastNotif("Error", "Cannot connect to server.");
                 }
-
                 Preferences.Set("PrefISMSyncing", false);
                 await Task.Delay(500);
                 return;

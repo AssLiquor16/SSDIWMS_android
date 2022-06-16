@@ -19,6 +19,7 @@
             <Color x:Key="BackgroundColor">#f7f7f7</Color>
             <Color x:Key="DisableColor">#b8b8b8</Color>
             <Color x:Key="PriorityColor">#ffdbb3</Color>
+            <Color x:Key="PutiNgaMedyoItom">#ededeb</Color>
 
             <Style TargetType="Button">
                 <Setter Property="FontFamily" Value="FAS"/>
