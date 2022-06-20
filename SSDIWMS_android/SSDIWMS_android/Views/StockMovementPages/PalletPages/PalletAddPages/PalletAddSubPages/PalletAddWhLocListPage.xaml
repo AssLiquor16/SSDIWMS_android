@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:fontAwsome="clr-namespace:FontAwesome" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.PalletAddSubVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages.PalletAddWhLocListPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:PalletAddWhLocListVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                        <StackLayout Orientation="Horizontal">
+                            <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Camera}" 
+                                               TextColor="Gray" FontSize="Title" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Entry Text="{Binding ApiSearchCode}" 
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="Search the code here"
+                                               WidthRequest="225"
+                                               HorizontalOptions="FillAndExpand"
+                                               FontAttributes="Bold"/>
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" FontSize="Title" VerticalOptions="CenterAndExpand">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ApiSearchCommand}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+                    <CollectionView 
+                                        ItemsSource="{Binding WarehouseLocList}"
+                                        SelectionMode="Single"
+                                        x:Name="PalletMasterColView"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                        <CollectionView.EmptyView>
+                            <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.Header>
+                            <StackLayout>
+
+                                <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70*"/>
+                                        <ColumnDefinition Width="200*"/>
+                                        <ColumnDefinition Width="70*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="Code" 
+                                                           FontSize="Small" 
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="0"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                    <Label Text="Description" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="1"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           Margin="-10,0,0,0"/>
+                                    <Label Text="Pallet" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="2"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           />
+
+                                </Grid>
+
+                            </StackLayout>
+                        </CollectionView.Header>
+                        <CollectionView.Footer>
+                            <StackLayout>
+                                <Label Text="Nothing to follow." 
+                                                       HorizontalOptions="CenterAndExpand"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                            </StackLayout>
+                        </CollectionView.Footer>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Margin="0,0.5">
+                                    <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                        <StackLayout BackgroundColor="Transparent">
+
+                                            <Grid Padding="2,5" VerticalOptions="CenterAndExpand">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50*"/>
+                                                    <ColumnDefinition Width="175*"/>
+                                                    <ColumnDefinition Width="50*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Grid.Column="0">
+                                                    <Label Text="{Binding Warehouse}" 
+                                                                           FontSize="Subtitle" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Horizontal" Grid.Column="1">
+                                                    <Label Text="{Binding Final_Location}" 
+                                                                       FontSize="Small" 
+                                                                       HorizontalOptions="StartAndExpand"/>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Horizontal" Grid.Column="2">
+                                                    <Label Text="{Binding MaxPallet}" 
+                                                                       FontSize="Small" 
+                                                                       HorizontalOptions="StartAndExpand"/>
+                                                </StackLayout>
+                                            </Grid>
+
+                                        </StackLayout>
+
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -73,7 +73,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                 await notifService.StaticToastNotif("Success", "Batch synced.");
                 await PageRefresh();
             }
-            catch(Exception ex)
+            catch
             {
                 await notifService.StaticToastNotif("Error","Cannot connect to server.");
             }

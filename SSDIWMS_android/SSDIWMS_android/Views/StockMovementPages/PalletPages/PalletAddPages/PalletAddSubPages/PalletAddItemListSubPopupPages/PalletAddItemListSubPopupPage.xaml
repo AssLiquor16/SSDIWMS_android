@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.PalletAddSubVMs.PalletAddItemListSubPopupVMs"
+                  x:Class="SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages.PalletAddItemListSubPopupPages.PalletAddItemListSubPopupPage">
+    <popup:PopupPage.BindingContext>
+        <viewmodels:PalletAddItemListSubPopupVM/>
+    </popup:PopupPage.BindingContext>
+    <popup:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </popup:PopupPage.Behaviors>
+
+    <Frame HeightRequest="300" 
+           WidthRequest="300" 
+           VerticalOptions="CenterAndExpand" 
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="White"
+           CornerRadius="10"
+           >
+
+        <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand">
+            <StackLayout HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand">
+                <Label Text="Item Details" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
+                <Entry Text="{Binding PassedItem.ItemCode}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" IsEnabled="False"/>
+                <Editor Text="{Binding PassedItem.ItemDesc}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" IsEnabled="False"/>
+                <Entry Text="{Binding Qty}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" Keyboard="Numeric"/>
+                <DatePicker Date="{Binding ExpiryDate}" FontFamily="FAS" FontSize="Subtitle"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Button Text="Add" Command="{Binding AddCommand}" CornerRadius="5" BackgroundColor="Green"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

@@ -4,14 +4,14 @@ using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Services.ServerDbServices.Users;
 using SSDIWMS_android.ViewModels;
 using SSDIWMS_android.ViewModels.PopUpVMs;
-using SSDIWMS_android.Views.PalletPages;
-using SSDIWMS_android.Views.PalletPages.PalletSubPages;
-using SSDIWMS_android.Views.PalletPages.PalletSubPages.PAddSubPages;
 using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
+using SSDIWMS_android.Views.StockMovementPages.PalletPages;
+using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages;
+using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -79,11 +79,13 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
             Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));
-            Routing.RegisterRoute(nameof(PalletHeaderPage), typeof(PalletHeaderPage));
-            Routing.RegisterRoute(nameof(PalletAddSubPage), typeof(PalletAddSubPage));
-            Routing.RegisterRoute(nameof(PAddItemListPage), typeof(PAddItemListPage));
-            Routing.RegisterRoute(nameof(PAddPalletAndWhListPage), typeof(PAddPalletAndWhListPage));
-
+            Routing.RegisterRoute(nameof(PalletHeaderListPage), typeof(PalletHeaderListPage));
+            Routing.RegisterRoute(nameof(PalletAddPage), typeof(PalletAddPage));
+            Routing.RegisterRoute(nameof(PalletAddPalletListPage), typeof(PalletAddPalletListPage));
+            Routing.RegisterRoute(nameof(PalletAddWhLocListPage), typeof(PalletAddWhLocListPage));
+            Routing.RegisterRoute(nameof(PalletAddItemListPage), typeof(PalletAddItemListPage));
+            Routing.RegisterRoute(nameof(PalletDetailsListPage), typeof(PalletDetailsListPage));
+            
 
             Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);

@@ -9,5 +9,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Temp
     {
         public ItemMasterModel Item { get; set; }
         public int Qty { get; set; }
+        public DateTime DateAdded { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
 }

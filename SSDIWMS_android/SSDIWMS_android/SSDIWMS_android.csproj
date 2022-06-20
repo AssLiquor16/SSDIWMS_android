@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Db\ServerDbServices\SMSTransaction\Pallet\PalletDetails\" />
+    <Folder Include="Services\Db\LocalDbServices\SMLTransaction\LStockCard\" />
     <Folder Include="Services\StockMovementServices\" />
   </ItemGroup>
 
@@ -72,18 +72,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MaintenancePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\PalletPages\PalletHeaderPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\PalletPages\PalletSubPages\PAddSubPages\PAddItemListPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\PalletPages\PalletSubPages\PAddSubPages\PAddPalletAndWhListPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\PalletPages\PalletSubPages\PalletAddSubPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\PopUpPages\FormPopupPage.xaml">
@@ -129,6 +117,30 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\SummaryPopupModulePages\SummaryPopupSubPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPages\PalletAddItemListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPages\PalletAddItemListSubPopupPages\PalletAddItemListSubPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPages\PalletAddPalletListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPages\PalletAddWhLocListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPopupPages\PalletAddItemDetailPopupPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletDetailsListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletHeaderListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

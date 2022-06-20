@@ -17,5 +17,8 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Pallet
         public DateTime DateSync { get; set; }
         [PrimaryKey][AutoIncrement]
         public int PHeaderLocalID { get; set; }
+        public string PDetRefId { get; set; }
+        public string PalletCode { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
 }

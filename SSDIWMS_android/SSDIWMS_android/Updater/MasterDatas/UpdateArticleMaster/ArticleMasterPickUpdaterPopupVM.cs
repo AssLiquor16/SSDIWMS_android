@@ -16,7 +16,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateArticleMaster
         }
         private async Task PageRefresh()
         {
-
+            await Task.Delay(1);
         }
     }
 }

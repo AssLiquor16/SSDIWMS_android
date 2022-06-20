@@ -21,6 +21,7 @@ namespace SSDIWMS_android.Services.MainServices.SubMainServices.SetPreferenceSer
             Preferences.Set("PrefTimerLongRandomVal",e);
             Preferences.Remove("PrefINCParDetDateCreated");
             Preferences.Remove("PrefSelectedPallet");
+            Preferences.Remove("PrefPalletAddPageInitialRefresh");
         }
         private async Task<int> SetRandomVal()
         {

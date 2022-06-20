@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:PalletAddVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5">
+                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+                            <Label Text="Information" FontSize="Title"/>
+                            <Frame>
+                                <StackLayout>
+                                    <Frame BackgroundColor="{StaticResource PutiNgaMedyoItom}" Padding="10,0" VerticalOptions="Center">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Pallet Code:" FontSize="Subtitle" VerticalOptions="Center" TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            <Entry Text="{Binding SelectedpalletMaster.PalletCode}" BackgroundColor="Transparent" WidthRequest="200" FontSize="Subtitle" IsEnabled="False"/>
+                                            <Label FontSize="Title" VerticalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding PalletListNavCommand}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </Frame>
+                            <Frame>
+                                <StackLayout>
+                                    <Frame BackgroundColor="{StaticResource PutiNgaMedyoItom}" Padding="10,0" VerticalOptions="Center">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Location     :" FontSize="Subtitle" VerticalOptions="Center" TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            <Entry Text="{Binding SelectedWarehouseLocation.Final_Location}" BackgroundColor="Transparent" WidthRequest="200" FontSize="Subtitle" IsEnabled="False"/>
+                                            <Label FontSize="Title" VerticalOptions="Center" IsVisible="False">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding WarehouseListNavCommand}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
+                                </StackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+                    <CollectionView 
+                                        ItemsSource="{Binding ToBeAddPalletDetailsList}"
+                                        SelectionMode="Single"
+                                        x:Name="PalletMasterColView"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                        <CollectionView.EmptyView>
+                            <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                            </StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.Header>
+                            <StackLayout>
+
+                                <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100*"/>
+                                        <ColumnDefinition Width="200*"/>
+                                        <ColumnDefinition Width="60*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="Item Code" 
+                                                           FontSize="Small" 
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="0"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                    <Label Text="Description" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="1"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           />
+                                    <Label Text="QTY" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="2"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           />
+
+                                </Grid>
+
+                            </StackLayout>
+                        </CollectionView.Header>
+                        <CollectionView.Footer>
+                            <StackLayout>
+                                <Label Text="Nothing to follow." 
+                                                       HorizontalOptions="CenterAndExpand"
+                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                            </StackLayout>
+                        </CollectionView.Footer>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Margin="0,0.5">
+                                    <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                        <StackLayout BackgroundColor="Transparent">
+
+                                            <Grid Padding="5" VerticalOptions="CenterAndExpand">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100*"/>
+                                                    <ColumnDefinition Width="200*"/>
+                                                    <ColumnDefinition Width="60*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <StackLayout Grid.Column="0">
+                                                    <Label Text="{Binding Item.ItemCode}" 
+                                                                           FontSize="Subtitle" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="1">
+                                                    <Label Text="{Binding Item.ItemDesc}" 
+                                                                       FontSize="Small" 
+                                                                       HorizontalOptions="StartAndExpand"/>
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="Expiry Date:" FontSize="Small"/>
+                                                        <Label Text="{Binding ExpiryDate, StringFormat='{0:MM/dd/yy}'}" FontSize="Small" HorizontalOptions="StartAndExpand"/>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                                <StackLayout Grid.Column="2">
+                                                    <Label Text="{Binding Qty}" 
+                                                                       FontSize="Small" 
+                                                                       HorizontalOptions="Center"/>
+                                                </StackLayout>
+                                            </Grid>
+
+                                        </StackLayout>
+
+                                    </Frame>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Button Text="Save" HorizontalOptions="FillAndExpand"
+                                            CornerRadius="5" 
+                                            Command="{Binding SavePalletDetailsCommand}">
+                            <Button.ImageSource>
+                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.Save}"/>
+                            </Button.ImageSource>
+                        </Button>
+                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Plus}" FontSize="Title" HorizontalOptions="End"
+                                            CornerRadius="5" 
+                                            Command="{Binding ItemListNavCommand}"
+                                            WidthRequest="50"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

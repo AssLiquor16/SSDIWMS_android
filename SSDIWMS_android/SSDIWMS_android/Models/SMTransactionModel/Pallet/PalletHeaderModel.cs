@@ -18,5 +18,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Pallet
         [PrimaryKey]
         [AutoIncrement]
         public int PHeaderLocalID { get; set; }
+        public string PHeaderRefID { get; set; }
+        public string Warehouse { get; set; }
     }
 }

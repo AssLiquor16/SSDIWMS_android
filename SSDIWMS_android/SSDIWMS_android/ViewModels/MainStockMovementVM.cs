@@ -1,7 +1,7 @@
 ﻿using MvvmHelpers.Commands;
 using SSDIWMS_android.Helpers;
-using SSDIWMS_android.Views.PalletPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
+using SSDIWMS_android.Views.StockMovementPages.PalletPages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,10 +26,8 @@ namespace SSDIWMS_android.ViewModels
             IncomingNavigationCommand = new AsyncCommand(IncomingNavigation);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-
-        private async Task PalletHeadernav() => await Shell.Current.GoToAsync($"{nameof(PalletHeaderPage)}"); 
-
-
+        
+        private async Task PalletHeadernav() => await Shell.Current.GoToAsync($"{nameof(PalletHeaderListPage)}");
 
         private async Task IncomingNavigation()
         {

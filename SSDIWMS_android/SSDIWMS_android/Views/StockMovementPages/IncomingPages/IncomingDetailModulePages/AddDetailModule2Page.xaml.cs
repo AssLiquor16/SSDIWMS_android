@@ -34,7 +34,7 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailM
                });
                };
                await Navigation.PushAsync(scanPage);
-            }
+        }
 
         
     }
