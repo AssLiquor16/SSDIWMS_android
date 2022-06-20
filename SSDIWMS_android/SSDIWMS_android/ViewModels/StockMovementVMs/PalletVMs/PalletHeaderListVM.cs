@@ -81,8 +81,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs
             }
             await livetime.LiveTimer();
             MainPalletHeaderList.Clear();
-            MainPalletHeaderList.AddRange(await dependencies.localDbPalletHeaderService.GetList());
-            PalletHeaderList.ReplaceRange(MainPalletHeaderList);
         }
     }
 }
