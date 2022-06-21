@@ -93,14 +93,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
                 default:
                     using (client = new HttpClient())
                     {
-
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var json = JsonConvert.SerializeObject(obj);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        var res = await client.PutAsync($"api/incomingHeaders/{obj.PHeadId}", content);
+                        var res = await client.PutAsync($"api/PalletHeaders/{obj.PHeadId}", content);
                         var sult = res.StatusCode.ToString();
                         return null;
                     }

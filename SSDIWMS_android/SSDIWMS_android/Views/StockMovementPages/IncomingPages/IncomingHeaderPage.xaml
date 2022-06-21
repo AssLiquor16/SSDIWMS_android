@@ -16,7 +16,9 @@
     <ContentPage.BindingContext>
         <viewmodels:IncomingHeaderVM/>
     </ContentPage.BindingContext>
-    
+    <TableView>
+        
+    </TableView>
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

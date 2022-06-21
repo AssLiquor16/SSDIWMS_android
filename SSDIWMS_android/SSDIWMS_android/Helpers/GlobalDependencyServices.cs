@@ -1,4 +1,5 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Defaults;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
@@ -8,10 +9,12 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.Pallets;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.Pallets.LPalletDetails;
 using SSDIWMS_android.Services.Db.ServerDbServices.Devices;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPalletDetails;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STPalletMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard.SStockTransferHistories;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehouseLocation;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.Date;
@@ -44,13 +47,17 @@ namespace SSDIWMS_android.Helpers
         public ISTPalletMasterServices serverDbTPalletMasterService { get; }
         public ISTWarehouseLocationServices serverDbTWarehouseLocationService { get; }
         public ISStockCardServices serverDbStockCardService { get; }
-
+        public IServerWarehouseMasterServices serverDbWarehouseService { get; }
+        public IStagingWarehouseLocationServices localDbStagingWarehouseLocationService { get; }
+        public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
         public GlobalDependencyServices()
         {
             serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
             dateServices = DependencyService.Get<IDateVerifierServices>();
             notifService = DependencyService.Get<IToastNotifService>();
             mainService = DependencyService.Get<IMainServices>();
+
+            localDbStagingWarehouseLocationService = DependencyService.Get<IStagingWarehouseLocationServices>();
 
             localDbWarehouseService = DependencyService.Get<ILocalWarehouseMasterServices>();
             localDbPalletMasterService = DependencyService.Get<ILocalPalletMasterServices>();
@@ -66,7 +73,8 @@ namespace SSDIWMS_android.Helpers
             serverDbTPalletMasterService = DependencyService.Get<ISTPalletMasterServices>();
             serverDbTWarehouseLocationService = DependencyService.Get<ISTWarehouseLocationServices>();
             serverDbStockCardService = DependencyService.Get<ISStockCardServices>();
-
+            serverDbWarehouseService = DependencyService.Get<IServerWarehouseMasterServices>();
+            serverDbStockTransferHistoriesService = DependencyService.Get<ISStockTransferHistoriesServices>();
         }
     }
 }

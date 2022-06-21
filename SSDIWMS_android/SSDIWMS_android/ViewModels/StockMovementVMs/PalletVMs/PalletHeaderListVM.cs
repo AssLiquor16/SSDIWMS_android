@@ -68,17 +68,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs
 
         private async Task PageRefresh()
         {
-            var warehouseInitial = await dependencies.localDbWarehouseService.GetFirstOrDefault(new WarehouseModel { WarehouseId = Preferences.Get("PrefUserWarehouseAssignedId", 0) });
-            if(warehouseInitial != null)
-            {
-                Preferences.Set("PrefWarehouseInitial", warehouseInitial.W_LocationInitial);
-                Preferences.Set("PrefWarehouseName", warehouseInitial.W_Location);
-            }
-            else
-            {
-                await App.Current.MainPage.DisplayAlert("Alert", "Missing master files, please update the local database in maintenance.", "Ok");
-                await Shell.Current.GoToAsync($"..");
-            }
             await livetime.LiveTimer();
             MainPalletHeaderList.Clear();
         }

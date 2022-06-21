@@ -231,6 +231,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         try
                         {
                             await Sync();
+                            await notifService.StaticToastNotif("Success", "PO Recieved.");
                         }
                         catch
                         {
@@ -255,6 +256,15 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                         if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to finalize the P.O?", "Yes", "No") == true)
                         {
                             await Recieve();
+                            try
+                            {
+                                await Sync();
+                                await notifService.StaticToastNotif("Success", "PO Recieved.");
+                            }
+                            catch
+                            {
+                                await notifService.StaticToastNotif("Error", "Cannot connect to server");
+                            }
                             MessagingCenter.Send(this, "ColviewRefresh");
                             await Task.Delay(1000);
                             await PopupNavigation.Instance.PopAllAsync(true);

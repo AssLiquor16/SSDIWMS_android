@@ -107,11 +107,21 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                     var sPalletHeader = await dependencies.serverDbPalletHeaderService.GetList(palletHeaderData, "PalletCode");
                                     if (sPalletHeader.Count() == 0)
                                     {
-                                        var retsPHeader = await dependencies.serverDbPalletHeaderService.Insert(palletHeaderData);
+                                        var pheaderId = 0;
+                                        try
+                                        {
+                                            var retsPHeader = await dependencies.serverDbPalletHeaderService.Insert(palletHeaderData);
+                                            pheaderId = retsPHeader.PHeadId;
+                                        }
+                                        catch
+                                        {
+                                            var retlPHeader = await dependencies.localDbPalletHeaderService.Insert(palletHeaderData);
+                                            pheaderId = retlPHeader.PHeadId;
+                                        }
                                         foreach (var initPalletDetail in ToBeAddPalletDetailsList)
                                         {
                                             PalletDetailsModel palletDetailsData = new PalletDetailsModel();
-                                            palletDetailsData.PHeadId = retsPHeader.PHeadId;
+                                            palletDetailsData.PHeadId = pheaderId;
                                             palletDetailsData.PalletCode = palletHeaderData.PalletCode;
                                             palletDetailsData.ItemCode = initPalletDetail.Item.ItemCode;
                                             palletDetailsData.ItemDesc = initPalletDetail.Item.ItemDesc;
@@ -121,54 +131,250 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                             palletDetailsData.DateSync = DateTime.Now;
                                             palletDetailsData.ExpiryDate = initPalletDetail.ExpiryDate;
                                             palletDetailsData.PDetRefId = $"PD{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}";
-                                            var retPDetail = await dependencies.serverDbPalletDetailsService.Insert(palletDetailsData);
 
-                                            var sCardFilter = new StockCardsModel
+                                            var retsPDetail = await dependencies.serverDbPalletDetailsService.Insert(palletDetailsData);
+                                            
+                                            try
                                             {
-                                                ItemCode = palletDetailsData.ItemCode,
-                                                Warehouse_Location = SelectedWarehouseLocation.Final_Location
-                                            };
-                                            var retSCard = await dependencies.serverDbStockCardService.GetList(sCardFilter, "ItemCode/WarehouseLocation");
-                                            if (retSCard.Count() == 0)
-                                            {
-                                                await dependencies.serverDbStockCardService.Insert(new StockCardsModel
+                                                var sCardFilter = new StockCardsModel
                                                 {
-                                                    ItemCode = retPDetail.ItemCode,
-                                                    ItemDesc = retPDetail.ItemDesc,
-                                                    OnStock = retPDetail.Qty,
-                                                    OnCommited = 0,
-                                                    OnBegginning = 0,
-                                                    ItemCategory1 = initPalletDetail.Item.ItemCat1,
-                                                    ItemCategory2 = initPalletDetail.Item.ItemCat2,
-                                                    Brand = initPalletDetail.Item.Brand,
-                                                    Warehouse_Location = SelectedWarehouseLocation.Final_Location,
-                                                    DateCreated = DateTime.Now,
-                                                    TimesUpdated = 0,
-                                                    DateSync = DateTime.Now,
-                                                    Area = SelectedWarehouseLocation.Area,
-                                                    Warehouse = SelectedWarehouseLocation.Warehouse
-                                                });
-                                            }
-                                            else if (retSCard.Count() == 1)
-                                            {
-                                                foreach (var scard in retSCard)
+                                                    ItemCode = palletDetailsData.ItemCode,
+                                                    Warehouse_Location = SelectedWarehouseLocation.Final_Location
+                                                };
+                                                var retSCard = await dependencies.serverDbStockCardService.GetList(sCardFilter, "ItemCode/WarehouseLocation");
+                                                if (retSCard.Count() == 0)
                                                 {
-                                                    scard.OnStock += retPDetail.Qty;
-                                                    await dependencies.serverDbStockCardService.Update(scard);
+                                                    await dependencies.serverDbStockCardService.Insert(new StockCardsModel
+                                                    {
+                                                        ItemCode = retsPDetail.ItemCode,
+                                                        ItemDesc = retsPDetail.ItemDesc,
+                                                        OnStock = retsPDetail.Qty,
+                                                        OnCommited = 0,
+                                                        OnBegginning = 0,
+                                                        ItemCategory1 = initPalletDetail.Item.Category,
+                                                        ItemCategory2 = initPalletDetail.Item.Division,
+                                                        Brand = initPalletDetail.Item.Brand,
+                                                        Warehouse_Location = SelectedWarehouseLocation.Final_Location,
+                                                        DateCreated = DateTime.Now,
+                                                        TimesUpdated = 0,
+                                                        DateSync = DateTime.Now,
+                                                        Area = SelectedWarehouseLocation.Area,
+                                                        Warehouse = SelectedWarehouseLocation.Warehouse
+                                                    });
+                                                }
+                                                else if (retSCard.Count() == 1)
+                                                {
+                                                    foreach (var scard in retSCard)
+                                                    {
+                                                        scard.OnStock += retsPDetail.Qty;
+                                                        await dependencies.serverDbStockCardService.Update(scard);
+                                                    }
                                                 }
                                             }
+                                            catch
+                                            {
+
+                                            }
+
                                         }
-                                        SelectedpalletMaster.PalletStatus = "In-Use";
-                                        await dependencies.serverDbTPalletMasterService.Update(SelectedpalletMaster);
-                                        SelectedWarehouseLocation.MaxPallet++;
-                                        await dependencies.serverDbTWarehouseLocationService.Update(SelectedWarehouseLocation);
-
                                     }
-                                    else
+                                    else if(sPalletHeader.Count() == 1)
                                     {
+                                      foreach(var sPhead in sPalletHeader)
+                                      {
+                                          try
+                                          {
+                                              sPhead.WarehouseLocation = SelectedWarehouseLocation.Final_Location;
+                                              sPhead.Warehouse = Preferences.Get("PrefWarehouseName", string.Empty);
+                                              await dependencies.serverDbPalletHeaderService.Update(sPhead);
+                                          }
+                                          catch
+                                          {
+                                                await dependencies.localDbPalletHeaderService.Update(sPhead);
+                                          }
+                                            foreach(var initPalletDetail in ToBeAddPalletDetailsList)
+                                            {
+                                                PalletDetailsModel palletDetailsData = new PalletDetailsModel();
+                                                palletDetailsData.PHeadId = sPhead.PHeadId;
+                                                palletDetailsData.PalletCode = palletHeaderData.PalletCode;
+                                                palletDetailsData.ItemCode = initPalletDetail.Item.ItemCode;
+                                                palletDetailsData.ItemDesc = initPalletDetail.Item.ItemDesc;
+                                                palletDetailsData.Qty = initPalletDetail.Qty;
+                                                palletDetailsData.DateCreated = DateTime.Now;
+                                                palletDetailsData.TimesUpdated = 0;
+                                                palletDetailsData.DateSync = DateTime.Now;
+                                                palletDetailsData.ExpiryDate = initPalletDetail.ExpiryDate;
+                                                palletDetailsData.PDetRefId = $"PD{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}";
 
+                                                var i = new PalletDetailsModel
+                                                {
+                                                    PalletCode = sPhead.PalletCode,
+                                                    ItemCode = initPalletDetail.Item.ItemCode
+                                                };
+                                                var spdetails = await dependencies.serverDbPalletDetailsService.GetList(i, "PalletCode/ItemCode");
+                                                if(spdetails.Count() == 0)
+                                                {
+                                                    var retPdDetail = await dependencies.serverDbPalletDetailsService.Insert(palletDetailsData);
+                                                    var sCardFilter = new StockCardsModel
+                                                    {
+                                                        ItemCode = palletDetailsData.ItemCode,
+                                                        Warehouse_Location = SelectedWarehouseLocation.Final_Location
+                                                    };
+                                                    var retSCard = await dependencies.serverDbStockCardService.GetList(sCardFilter, "" +
+                                                        "ItemCode/WarehouseLocation");
+                                                    if (retSCard.Count() == 0)
+                                                    {
+                                                        await dependencies.serverDbStockCardService.Insert(new StockCardsModel
+                                                        {
+                                                            ItemCode = retPdDetail.ItemCode,
+                                                            ItemDesc = retPdDetail.ItemDesc,
+                                                            OnStock = retPdDetail.Qty,
+                                                            OnCommited = 0,
+                                                            OnBegginning = 0,
+                                                            ItemCategory1 = initPalletDetail.Item.Category,
+                                                            ItemCategory2 = initPalletDetail.Item.Division,
+                                                            Brand = initPalletDetail.Item.Brand,
+                                                            Warehouse_Location = SelectedWarehouseLocation.Final_Location,
+                                                            DateCreated = DateTime.Now,
+                                                            TimesUpdated = 0,
+                                                            DateSync = DateTime.Now,
+                                                            Area = SelectedWarehouseLocation.Area,
+                                                            Warehouse = SelectedWarehouseLocation.Warehouse
+                                                        });
+
+                                                        await dependencies.serverDbStockTransferHistoriesService.Insert(new StockTransferHistoryModel
+                                                        {
+                                                            ItemCode = retPdDetail.ItemCode,
+                                                            ItemDesc = retPdDetail.ItemDesc,
+                                                            PalletCode = retPdDetail.PalletCode,
+                                                            TransferType = "Pallet to Location",
+                                                            TransactionType = "New-Stocks",
+                                                            FromLocation = SelectedWarehouseLocation.Final_Location,
+                                                            ToLocation = SelectedWarehouseLocation.Final_Location,
+                                                            DateTransact = DateTime.Now,
+                                                            UserId = Preferences.Get("PrefUserId", 0),
+                                                            TimesUpdated = 0,
+                                                            DateSync = DateTime.Now,
+                                                            StockTransferLocalId = $"STH{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}",
+                                                            Area = Preferences.Get("PrefWarehouseName", string.Empty),
+                                                            Warehouse = SelectedWarehouseLocation.Warehouse
+                                                        });
+                                                    }
+                                                    else if (retSCard.Count() == 1)
+                                                    {
+                                                        foreach (var scard in retSCard)
+                                                        {
+                                                            scard.OnStock += retPdDetail.Qty;
+                                                            await dependencies.serverDbStockCardService.Update(scard);
+                                                            await dependencies.serverDbStockTransferHistoriesService.Insert(new StockTransferHistoryModel
+                                                            {
+                                                                ItemCode = scard.ItemCode,
+                                                                ItemDesc = scard.ItemDesc,
+                                                                PalletCode = retPdDetail.PalletCode,
+                                                                TransferType = "Pallet to Location",
+                                                                TransactionType = "New-Stocks",
+                                                                FromLocation = SelectedWarehouseLocation.Final_Location,
+                                                                ToLocation = SelectedWarehouseLocation.Final_Location,
+                                                                DateTransact = DateTime.Now,
+                                                                UserId = Preferences.Get("PrefUserId", 0),
+                                                                TimesUpdated = 0,
+                                                                DateSync = DateTime.Now,
+                                                                StockTransferLocalId = $"STH{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}",
+                                                                Area = Preferences.Get("PrefWarehouseName", string.Empty),
+                                                                Warehouse = SelectedWarehouseLocation.Warehouse
+                                                            });
+                                                        }
+                                                    }
+                                                }
+                                                else if(spdetails.Count() == 1)
+                                                {
+                                                    foreach(var sp in spdetails)
+                                                    {
+                                                        sp.TimesUpdated++;
+                                                        sp.Qty += palletDetailsData.Qty;
+                                                        sp.DateSync = DateTime.Now;
+                                                        sp.ExpiryDate = palletDetailsData.ExpiryDate;
+                                                        await dependencies.serverDbPalletDetailsService.Update(sp);
+
+                                                        var sCardFilter = new StockCardsModel
+                                                        {
+                                                            ItemCode = sp.ItemCode,
+                                                            Warehouse_Location = SelectedWarehouseLocation.Final_Location
+                                                        };
+                                                        var retSCard = await dependencies.serverDbStockCardService.GetList(sCardFilter, "" +
+                                                            "ItemCode/WarehouseLocation");
+                                                        if (retSCard.Count() == 0)
+                                                        {
+                                                            await dependencies.serverDbStockCardService.Insert(new StockCardsModel
+                                                            {
+                                                                ItemCode = sp.ItemCode,
+                                                                ItemDesc = sp.ItemDesc,
+                                                                OnStock = sp.Qty,
+                                                                OnCommited = 0,
+                                                                OnBegginning = 0,
+                                                                ItemCategory1 = initPalletDetail.Item.Category,
+                                                                ItemCategory2 = initPalletDetail.Item.Division,
+                                                                Brand = initPalletDetail.Item.Brand,
+                                                                Warehouse_Location = SelectedWarehouseLocation.Final_Location,
+                                                                DateCreated = DateTime.Now,
+                                                                TimesUpdated = 0,
+                                                                DateSync = DateTime.Now,
+                                                                Area = SelectedWarehouseLocation.Area,
+                                                                Warehouse = SelectedWarehouseLocation.Warehouse
+                                                            });
+
+                                                            await dependencies.serverDbStockTransferHistoriesService.Insert(new StockTransferHistoryModel
+                                                            {
+                                                                ItemCode = sp.ItemCode,
+                                                                ItemDesc = sp.ItemDesc,
+                                                                PalletCode = sp.PalletCode,
+                                                                TransferType = "Pallet to Location",
+                                                                TransactionType = "New-Stocks",
+                                                                FromLocation = SelectedWarehouseLocation.Final_Location,
+                                                                ToLocation = SelectedWarehouseLocation.Final_Location,
+                                                                DateTransact = DateTime.Now,
+                                                                UserId = Preferences.Get("PrefUserId", 0),
+                                                                TimesUpdated = 0,
+                                                                DateSync = DateTime.Now,
+                                                                StockTransferLocalId = $"STH{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}",
+                                                                Area = Preferences.Get("PrefWarehouseName", string.Empty),
+                                                                Warehouse = SelectedWarehouseLocation.Warehouse
+                                                            });
+                                                        }
+                                                        else if (retSCard.Count() == 1)
+                                                        {
+                                                            foreach (var scard in retSCard)
+                                                            {
+                                                                scard.OnStock += sp.Qty;
+                                                                await dependencies.serverDbStockCardService.Update(scard);
+
+                                                                await dependencies.serverDbStockTransferHistoriesService.Insert(new StockTransferHistoryModel
+                                                                {
+                                                                    ItemCode = scard.ItemCode,
+                                                                    ItemDesc = scard.ItemDesc,
+                                                                    PalletCode = sp.PalletCode,
+                                                                    TransferType = "Pallet to Location",
+                                                                    TransactionType = "New-Stocks",
+                                                                    FromLocation = SelectedWarehouseLocation.Final_Location,
+                                                                    ToLocation = SelectedWarehouseLocation.Final_Location,
+                                                                    DateTransact = DateTime.Now,
+                                                                    UserId = Preferences.Get("PrefUserId", 0),
+                                                                    TimesUpdated = 0,
+                                                                    DateSync = DateTime.Now,
+                                                                    StockTransferLocalId = $"STH{RandomString()}{DateTime.Now.ToString("MddyyHHmmssff")}",
+                                                                    Area = Preferences.Get("PrefWarehouseName", string.Empty),
+                                                                    Warehouse = SelectedWarehouseLocation.Warehouse
+                                                                });
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                
+
+                                            }
+                                        }
                                     }
-
+                                    await dependencies.notifService.StaticToastNotif("Success", "Pallet Header added succesfully.");
                                 }
                                 catch
                                 {
@@ -223,33 +429,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        private async Task PageRefresh()
-        {
-            await Task.Delay(100);
-            await dependencies.notifService.LoadingProcess("Begin", "Loading...");
-            try
-            {
-                if (Preferences.Get("PrefPalletAddPageInitialRefresh", false) == false)
-                {
-                    var whFilter = new WarehouseLocationModel
-                    {
-                        Warehouse = Preferences.Get("PrefWarehouseInitial", string.Empty),
-                        Final_Location = "STAGE"
-
-                    };
-                    var e = await dependencies.serverDbTWarehouseLocationService.GetList(whFilter, "Final_Loc/Warehouse");
-                    SelectedWarehouseLocation = e.FirstOrDefault();
-                    ToBeAddPalletDetailsList.Clear();
-                    Preferences.Set("PrefPalletAddPageInitialRefresh", true);
-                }
-            }
-            catch
-            {
-                await App.Current.MainPage.DisplayAlert("Alert", "Cannot query the location, please try again.", "Ok");
-                await Shell.Current.GoToAsync($"..");
-            }
-            await dependencies.notifService.LoadingProcess("End");
-        }
+        
         private void AddToList(ItemWithQtyModel obj)
         {
             ToBeAddPalletDetailsList.Add(obj);
@@ -268,5 +448,49 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
             ToBeAddPalletDetailsList.Remove(SelectedItem);
         }
 
+        private async Task PageRefresh()
+        {
+            await Task.Delay(100);
+            await dependencies.notifService.LoadingProcess("Begin", "Loading...");
+            try
+            {
+                if (Preferences.Get("PrefPalletAddPageInitialRefresh", false) == false)
+                {
+                    var stagingloc = await dependencies.localDbStagingWarehouseLocationService.GetFirstOrDefault();
+                    SelectedWarehouseLocation = new WarehouseLocationModel
+                    {
+                        LocId = stagingloc.LocId,
+                        Warehouse = stagingloc.Warehouse,
+                        Area = stagingloc.Area,
+                        Rack = stagingloc.Rack,
+                        Level = stagingloc.Level,
+                        Bin = stagingloc.Bin,
+                        UOM = stagingloc.UOM,
+                        Final_Location = stagingloc.Final_Location,
+                        DateCreated = stagingloc.DateCreated,
+                        DateUpdated = stagingloc.DateUpdated,
+                        MultiplePallet = stagingloc.MultiplePallet,
+                        IsBlockStock = stagingloc.IsBlockStock,
+                        MaxPallet = stagingloc.MaxPallet
+                    };
+                    ToBeAddPalletDetailsList.Clear();
+                    Preferences.Set("PrefPalletAddPageInitialRefresh", true);
+                }
+            }
+            catch
+            {
+                await App.Current.MainPage.DisplayAlert("Alert", "Cannot query the location, please try again.", "Ok");
+                await Shell.Current.GoToAsync($"..");
+            }
+            await dependencies.notifService.LoadingProcess("End");
+        }
     }
 }
+
+
+/*
+ * SelectedpalletMaster.PalletStatus = "In-Use";
+                                      await dependencies.serverDbTPalletMasterService.Update(SelectedpalletMaster);
+                                      SelectedWarehouseLocation.MaxPallet++;
+                                      await dependencies.serverDbTWarehouseLocationService.Update(SelectedWarehouseLocation);
+ */

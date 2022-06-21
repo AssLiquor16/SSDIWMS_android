@@ -93,8 +93,6 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             await UpdateUserMaster();
             await UpdateSiteMaster();
             await UpdateArticleMaster();
-            await UpdatePalletMaster();
-            await UpdateWarehouseLocationMaster();
             await UpdateWarehouseMaster();
             await PopupNavigation.Instance.PopAsync(true);
         }
@@ -166,7 +164,10 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                         ItemCat2 = item.Category,
                         Barcode = item.Barcode,
                         CaseCode = item.Casecode,
-                        Status = item.Status
+                        Status = item.Status,
+                        Brand = item.Brand,
+                        Category = item.Category,
+                        Division = item.Division,
                     };
                     if (localDataCheck == null)
                     {
@@ -182,39 +183,6 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     await Task.Delay(50);
                 }
                 await notifService.ToastNotif("Success", "Article master downloaded succesfully.");
-            }
-            catch
-            {
-                await notifService.ToastNotif("Error", ErrorText);
-            }
-        }
-        private async Task UpdatePalletMaster()
-        {
-            try
-            {
-                PalletMasterList.Clear();
-                var retdata = await serverDbPalletMasterService.GetList("All", null, null);
-                PalletMasterList.AddRange(retdata);
-                decimal totcount = PalletMasterList.Count;
-                decimal foreachcount = 0;
-                foreach (var item in retdata)
-                {
-                    int[] intfilterarray = { item.PId };
-                    var localDataCheck = await localDbPalletMasterService.GetModel("PId", null, intfilterarray);
-                    if (localDataCheck == null)
-                    {
-                        await localDbPalletMasterService.Insert("Common", item);
-                    }
-                    else
-                    {
-                        await localDbPalletMasterService.Update("Common", item);
-                    }
-                    foreachcount++;
-                    decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await percalc.GetPercentage("Users", decArray);
-                    await Task.Delay(50);
-                }
-                await notifService.ToastNotif("Success", "Pallet master downloaded succesfully.");
             }
             catch
             {
@@ -247,43 +215,6 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     await Task.Delay(50);
                 }
                 await notifService.ToastNotif("Success", "Sites master downloaded succesfully.");
-
-            }
-            catch
-            {
-                await notifService.StaticToastNotif("Error", ErrorText);
-            }
-        }
-        private async Task UpdateWarehouseLocationMaster()
-        {
-            try
-            {
-                WarehouseLocationList.Clear();
-                var retdata = await serverDbWarehouseLocationMasterService.GetList();
-                WarehouseLocationList.AddRange(retdata);
-                decimal totcount = WarehouseLocationList.Count;
-                decimal foreachcount = 0;
-                foreach (var item in retdata)
-                {
-                    var filter = new WarehouseLocationModel
-                    {
-                        LocId = item.LocId
-                    };
-                    var localDataCheck = await localDbWarehouseLocationMasterMasterService.GetFirstOrDefault(filter);
-                    if (localDataCheck == null)
-                    {
-                        await localDbWarehouseLocationMasterMasterService.Insert(item);
-                    }
-                    else
-                    {
-                        await localDbWarehouseLocationMasterMasterService.Update(item);
-                    }
-                    foreachcount++;
-                    decimal[] decArray = { foreachcount, totcount };
-                    LoadingText = await percalc.GetPercentage("WarehouseLocation", decArray);
-                    await Task.Delay(50);
-                }
-                await notifService.ToastNotif("Success", "WarehouseLocation master downloaded succesfully.");
 
             }
             catch
@@ -330,3 +261,75 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         }
     }
 }
+#region 
+/*private async Task UpdatePalletMaster()
+{
+    try
+    {
+        PalletMasterList.Clear();
+        var retdata = await serverDbPalletMasterService.GetList("All", null, null);
+        PalletMasterList.AddRange(retdata);
+        decimal totcount = PalletMasterList.Count;
+        decimal foreachcount = 0;
+        foreach (var item in retdata)
+        {
+            int[] intfilterarray = { item.PId };
+            var localDataCheck = await localDbPalletMasterService.GetModel("PId", null, intfilterarray);
+            if (localDataCheck == null)
+            {
+                await localDbPalletMasterService.Insert("Common", item);
+            }
+            else
+            {
+                await localDbPalletMasterService.Update("Common", item);
+            }
+            foreachcount++;
+            decimal[] decArray = { foreachcount, totcount };
+            LoadingText = await percalc.GetPercentage("Users", decArray);
+            await Task.Delay(50);
+        }
+        await notifService.ToastNotif("Success", "Pallet master downloaded succesfully.");
+    }
+    catch
+    {
+        await notifService.ToastNotif("Error", ErrorText);
+    }
+}
+private async Task UpdateWarehouseLocationMaster()
+{
+    try
+    {
+        WarehouseLocationList.Clear();
+        var retdata = await serverDbWarehouseLocationMasterService.GetList();
+        WarehouseLocationList.AddRange(retdata);
+        decimal totcount = WarehouseLocationList.Count;
+        decimal foreachcount = 0;
+        foreach (var item in retdata)
+        {
+            var filter = new WarehouseLocationModel
+            {
+                LocId = item.LocId
+            };
+            var localDataCheck = await localDbWarehouseLocationMasterMasterService.GetFirstOrDefault(filter);
+            if (localDataCheck == null)
+            {
+                await localDbWarehouseLocationMasterMasterService.Insert(item);
+            }
+            else
+            {
+                await localDbWarehouseLocationMasterMasterService.Update(item);
+            }
+            foreachcount++;
+            decimal[] decArray = { foreachcount, totcount };
+            LoadingText = await percalc.GetPercentage("WarehouseLocation", decArray);
+            await Task.Delay(50);
+        }
+        await notifService.ToastNotif("Success", "WarehouseLocation master downloaded succesfully.");
+
+    }
+    catch
+    {
+        await notifService.StaticToastNotif("Error", ErrorText);
+    }
+}*/
+#endregion
