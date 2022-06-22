@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Views.StockMovementPages.PalletPages
+namespace SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletPopupPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PalletDetailsListPage : ContentPage
+    public partial class PalletDetailsListPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
-        public PalletDetailsListPage()
+        public PalletDetailsListPopupPage()
         {
             InitializeComponent();
         }

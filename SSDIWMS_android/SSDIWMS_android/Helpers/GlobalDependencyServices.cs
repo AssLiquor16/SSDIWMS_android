@@ -16,6 +16,7 @@ using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STPalle
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard.SStockTransferHistories;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehouseLocation;
+using SSDIWMS_android.Services.DeviceServices;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.Date;
 using SSDIWMS_android.Services.NotificationServices;
@@ -29,6 +30,7 @@ namespace SSDIWMS_android.Helpers
 {
     public class GlobalDependencyServices : ViewModelBase
     {
+        public IDroidDeviceServices droidService { get; }
         public ILocalWarehouseMasterServices localDbWarehouseService { get; }
         public ILocalWarehouseLocationMasterServices localDbWarehouseLocationService { get; }
         public ILocalPalletMasterServices localDbPalletMasterService { get; }
@@ -52,6 +54,7 @@ namespace SSDIWMS_android.Helpers
         public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
         public GlobalDependencyServices()
         {
+            droidService = DependencyService.Get<IDroidDeviceServices>();
             serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
             dateServices = DependencyService.Get<IDateVerifierServices>();
             notifService = DependencyService.Get<IToastNotifService>();
@@ -75,6 +78,7 @@ namespace SSDIWMS_android.Helpers
             serverDbStockCardService = DependencyService.Get<ISStockCardServices>();
             serverDbWarehouseService = DependencyService.Get<IServerWarehouseMasterServices>();
             serverDbStockTransferHistoriesService = DependencyService.Get<ISStockTransferHistoriesServices>();
+
         }
     }
 }

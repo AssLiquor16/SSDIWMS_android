@@ -54,7 +54,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         var json = JsonConvert.SerializeObject(obj);
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
-                        var r = await client.PostAsync("api/StockTransferHisotories/", content);
+                        var r = await client.PostAsync("api/StockTransferHistories/", content);
                         var ret = r.Content.ReadAsStringAsync().Result;
                         var res = r.StatusCode.ToString();
                         var caseDefault = JsonConvert.DeserializeObject<StockTransferHistoryModel>(ret);

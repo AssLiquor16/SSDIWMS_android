@@ -48,10 +48,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
         }
         private async Task ApiSearch()
         {
-            await dependencies.notifService.LoadingProcess("Begin", "Searching...");
-            var val = ApiSearchCode.ToUpperInvariant();
-            if (!string.IsNullOrWhiteSpace(val))
+            if (!string.IsNullOrWhiteSpace(ApiSearchCode))
             {
+                var val = ApiSearchCode.ToUpperInvariant();
+                await dependencies.notifService.LoadingProcess("Begin", "Searching...");
                 try
                 {
                     PalletMasterList.Clear();
@@ -61,12 +61,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
                 {
                     await dependencies.notifService.StaticToastNotif("Error", "Cannot connect to server");
                 }
+                await dependencies.notifService.LoadingProcess("End");
             }
             else
             {
                 PalletMasterList.Clear();
             }
-            await dependencies.notifService.LoadingProcess("End");
         }
         private async Task Tapped()
         {

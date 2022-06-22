@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
               xmlns:fontAwsome="clr-namespace:FontAwesome" 
+             Title="Pallet Track"
              xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs"
              x:Class="SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletHeaderListPage">
     <d:ContentPage.Behaviors>

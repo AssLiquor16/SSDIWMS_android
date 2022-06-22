@@ -44,7 +44,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = await client.GetStringAsync($"api/PalletDetails");
+                        var json = await client.GetStringAsync($"api/PalletDetails/SearchPallet/{obj.PalletCode}");
                         var caseA = JsonConvert.DeserializeObject<IEnumerable<PalletDetailsModel>>(json);
                         return caseA;
                     }

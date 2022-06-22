@@ -24,5 +24,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.StockCard
         public string StockTransferLocalId { get; set; }
         public string Area { get; set; }
         public string Warehouse { get; set; }
+        public int Qty { get; set; }
+        public string Remarks { get; set; }
     }
 }

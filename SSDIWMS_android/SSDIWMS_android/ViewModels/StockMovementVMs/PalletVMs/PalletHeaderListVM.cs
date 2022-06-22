@@ -1,10 +1,12 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
+using Rg.Plugins.Popup.Services;
 using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Models.SMTransactionModel.Pallet;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages;
+using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletPopupPages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,23 +42,28 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs
         private async Task ApiSearch()
         {
             var val = ApiSearchCode.ToUpperInvariant();
-            await dependencies.notifService.LoadingProcess("Begin", "Searching...");
-            try
+            if (!string.IsNullOrWhiteSpace(val))
             {
-                PalletHeaderList.ReplaceRange(await dependencies.serverDbPalletHeaderService.GetList(new PalletHeaderModel { PalletCode = val }, "PalletCode"));
+                await dependencies.notifService.LoadingProcess("Begin", "Searching...");
+                try
+                {
+
+                    PalletHeaderList.ReplaceRange(await dependencies.serverDbPalletHeaderService.GetList(new PalletHeaderModel { PalletCode = val }, "PalletCode"));
+                }
+                catch
+                {
+                    await dependencies.notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+                await dependencies.notifService.LoadingProcess("End");
             }
-            catch
-            {
-                await dependencies.notifService.StaticToastNotif("Error", "Cannot connect to server.");
-            }
-            await dependencies.notifService.LoadingProcess("End");
+            
         }
         private async Task Tapped()
         {
             if(SelectedItem != null)
             {
                 Preferences.Set("PrefSelectedPalletHeader", SelectedItem.PalletCode);
-                await Shell.Current.GoToAsync($"{nameof(PalletDetailsListPage)}");
+                await PopupNavigation.Instance.PushAsync(new PalletDetailsListPopupPage());
                 SelectedItem = null;
             }
         }
@@ -69,7 +76,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs
         private async Task PageRefresh()
         {
             await livetime.LiveTimer();
+            ApiSearchCode = string.Empty;
             MainPalletHeaderList.Clear();
+            PalletHeaderList.Clear();
         }
     }
 }

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	<LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -137,10 +138,10 @@
     <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletAddPages\PalletAddSubPopupPages\PalletAddItemDetailPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletDetailsListPage.xaml">
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletHeaderListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletHeaderListPage.xaml">
+    <EmbeddedResource Update="Views\StockMovementPages\PalletPages\PalletPopupPages\PalletDetailsListPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

@@ -78,6 +78,8 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
         }
     }
 }
+
+#region Comment
 /*{
     await dependencies.notifService.LoadingProcess("Begin", "Processing...");
     if (SelectedItem != null)
@@ -104,3 +106,4 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
     SelectedItem = null;
     await dependencies.notifService.LoadingProcess("End");
 }*/
+#endregion
