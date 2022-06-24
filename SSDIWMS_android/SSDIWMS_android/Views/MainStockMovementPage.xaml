@@ -19,7 +19,6 @@
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                 <StackLayout Padding="15" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-
                     <StackLayout Orientation="Horizontal">
                         <Label FontSize="Subtitle">
                             <Label.FormattedText>
@@ -87,7 +86,24 @@
 
                                     </StackLayout>
                                 </Frame>
-                                
+
+                                <Frame Style="{StaticResource Framegrouping1}" IsVisible="{Binding CreatePalletBtnVisible}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Stock Transfer" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                        <Button
+                                            Command="{Binding StockTransferNavCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                            <Button.ImageSource>
+                                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                            </Button.ImageSource>
+                                        </Button>
+
+                                    </StackLayout>
+                                </Frame>
+
                             </StackLayout>
 
                         </ScrollView>

@@ -8,6 +8,7 @@ using SSDIWMS_android.Updater.MasterDatas.UpdateAllUserMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdateArticleMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdatePalletMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdateSiteMaster;
+using SSDIWMS_android.Updater.MasterDatas.UpdateTransferTypes;
 using SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseLocationMaster;
 using SSDIWMS_android.Updater.MasterDatas.UpdateWarehouseMaster;
 using SSDIWMS_android.Updater.UpdateArticleMaster;
@@ -49,6 +50,7 @@ namespace SSDIWMS_android.ViewModels
         public AsyncCommand WarehouseLocationUpdateCommand { get; }
         public AsyncCommand WarehouseUpdateCommand { get; }
         public AsyncCommand UserMasterUpdateCommand { get; }
+        public AsyncCommand TransfertypeUpdateCommand { get; }
         public AsyncCommand AllUpdateCommand { get; }
         public AsyncCommand ClearTransactionCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -66,6 +68,7 @@ namespace SSDIWMS_android.ViewModels
             WarehouseLocationUpdateCommand = new AsyncCommand(WarehouseLocationUpdate);
             WarehouseUpdateCommand = new AsyncCommand(WarehouseUpdate);
             UserMasterUpdateCommand = new AsyncCommand(UserMasterUpdate);
+            TransfertypeUpdateCommand = new AsyncCommand(TransferTypeUpdate);
             AllUpdateCommand = new AsyncCommand(AllUpdate);
             ClearTransactionCommand = new AsyncCommand(ClearTransaction);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
@@ -92,6 +95,7 @@ namespace SSDIWMS_android.ViewModels
         private async Task WarehouseLocationUpdate() => await PopupNavigation.Instance.PushAsync(new WarehouseLocationMasterUpdaterPopupPage());
         private async Task WarehouseUpdate() => await PopupNavigation.Instance.PushAsync(new WarehouseMasterUpdaterPopupPage());
         private async Task UserMasterUpdate() => await PopupNavigation.Instance.PushAsync(new UserMasterUpdaterPopupPage());
+        private async Task TransferTypeUpdate() => await PopupNavigation.Instance.PushAsync(new TransferTypesUpdaterPopupPage()); 
         private async Task AllUpdate() => await PopupNavigation.Instance.PushAsync(new AllMasterfileUpdaterPopupPage());
         private async Task ClearTransaction() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminClearTrans"));
         private async Task PageRefresh()

@@ -2,6 +2,7 @@
 using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages;
+using SSDIWMS_android.Views.StockMovementPages.StockTransferPages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,19 +15,22 @@ namespace SSDIWMS_android.ViewModels
     public class MainStockMovementVM : ViewModelBase
     {
         public LiveTime livetime { get; } = new LiveTime();
-        bool _proceedEnable, _createPalletBtnVisible;
+        bool _proceedEnable, _createPalletBtnVisible, _stockTransferBtnVisible;
         public bool ProceedEnable { get => _proceedEnable; set => SetProperty(ref _proceedEnable, value); }
         public bool CreatePalletBtnVisible { get => _createPalletBtnVisible; set => SetProperty(ref _createPalletBtnVisible, value); }
+        public bool StockTransferBtnVisible { get => _stockTransferBtnVisible; set => SetProperty(ref _stockTransferBtnVisible, value); }
+        public AsyncCommand StockTransferNavCommand { get; }
         public AsyncCommand PalletHeaderNavCommand { get; }
         public AsyncCommand IncomingNavigationCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
         public MainStockMovementVM()
         {
+            StockTransferNavCommand = new AsyncCommand(StockTransferNav);
             PalletHeaderNavCommand = new AsyncCommand(PalletHeadernav);
             IncomingNavigationCommand = new AsyncCommand(IncomingNavigation);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-        
+        private async Task StockTransferNav() => await Shell.Current.GoToAsync($"{nameof(STTransferTypesPage)}");
         private async Task PalletHeadernav() => await Shell.Current.GoToAsync($"{nameof(PalletHeaderListPage)}");
 
         private async Task IncomingNavigation()
@@ -44,10 +48,12 @@ namespace SSDIWMS_android.ViewModels
                 if(role == "Check")
                 {
                     CreatePalletBtnVisible = false;
+                    StockTransferBtnVisible = false;
                 }
                 else if(role == "Pick")
                 {
                     CreatePalletBtnVisible = true;
+                    StockTransferBtnVisible = true;
                 }
                 ProceedEnable = true;
             }
@@ -55,6 +61,7 @@ namespace SSDIWMS_android.ViewModels
             {
                 ProceedEnable = false;
                 CreatePalletBtnVisible = false;
+                StockTransferBtnVisible = false;
             }
             await livetime.LiveTimer();
             

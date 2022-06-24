@@ -3,11 +3,11 @@
                   CloseWhenBackgroundIsClicked="False"
                   xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.MasterDatas.UpdateAllUserMaster" 
-                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-                  x:Class="SSDIWMS_android.Updater.MasterDatas.UpdateAllUserMaster.UserMasterUpdaterPopupPage">
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.Updater.MasterDatas.UpdateTransferTypes"
+                  x:Class="SSDIWMS_android.Updater.MasterDatas.UpdateTransferTypes.TransferTypesUpdaterPopupPage">
     <popup:PopupPage.BindingContext>
-        <viewmodels:UserMasterUpdaterPopupVM/>
+        <viewmodels:TransferTypesUpdaterPopupVM/>
     </popup:PopupPage.BindingContext>
     <popup:PopupPage.Behaviors>
         <xct:EventToCommandBehavior

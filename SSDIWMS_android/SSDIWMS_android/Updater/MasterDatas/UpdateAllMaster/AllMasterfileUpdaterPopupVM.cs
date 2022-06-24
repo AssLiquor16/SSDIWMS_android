@@ -6,12 +6,14 @@ using SSDIWMS_android.Models;
 using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.TransferTypesServices;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.UserMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.TransferTypesServices;
 using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.PalletMaster;
@@ -44,7 +46,8 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
         ILocalWarehouseMasterServices localDbWarehouseMasterService;
         IServerWarehouseMasterServices serverDbWarehouseMasterService;
         IToastNotifService notifService;
-
+        ISTransferTypesServices serverDbTransferTypeService;
+        ILTransferTypesServices localDbTransferTypeService;
         string _staticloadingText, _loadingText, _taskType, _errorText;
 
         public string TaskType { get => _taskType; set => SetProperty(ref _taskType, value); }
@@ -77,6 +80,8 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             localDbWarehouseMasterService = DependencyService.Get<ILocalWarehouseMasterServices>();
             serverDbWarehouseMasterService = DependencyService.Get<IServerWarehouseMasterServices>();
             notifService = DependencyService.Get<IToastNotifService>();
+            serverDbTransferTypeService = DependencyService.Get<ISTransferTypesServices>();
+            localDbTransferTypeService = DependencyService.Get<ILTransferTypesServices>();
 
             UserMasterList = new ObservableRangeCollection<UsermasterModel>();
             ArticleMasterList = new ObservableRangeCollection<ArticleMasterModel>();
@@ -94,6 +99,7 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
             await UpdateSiteMaster();
             await UpdateArticleMaster();
             await UpdateWarehouseMaster();
+            await UpdateTransferType();
             await PopupNavigation.Instance.PopAsync(true);
         }
         private async Task UpdateUserMaster()
@@ -252,6 +258,43 @@ namespace SSDIWMS_android.Updater.MasterDatas.UpdateAllMaster
                     await Task.Delay(50);
                 }
                 await notifService.ToastNotif("Success", "Warehouse master downloaded succesfully.");
+
+            }
+            catch
+            {
+                await notifService.StaticToastNotif("Error", ErrorText);
+            }
+        }
+        private async Task UpdateTransferType()
+        {
+            try
+            {
+                List<TransferTypesModel> transferTypes = new List<TransferTypesModel>();
+                var retdata = await serverDbTransferTypeService.GetList();
+                transferTypes.AddRange(retdata);
+                decimal totcount = WarehouseLocationList.Count;
+                decimal foreachcount = 0;
+                foreach (var item in retdata)
+                {
+                    var filter = new TransferTypesModel
+                    {
+                        TransferId = item.TransferId
+                    };
+                    var localDataCheck = await localDbTransferTypeService.GetFirstOrDefault(filter);
+                    if (localDataCheck == null)
+                    {
+                        await localDbTransferTypeService.Insert(item);
+                    }
+                    else
+                    {
+                        await localDbTransferTypeService.Update(item);
+                    }
+                    foreachcount++;
+                    decimal[] decArray = { foreachcount, totcount };
+                    LoadingText = await percalc.GetPercentage("TransferTypes", decArray);
+                    await Task.Delay(50);
+                }
+                await notifService.ToastNotif("Success", "TransferTypes downloaded succesfully.");
 
             }
             catch

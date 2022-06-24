@@ -76,7 +76,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         }
 
         private async Task NavWarehouseLocationList() => 
-            await Shell.Current.GoToAsync($"{nameof(WarehouseLocationMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
+            await Shell.Current.GoToAsync($"{nameof(WhLocMListDetSubModPage)}?PageCameFrom=EditDetail");
 
         private async Task NavPalletList() => 
             await Shell.Current.GoToAsync($"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");

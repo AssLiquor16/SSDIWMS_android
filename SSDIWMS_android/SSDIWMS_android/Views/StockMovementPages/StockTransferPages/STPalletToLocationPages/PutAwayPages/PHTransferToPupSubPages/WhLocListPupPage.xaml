@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletToLocationVMs.PutAwayVMs.PHTransferToPupSubVMs" 
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+x:Class="SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.PutAwayPages.PHTransferToPupSubPages.WhLocListPupPage">
+    <popup:PopupPage.BindingContext>
+        <viewmodels:WhLocListPupVM/>
+    </popup:PopupPage.BindingContext>
+    <popup:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding RefreshCommand}"/>
+    </popup:PopupPage.Behaviors>
+
+    <Frame HeightRequest="380" 
+           WidthRequest="300" 
+           VerticalOptions="CenterAndExpand" 
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="White"
+           CornerRadius="10"
+           >
+
+        <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand">
+            <StackLayout HorizontalOptions="FillAndExpand"
+                         VerticalOptions="FillAndExpand">
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

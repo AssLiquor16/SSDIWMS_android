@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletToLocationVMs" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms"
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.STTPalletToLocTransactionTypePage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:STTPalletToLocTransactionTypeVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <StackLayout Orientation="Horizontal">
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <BoxView/>
+                    <ScrollView>
+
+                        <StackLayout >
+
+                            <Frame Style="{StaticResource Framegrouping1}">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Put-Away" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                    <Button
+                                            Command="{Binding PutAwayPageNavCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+
+                                </StackLayout>
+                            </Frame>
+
+                        </StackLayout>
+
+                    </ScrollView>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

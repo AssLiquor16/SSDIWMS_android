@@ -37,16 +37,27 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
                         var caseDefault = JsonConvert.DeserializeObject<IEnumerable<PalletMasterModel>>(json);
                         return caseDefault;
                     }
-                case "PalletCode/Status=Not-Use":
+                case "PalletCode/Status=Not-Use/WarehouseId":
                     using(client = new HttpClient())
                     {
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = await client.GetStringAsync($"api/Pallets/SearchPallet/{obj.PalletCode}/Not-Use");
+                        var json = await client.GetStringAsync($"api/Pallets/SearchPallet/{obj.PalletCode}/Not-Use/{obj.WarehouseId}");
                         var caseA = JsonConvert.DeserializeObject<IEnumerable<PalletMasterModel>>(json);
                         return caseA;
+                    }
+                case "PalletCode/WarehouseID":
+                    using (client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var json = await client.GetStringAsync($"api/Pallets/CheckItemCode/{obj.PalletCode}/{obj.WarehouseId}");
+                        var caseB = JsonConvert.DeserializeObject<IEnumerable<PalletMasterModel>>(json);
+                        return caseB;
                     }
 
             }

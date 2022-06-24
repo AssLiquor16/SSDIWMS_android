@@ -1,5 +1,6 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Defaults;
+using SSDIWMS_android.Services.Db.LocalDbServices.Master.TransferTypesServices;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.PalletMaster;
@@ -9,6 +10,7 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.Pallets;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.Pallets.LPalletDetails;
 using SSDIWMS_android.Services.Db.ServerDbServices.Devices;
+using SSDIWMS_android.Services.Db.ServerDbServices.Master.TransferTypesServices;
 using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPalletDetails;
@@ -52,6 +54,8 @@ namespace SSDIWMS_android.Helpers
         public IServerWarehouseMasterServices serverDbWarehouseService { get; }
         public IStagingWarehouseLocationServices localDbStagingWarehouseLocationService { get; }
         public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
+        public ISTransferTypesServices serverDbTransferTypesService { get; }
+        public ILTransferTypesServices localDbTransferTypesService { get; }
         public GlobalDependencyServices()
         {
             droidService = DependencyService.Get<IDroidDeviceServices>();
@@ -78,7 +82,8 @@ namespace SSDIWMS_android.Helpers
             serverDbStockCardService = DependencyService.Get<ISStockCardServices>();
             serverDbWarehouseService = DependencyService.Get<IServerWarehouseMasterServices>();
             serverDbStockTransferHistoriesService = DependencyService.Get<ISStockTransferHistoriesServices>();
-
+            serverDbTransferTypesService = DependencyService.Get<ISTransferTypesServices>();
+            localDbTransferTypesService = DependencyService.Get<ILTransferTypesServices>();
         }
     }
 }

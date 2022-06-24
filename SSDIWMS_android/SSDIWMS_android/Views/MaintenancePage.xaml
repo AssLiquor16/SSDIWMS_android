@@ -80,6 +80,28 @@
                                          Margin="0,5"
                                          VerticalOptions="CenterAndExpand" 
                                          HorizontalOptions="FillAndExpand">
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Phone}" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+                                        <Label Text="Transfer types" 
+                                           FontSize="Subtitle"
+                                               VerticalOptions="CenterAndExpand"/>
+
+                                        <Button Text="{x:Static fontAwsome:FontAwesomeIcons.Download}" 
+                                                FontFamily="FAS" Command="{Binding TransfertypeUpdateCommand}"
+                                                CornerRadius="5" Margin="0" 
+                                                HorizontalOptions="EndAndExpand" 
+                                                Padding="0" 
+                                                WidthRequest="50" 
+                                                HeightRequest="50"/>
+                                    </StackLayout>
+                                </Frame>
+                                
+                                <Frame Style="{StaticResource Framegrouping}">
+                                    <StackLayout Orientation="Horizontal" 
+                                         Margin="0,5"
+                                         VerticalOptions="CenterAndExpand" 
+                                         HorizontalOptions="FillAndExpand">
                                         <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
                                            FontSize="Subtitle"
                                                VerticalOptions="CenterAndExpand"/>

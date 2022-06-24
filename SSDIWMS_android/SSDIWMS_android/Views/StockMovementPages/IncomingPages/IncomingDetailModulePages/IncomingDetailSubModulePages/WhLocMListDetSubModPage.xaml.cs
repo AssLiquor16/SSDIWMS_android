@@ -12,10 +12,9 @@ using ZXing.Net.Mobile.Forms;
 namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PalletMasterListDetailSubModulePage : ContentPage
+    public partial class WhLocMListDetSubModPage : ContentPage
     {
-        
-        public PalletMasterListDetailSubModulePage()
+        public WhLocMListDetSubModPage()
         {
             InitializeComponent();
         }
@@ -24,7 +23,7 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailM
         private async void Button_Clicked(object sender, EventArgs e)
         {
             scanPage = new ZXingScannerPage();
-            var con = BindingContext as PalletMasterListDetailSubModuleVM;
+            var con = BindingContext as WarehouseLocationMasterListDetailSubModuleVM;
             scanPage.OnScanResult += (result) =>
             {
                 scanPage.IsScanning = false;

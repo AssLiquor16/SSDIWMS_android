@@ -42,6 +42,9 @@ namespace SSDIWMS_android.Helpers
                 case "Users":
                     msg = "User Master: " + g + " %";
                     break;
+                case "TransferTypes":
+                    msg = "Transfer types: " + g + " %";
+                    break;
                 default: return null;
             }
             return msg;

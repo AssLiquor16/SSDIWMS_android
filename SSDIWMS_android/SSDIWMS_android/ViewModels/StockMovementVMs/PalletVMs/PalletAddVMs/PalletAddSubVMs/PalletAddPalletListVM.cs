@@ -55,7 +55,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
                 try
                 {
                     PalletMasterList.Clear();
-                    PalletMasterList.AddRange(await dependencies.serverDbTPalletMasterService.GetList(new PalletMasterModel { PalletCode = val }, "PalletCode/Status=Not-Use"));
+                    PalletMasterList.AddRange(await dependencies.serverDbTPalletMasterService.GetList(new PalletMasterModel { PalletCode = val , WarehouseId = Preferences.Get("PrefUserWarehouseAssignedId",0) }, "PalletCode/Status=Not-Use/WarehouseId"));
                 }
                 catch
                 {

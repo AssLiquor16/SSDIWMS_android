@@ -3,25 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-             xmlns:fontAwsome="clr-namespace:FontAwesome" 
-             Title="Pallet Track"
-             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs"
-             x:Class="SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletHeaderListPage">
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletToLocationVMs.PutAwayVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.PutAwayPages.PHTransferFromPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"
             Command="{Binding PageRefreshCommand}"/>
     </d:ContentPage.Behaviors>
     <ContentPage.BindingContext>
-        <viewmodels:PalletHeaderListVM/>
+        <viewmodels:PHTransferFromVM/>
     </ContentPage.BindingContext>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddNavCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="FAS" Glyph="{x:Static fontAwsome:FontAwesomeIcons.Plus}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Padding="7">
             <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
@@ -47,32 +39,40 @@
                         </Label>
                     </StackLayout>
                     <BoxView/>
-                    <StackLayout Padding="7">
+                    <StackLayout>
+                        <Label Text="Transfer from" HorizontalOptions="CenterAndExpand" FontSize="Title"/>
                         <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                             <StackLayout>
                                 <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
                                     <StackLayout Orientation="Horizontal">
                                         <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3" HorizontalOptions="FillAndExpand">
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
+                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Camera}" 
                                                TextColor="Gray" FontSize="Title" 
                                                VerticalOptions="CenterAndExpand" 
-                                               HorizontalOptions="Start"/>
-                                                <Entry Text="{Binding ApiSearchCode}" 
+                                               HorizontalOptions="Start">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                                <Entry Text="{Binding SearchCode}" 
                                                FontSize="Subtitle" 
                                                FontFamily="FAS"
                                                PlaceholderColor="Gray"
                                                Placeholder="Search the code here"
-                                               WidthRequest="225"
                                                HorizontalOptions="FillAndExpand"
                                                FontAttributes="Bold"/>
-                                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" FontSize="Title" VerticalOptions="CenterAndExpand">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding ApiSearchCommand}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
                                             </StackLayout>
                                         </Frame>
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
+                                               TextColor="{StaticResource TextColor}" FontSize="Title" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               Margin="10"
+                                               HorizontalOptions="Center">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ApiSearchCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </StackLayout>
                                 </Frame>
                                 <CollectionView 

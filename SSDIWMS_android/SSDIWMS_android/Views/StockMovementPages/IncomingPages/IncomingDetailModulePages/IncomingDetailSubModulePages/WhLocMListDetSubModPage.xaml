@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs.IncomingDetailSubModuleVMs"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs.IncomingDetailSubModuleVMs" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-             xmlns:d="http://xamarin.com/schemas/2014/forms"
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
              xmlns:fontAwsome="clr-namespace:FontAwesome"
-             Title="INCOMING STOCKS" x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages.WarehouseLocationMasterListDetailSubModulePage">
+             Title="INCOMING STOCKS"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages.WhLocMListDetSubModPage">
     <d:ContentPage.Behaviors>
         <xct:EventToCommandBehavior
             EventName="Appearing"

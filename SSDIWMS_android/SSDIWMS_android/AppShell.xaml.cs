@@ -12,6 +12,9 @@ using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModul
 using SSDIWMS_android.Views.StockMovementPages.PalletPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages;
+using SSDIWMS_android.Views.StockMovementPages.StockTransferPages;
+using SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages;
+using SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.PutAwayPages;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -78,15 +81,17 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(AddDetailModule2Page), typeof(AddDetailModule2Page));
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
             Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
-            Routing.RegisterRoute(nameof(WarehouseLocationMasterListDetailSubModulePage), typeof(WarehouseLocationMasterListDetailSubModulePage));
+            Routing.RegisterRoute(nameof(WhLocMListDetSubModPage), typeof(WhLocMListDetSubModPage));
             Routing.RegisterRoute(nameof(PalletHeaderListPage), typeof(PalletHeaderListPage));
             Routing.RegisterRoute(nameof(PalletAddPage), typeof(PalletAddPage));
             Routing.RegisterRoute(nameof(PalletAddPalletListPage), typeof(PalletAddPalletListPage));
             Routing.RegisterRoute(nameof(PalletAddWhLocListPage), typeof(PalletAddWhLocListPage));
             Routing.RegisterRoute(nameof(PalletAddItemListPage), typeof(PalletAddItemListPage));
-            
-
-            Fullname = Preferences.Get("PrefUserFullname", string.Empty);
+            Routing.RegisterRoute(nameof(STTransferTypesPage), typeof(STTransferTypesPage));
+            Routing.RegisterRoute(nameof(STTPalletToLocTransactionTypePage), typeof(STTPalletToLocTransactionTypePage));
+            Routing.RegisterRoute(nameof(PHTransferFromPage), typeof(PHTransferFromPage));
+            Routing.RegisterRoute(nameof(PHTransferToPage), typeof(PHTransferToPage));
+             Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);
 
