@@ -56,6 +56,7 @@ namespace SSDIWMS_android.Helpers
         public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
         public ISTransferTypesServices serverDbTransferTypesService { get; }
         public ILTransferTypesServices localDbTransferTypesService { get; }
+
         public GlobalDependencyServices()
         {
             droidService = DependencyService.Get<IDroidDeviceServices>();

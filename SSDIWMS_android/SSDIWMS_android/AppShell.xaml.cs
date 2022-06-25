@@ -15,6 +15,7 @@ using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.Pallet
 using SSDIWMS_android.Views.StockMovementPages.StockTransferPages;
 using SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages;
 using SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.PutAwayPages;
+using SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.StockMovementPages;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -91,6 +92,8 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(STTPalletToLocTransactionTypePage), typeof(STTPalletToLocTransactionTypePage));
             Routing.RegisterRoute(nameof(PHTransferFromPage), typeof(PHTransferFromPage));
             Routing.RegisterRoute(nameof(PHTransferToPage), typeof(PHTransferToPage));
+            Routing.RegisterRoute(nameof(SMPHTrasnferFromPage), typeof(SMPHTrasnferFromPage));
+            
              Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);

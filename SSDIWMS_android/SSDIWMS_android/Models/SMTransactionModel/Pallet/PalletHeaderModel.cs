@@ -20,5 +20,7 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Pallet
         public int PHeaderLocalID { get; set; }
         public string PHeaderRefID { get; set; }
         public string Warehouse { get; set; }
+        public string Area { get; set; }
+        public bool IsTransferable { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
     {
         Task<IEnumerable<ItemMasterModel>> GetList(string type,string[] stringarray, int[] intarray);
         Task<ItemMasterModel> GetModel(string type, string[] stringfilter, int[] intfilter);
+        Task<ItemMasterModel> GetFirstOrDefault(ItemMasterModel obj, string type = null);
         Task Insert(string type, ItemMasterModel item);
         Task Update(string type, ItemMasterModel item);
         Task Clear();

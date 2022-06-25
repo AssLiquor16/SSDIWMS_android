@@ -3,6 +3,7 @@ using SSDIWMS_android.Models.MasterListModel;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehouseLocation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -48,6 +49,17 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
                         var caseA = JsonConvert.DeserializeObject<IEnumerable<WarehouseLocationModel>>(json);
                         return caseA;
                     }
+                case "Final_Loc":
+                    using (client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(BaseUrl);
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.MaxResponseContentBufferSize = 10000000;
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        var json = await client.GetStringAsync($"api/WarehouseLocations/getWhLoc/{obj.Final_Location}");
+                        var caseB = JsonConvert.DeserializeObject<IEnumerable<WarehouseLocationModel>>(json);
+                        return caseB;
+                    }
             }
         }
 
@@ -76,5 +88,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
                     }
             }
         }
+
     }
+    
 }

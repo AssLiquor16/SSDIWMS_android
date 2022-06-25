@@ -40,23 +40,21 @@
                     </StackLayout>
                     <BoxView/>
                     <StackLayout>
-                        <Label Text="W1P12" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
-                        <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                            <StackLayout>
-                                
-                                <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
-                                    <StackLayout Orientation="Horizontal">
-                                        <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="FROM:" 
+                        <Label Text="{Binding PalletCode}" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
+                        <StackLayout>
+                            <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="FROM:" 
                                                TextColor="Gray" FontSize="Subtitle" 
                                                VerticalOptions="CenterAndExpand" 
                                                HorizontalOptions="Start">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding .}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                                <Entry Text="DAV-STAGING-R0-L0-B0" 
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Entry Text="{Binding WarehouseLoc}" 
                                                FontSize="Subtitle" 
                                                FontFamily="FAS"
                                                IsEnabled="False"
@@ -64,79 +62,75 @@
                                                Placeholder="Search the code here"
                                                HorizontalOptions="FillAndExpand"
                                                FontAttributes="Bold"/>
-                                            </StackLayout>
-                                        </Frame>
+                                        </StackLayout>
+                                    </Frame>
 
-                                    </StackLayout>
-                                </Frame>
-                                <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
-                                    <StackLayout Orientation="Horizontal">
-                                        <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="TO      :" 
+                                </StackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="TO      :" 
                                                TextColor="Gray" FontSize="Subtitle" 
                                                VerticalOptions="CenterAndExpand" 
                                                HorizontalOptions="Start">
-                                                    <Label.GestureRecognizers>
-                                                        <TapGestureRecognizer Command="{Binding .}" />
-                                                    </Label.GestureRecognizers>
-                                                </Label>
-                                                <Entry Text="DAV-STAGING-R0-L0-B0" 
+                                            </Label>
+                                            <Entry Text="{Binding NewWarehouseLoc}" 
                                                FontSize="Subtitle" 
                                                FontFamily="FAS"
                                                IsEnabled="False"
                                                PlaceholderColor="Gray"
-                                               Placeholder="Search the code here"
+                                               Placeholder="New location"
                                                HorizontalOptions="FillAndExpand"
                                                FontAttributes="Bold"/>
-                                            </StackLayout>
-                                        </Frame>
-                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" 
+                                        </StackLayout>
+                                    </Frame>
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" 
                                                TextColor="{StaticResource TextColor}" FontSize="Title" 
                                                VerticalOptions="CenterAndExpand" 
                                                HorizontalOptions="Start">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding .}" />
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </StackLayout>
-                                </Frame>
-                                <CollectionView 
-                                        ItemsSource="{Binding PalletHeaderList}"
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding WarehouseLocationNavCommand}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                            </Frame>
+                            <CollectionView 
+                                        ItemsSource="{Binding PalletDetailsList}"
                                         SelectionMode="Single"
                                         x:Name="PalletMasterColView"
-                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectedItem="{Binding .}"
                                         SelectionChangedCommand ="{Binding TappedCommand}"
                                         RemainingItemsThreshold="1"
                                         Margin="7,15">
-                                    <CollectionView.EmptyView>
-                                        <StackLayout VerticalOptions="CenterAndExpand" 
+                                <CollectionView.EmptyView>
+                                    <StackLayout VerticalOptions="CenterAndExpand" 
                                                          HorizontalOptions="CenterAndExpand"
                                                          Padding="0,100"
                                                          >
 
-                                            <Label Text="Nothing to show." 
+                                        <Label Text="Nothing to show." 
                                                        VerticalOptions="CenterAndExpand" 
                                                        HorizontalOptions="CenterAndExpand" 
                                                        FontAttributes="Bold"
                                                        FontSize="Subtitle"/>
 
-                                        </StackLayout>
-                                    </CollectionView.EmptyView>
-                                    <CollectionView.Header>
-                                        <StackLayout>
+                                    </StackLayout>
+                                </CollectionView.EmptyView>
+                                <CollectionView.Header>
+                                    <StackLayout>
 
-                                            <Grid Padding="10,5,2,5" VerticalOptions="CenterAndExpand">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="70*"/>
-                                                    <ColumnDefinition Width="200*"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="Code" 
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70*"/>
+                                                <ColumnDefinition Width="200*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="Code" 
                                                            FontSize="Small" 
-                                                           VerticalOptions="Center"
                                                            Grid.Column="0"
                                                            TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                                <Label Text="Description" 
+                                            <Label Text="Description" 
                                                            FontSize="Small"
                                                            VerticalOptions="Center"
                                                            Grid.Column="1"
@@ -144,21 +138,49 @@
                                                            TextColor="{StaticResource HeaderFooterTextCollor}" 
                                                            Margin="-10,0,0,0"/>
 
-                                            </Grid>
+                                        </Grid>
 
+                                    </StackLayout>
+                                </CollectionView.Header>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Margin="0,0.5">
+                                            <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                                <StackLayout BackgroundColor="Transparent">
+
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="70*"/>
+                                                            <ColumnDefinition Width="200*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackLayout Grid.Column="0">
+                                                            <Label Text="{Binding ItemCode}" 
+                                                                           FontSize="Small" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Grid.Column="1">
+                                                            <Label Text="{Binding ItemDesc}" 
+                                                                       FontSize="Small" />
+                                                        </StackLayout>
+                                                    </Grid>
+
+                                                </StackLayout>
+
+                                            </Frame>
                                         </StackLayout>
-                                    </CollectionView.Header>
-                                    <CollectionView.Footer>
-                                        <StackLayout>
-                                            <Label Text="Nothing to follow." 
-                                                       HorizontalOptions="CenterAndExpand"
-                                                       TextColor="{StaticResource HeaderFooterTextCollor}"/>
-                                        </StackLayout>
-                                    </CollectionView.Footer>
-                                </CollectionView>
-                            </StackLayout>
-                        </Frame>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
                     </StackLayout>
+                    <Button Text="Save" Command="{Binding SaveNewLocationCommand}" CornerRadius="5" >
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.Save}"/>
+                        </Button.ImageSource>
+                    </Button>
                 </StackLayout>
             </Frame>
         </StackLayout>

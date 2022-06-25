@@ -95,5 +95,20 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
             await Init();
             await db_.DeleteAllAsync<ItemMasterModel>();
         }
+
+        public async Task<ItemMasterModel> GetFirstOrDefault(ItemMasterModel obj, string type = null)
+        {
+            await Init();
+            switch (type)
+            {
+                default: return await db_.Table<ItemMasterModel>().Where(x=>x.ItemId ==obj.ItemId).FirstOrDefaultAsync();
+                case "ItemCode/ItemDesc":
+                    var caseA = await db_.Table<ItemMasterModel>().Where(x => x.ItemCode == obj.ItemCode && x.ItemDesc == obj.ItemDesc).FirstOrDefaultAsync();
+                    return caseA;
+                case "ItemCode":
+                    var caseB = await db_.Table<ItemMasterModel>().Where(x => x.ItemCode == obj.ItemCode).FirstOrDefaultAsync();
+                    return caseB;
+            }
+        }
     }
 }

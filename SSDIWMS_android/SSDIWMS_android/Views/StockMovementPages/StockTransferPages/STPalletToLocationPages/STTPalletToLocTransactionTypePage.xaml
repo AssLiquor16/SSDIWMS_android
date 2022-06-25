@@ -60,6 +60,23 @@
                                 </StackLayout>
                             </Frame>
 
+                            <Frame Style="{StaticResource Framegrouping1}">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="Stock Movement" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                    <Button
+                                            Command="{Binding StockMovementPageNavCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                        <Button.ImageSource>
+                                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                        </Button.ImageSource>
+                                    </Button>
+
+                                </StackLayout>
+                            </Frame>
+
                         </StackLayout>
 
                     </ScrollView>

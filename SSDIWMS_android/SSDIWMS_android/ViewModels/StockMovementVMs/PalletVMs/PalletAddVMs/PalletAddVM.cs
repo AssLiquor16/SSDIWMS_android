@@ -23,7 +23,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
 {
     public class PalletAddVM : ViewModelBase
     {
-        private static Random random = new Random();
+        GroupStockTransferHistory groupstckhistory = new GroupStockTransferHistory();
         GlobalDependencyServices dependencies = new GlobalDependencyServices();
 
         ItemWithQtyModel _selectedItem;
@@ -165,14 +165,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
         {
             ToBeAddPalletDetailsList.Remove(SelectedItem);
         }
-        public static string RandomString(string firstchar)
-        {
-            int length = 3;
-            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var rand = new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
-            return $"{firstchar}{rand}{DateTime.Now.ToString("MddyyHHmmssff")}";
-
-        }
+        
         #endregion
         #region Save = PalletHeader/PalletDetails/StockCard/StockTransferHistory/PalletMaster/WarehouseLocation
         private async Task SavePalletDetails()
@@ -182,7 +175,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                 {if (ToBeAddPalletDetailsList.Count > 0)
                     {   var transdate = DateTime.Now;
                         var deviceSerial = dependencies.droidService.GetDeviceInfo("Serial").ToUpperInvariant();
-                        PalletHeaderModel palletHeaderData = new PalletHeaderModel 
+                        PalletHeaderModel palletHeaderData = new PalletHeaderModel
                         {
                             PalletCode = SelectedpalletMaster.PalletCode,
                             WarehouseLocation = SelectedWarehouseLocation.Final_Location,
@@ -190,8 +183,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                             DateCreated = transdate,
                             TimesUpdated = 0,
                             DateSync = DateTime.Now,
-                            PHeaderRefID = RandomString("PH"),
-                            Warehouse = Preferences.Get("PrefWarehouseName", string.Empty)
+                            PHeaderRefID = RandomStringGenerator.RandomString("PH"),
+                            Warehouse = Preferences.Get("PrefWarehouseName", string.Empty),
+                            Area = SelectedWarehouseLocation.Area,
+                            IsTransferable = false
                         };
                         try
                         {
@@ -217,7 +212,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                             TimesUpdated = 0,
                                             DateSync = DateTime.Now,
                                             ExpiryDate = initPalletDetail.ExpiryDate,
-                                            PDetRefId = RandomString("PD")
+                                            PDetRefId = RandomStringGenerator.RandomString("PD")
                                         };
                                         var retsPDetail = await dependencies.serverDbPalletDetailsService.Insert(palletDetailsData);
 
@@ -338,7 +333,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                         }
                                             }
                                     }
-                                var stckHistories = await GroupStockCard(returnedstockdatas);
+                                var stckHistories = await groupstckhistory.GroupStockCard(returnedstockdatas);
                                 foreach(var stckHistory in stckHistories)
                                 {
                                     await dependencies.serverDbStockTransferHistoriesService.Insert(stckHistory);
@@ -353,7 +348,11 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                 foreach (var sPhead in sPalletHeader)
                                 {
                                    sPhead.WarehouseLocation = SelectedWarehouseLocation.Final_Location;
-                                   sPhead.Warehouse = Preferences.Get("PrefWarehouseName", string.Empty);
+                                    sPhead.Warehouse = Preferences.Get("PrefWarehouseName", string.Empty);
+
+                                   sPhead.Area = SelectedWarehouseLocation.Area;
+                                   sPhead.IsTransferable = false;
+
                                    await dependencies.serverDbPalletHeaderService.Update(sPhead);
                                    foreach (var initPalletDetail in ToBeAddPalletDetailsList)
                                         {
@@ -367,7 +366,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                                             palletDetailsData.TimesUpdated = 0;
                                             palletDetailsData.DateSync = DateTime.Now;
                                             palletDetailsData.ExpiryDate = initPalletDetail.ExpiryDate;
-                                            palletDetailsData.PDetRefId = RandomString("PD");
+                                            palletDetailsData.PDetRefId = RandomStringGenerator.RandomString("PD");
 
                                             var i = new PalletDetailsModel
                                             {
@@ -621,7 +620,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
 
                                         }
                                 }
-                                var groupedsth = await GroupStockCard(returnedstockdatas);
+                                var groupedsth = await groupstckhistory.GroupStockCard(returnedstockdatas);
                                 foreach (var stckHistory in groupedsth)
                                 {
                                     await dependencies.serverDbStockTransferHistoriesService.Insert(stckHistory);
@@ -636,30 +635,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                     }else{ await dependencies.notifService.StaticToastNotif("Error", "No item(s) added.");}
             }else{ await dependencies.notifService.StaticToastNotif("Error", "Missing  entry."); }
             }await dependencies.notifService.LoadingProcess("End");
-        }
-        private async Task<IEnumerable<StockTransferHistoryModel>>GroupStockCard(List<StockTransferHistoryModel> lists)
-        {
-            await Task.Delay(1);
-            var e = lists.GroupBy(l=> l.ItemCode).Select(cl => new StockTransferHistoryModel
-            {
-                MobileId = cl.FirstOrDefault().MobileId,
-                ItemCode = cl.Key,
-                ItemDesc = cl.Where(x=>x.ItemCode == cl.Key).FirstOrDefault().ItemDesc,
-                PalletCode = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().PalletCode,
-                TransferType = "Incoming New Stocks", //cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TransferType,
-                TransactionType = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TransactionType,
-                FromLocation = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().FromLocation,
-                ToLocation = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().ToLocation,
-                DateTransact = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().DateTransact,
-                UserId = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().UserId,
-                TimesUpdated = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().TimesUpdated,
-                DateSync = DateTime.Now,
-                StockTransferLocalId = RandomString("STH"),
-                Area = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Area,
-                Warehouse = cl.Where(x => x.ItemCode == cl.Key).FirstOrDefault().Warehouse,
-                Qty = cl.Sum(x => x.Qty)
-            }).ToList();
-            return e;
         }
         #endregion
     }
