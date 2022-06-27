@@ -15,17 +15,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 {
     public class SMSIncomingPartialDetailServices : ISMSIncomingPartialDetailServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SMSIncomingPartialDetailServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<IncomingPartialDetailModel>> GetList(string type, string[] stringfilter, int[] intfilter)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -36,7 +41,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetItemCodePO":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -60,12 +65,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public async Task<IncomingPartialDetailModel> SpecialCaseInsert(string type, IncomingPartialDetailModel item)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "ReturnInsertedItem":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -83,12 +89,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public async Task Update(string type, IncomingPartialDetailModel item)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "Common":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

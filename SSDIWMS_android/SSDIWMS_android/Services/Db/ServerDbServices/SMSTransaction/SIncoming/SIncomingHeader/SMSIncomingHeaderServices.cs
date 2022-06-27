@@ -15,17 +15,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 {
     public class SMSIncomingHeaderServices : ISMSIncomingHeaderServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SMSIncomingHeaderServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<IncomingHeaderModel>> GetList(string type, string[] stringfilter, int[] intfilter, DateTime[] datefilter)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -36,7 +41,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "WhId":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -47,7 +52,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetFinalize": 
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -59,7 +64,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetOngoing":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -71,7 +76,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "GetActDate":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -86,12 +91,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public async Task<string> GetString(string type, string[] stringfilter, int[] intfilter)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "ReturnStatus":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -105,13 +111,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public async Task Update(string type, IncomingHeaderModel data)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "Common":
                     using (client = new HttpClient())
                     {
                         
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

@@ -14,7 +14,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 {
     public class SMSBatchHeaderServices : ISMSBatchHeaderServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SMSBatchHeaderServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<BatchHeaderModel> GetFirstOrDefault(object obj = null, string type = null)
@@ -24,13 +28,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 
         public async Task<IEnumerable<BatchHeaderModel>> GetList(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchHeaderModel);
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,7 +46,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
                 case "UserId":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -55,13 +60,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
     
         public async Task<BatchHeaderModel> Insert(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchHeaderModel);
             switch (type)
             {
                 case "ReturnInsertedItem":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -79,13 +85,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 
         public async Task<BatchHeaderModel> Update(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchHeaderModel);
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

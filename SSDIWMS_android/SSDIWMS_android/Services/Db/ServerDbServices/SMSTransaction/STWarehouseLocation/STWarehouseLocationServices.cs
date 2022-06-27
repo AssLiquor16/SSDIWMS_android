@@ -15,7 +15,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
 {
     public class STWarehouseLocationServices : ISTWarehouseLocationServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public STWarehouseLocationServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<WarehouseLocationModel> GetFirstOrDefault(WarehouseLocationModel obj, string type = null)
@@ -25,12 +29,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
 
         public async Task<IEnumerable<WarehouseLocationModel>> GetList(WarehouseLocationModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,7 +46,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
                 case "Final_Loc/Warehouse":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -52,7 +57,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
                 case "Final_Loc":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -70,13 +75,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehous
 
         public async Task<WarehouseLocationModel> Update(WarehouseLocationModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

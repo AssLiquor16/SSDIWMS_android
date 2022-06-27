@@ -56,14 +56,7 @@ namespace SSDIWMS_android
                 Ip_Address = "http://192.168.1.217:80/",
                 Is_Used = true
             };
-            var secondaryIp = new IPAddressModel
-            {
-                Ip_Id = 2,
-                Ip_Address = "http://192.168.1.216:80/",
-                Is_Used = false
-            };
             IpList.Add(defaultIp);
-            IpList.Add(secondaryIp);
             if (await ipService.GetFirstorDefault(defaultIp) == null)
             {
                 foreach (var ip in IpList)

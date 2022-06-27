@@ -12,6 +12,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.Defaults.IP
         Task<IPAddressModel> GetFirstorDefault(IPAddressModel obj, string type = null);
         Task<IPAddressModel> Insert(IPAddressModel obj, string type = null);
         Task<IPAddressModel> Update(IPAddressModel obj, string type = null);
+        Task Delete(IPAddressModel obj = null, string type = null);
 
     }
 }

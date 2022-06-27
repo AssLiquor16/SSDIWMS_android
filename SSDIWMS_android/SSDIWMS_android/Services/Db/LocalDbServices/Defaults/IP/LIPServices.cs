@@ -77,5 +77,15 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.Defaults.IP
                     return null;
             }
         }
+
+        public async Task Delete(IPAddressModel obj = null, string type = null)
+        {
+            await Init();
+            switch (type)
+            {
+                default: await db_.DeleteAllAsync<IPAddressModel>(); break;
+                case "Single": await db_.DeleteAsync(obj); break;
+            }
+        }
     }
 }

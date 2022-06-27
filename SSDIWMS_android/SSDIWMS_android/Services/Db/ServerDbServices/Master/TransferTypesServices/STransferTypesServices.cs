@@ -14,18 +14,24 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.TransferTypesServi
 {
     public class STransferTypesServices : ISTransferTypesServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public STransferTypesServices()
+        {
+            setup = new Setup();
+        }
+        
         HttpClient client;
 
         public async Task<IEnumerable<TransferTypesModel>> GetList(TransferTypesModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
                         //client.Timeout = TimeSpan.FromSeconds(40);
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

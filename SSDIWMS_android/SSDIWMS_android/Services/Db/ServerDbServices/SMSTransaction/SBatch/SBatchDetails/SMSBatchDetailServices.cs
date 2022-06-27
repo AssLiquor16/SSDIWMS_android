@@ -14,18 +14,23 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 {
     public class SMSBatchDetailServices : ISMSBatchDetailServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SMSBatchDetailServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<BatchDetailsModel> GetFirstOrDefault(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchDetailsModel);
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -40,13 +45,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 
         public async Task<IEnumerable<BatchDetailsModel>> GetList(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchDetailsModel);
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -57,7 +63,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
                 case "BatchCode":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -71,13 +77,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 
         public async Task<BatchDetailsModel> Insert(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchDetailsModel);
             switch (type)
             {
                 case "ReturnInsertedItem":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -95,13 +102,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SBatch.SBa
 
         public async Task<BatchDetailsModel> Update(object obj = null, string type = null)
         {
+            var ip = setup.getIp();
             var data = (obj as BatchDetailsModel);
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

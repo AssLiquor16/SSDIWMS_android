@@ -1,5 +1,6 @@
 ﻿using SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Defaults;
+using SSDIWMS_android.Services.Db.LocalDbServices.Defaults.IP;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.TransferTypesServices;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseLocationMaster;
 using SSDIWMS_android.Services.Db.LocalDbServices.Master.WarehouseMaster;
@@ -56,6 +57,7 @@ namespace SSDIWMS_android.Helpers
         public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
         public ISTransferTypesServices serverDbTransferTypesService { get; }
         public ILTransferTypesServices localDbTransferTypesService { get; }
+        public ILIPServices localDbIpServices { get; }
 
         public GlobalDependencyServices()
         {
@@ -85,6 +87,7 @@ namespace SSDIWMS_android.Helpers
             serverDbStockTransferHistoriesService = DependencyService.Get<ISStockTransferHistoriesServices>();
             serverDbTransferTypesService = DependencyService.Get<ISTransferTypesServices>();
             localDbTransferTypesService = DependencyService.Get<ILTransferTypesServices>();
+            localDbIpServices = DependencyService.Get<ILIPServices>();
         }
     }
 }

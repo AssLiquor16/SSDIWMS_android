@@ -21,15 +21,15 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
         {
             setup = new Setup();
         }
-        string BaseUrl = Setup.baseIp;
         HttpClient client;
 
         public async Task<int> ReturnInt(string type, string[] stringdata, int[] intdata)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "DeviceCount":
-                    var ip = setup.getIp();
+                    
                     var serial = stringdata[0];
                     using (client = new HttpClient())
                     {
@@ -47,6 +47,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
         }
         public async Task InsertData(string type, string[] stringdata, int[] intdata)
         {
+            var ip = setup.getIp();
             var firstdata = stringdata[0].ToUpperInvariant();
             var secondata = stringdata[1].ToUpperInvariant();
             var thirddata = stringdata[2].ToUpperInvariant();
@@ -62,7 +63,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
                             DeviceModel = thirddata,
                             DeviceSerial = firstdata
                         };
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -82,9 +83,10 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
 
         public async Task<DateTime> GetServerDate()
         {
+            var ip = setup.getIp();
             using (client = new HttpClient())
             {
-                client.BaseAddress = new Uri(BaseUrl);
+                client.BaseAddress = new Uri(ip);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.MaxResponseContentBufferSize = 10000000;
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

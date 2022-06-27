@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.PopUpVMs" 
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                  x:Class="SSDIWMS_android.Views.PopUpPages.IPListPopupPage"
+                  x:Name="IPlistPag"
+                  >
+    <popup:PopupPage.BindingContext>
+        <viewmodels:IPListPopupVM/>
+    </popup:PopupPage.BindingContext>
+    <popup:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </popup:PopupPage.Behaviors>
+
+    <Frame HeightRequest="400" 
+           WidthRequest="350" 
+           VerticalOptions="CenterAndExpand" 
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="White"
+           CornerRadius="10"
+           >
+        
+        <StackLayout>
+            <CollectionView 
+                                        ItemsSource="{Binding IPList}"
+                                        SelectionMode="Single"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItems Mode="Execute">
+                                    <SwipeItem Text="Delete" 
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={x:Reference IPlistPag}, Path=BindingContext.DeleteCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                            <StackLayout Margin="0,0.5">
+                                <Frame BackgroundColor="#f2f2f2" CornerRadius="0">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Grid Padding="2,5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="175*"/>
+                                                <ColumnDefinition Width="40*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackLayout Grid.Column="0">
+                                                <Label Text="{Binding Ip_Address}" VerticalOptions="CenterAndExpand" FontSize="Small"/>
+                                            </StackLayout>
+                                            <StackLayout Grid.Column="1">
+                                                <CheckBox IsChecked="{Binding Is_Used}" IsEnabled="False"/>
+                                            </StackLayout>
+                                        </Grid>
+                                    </StackLayout>
+
+                                </Frame>
+                            </StackLayout>
+                        </SwipeView>
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Add" Command="{Binding AddIpCommand}" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>

@@ -14,7 +14,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
 {
     public class STPalletMasterServices : ISTPalletMasterServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public STPalletMasterServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<PalletMasterModel> GetFirstOrDefault(PalletMasterModel obj, string type = null)
@@ -24,12 +28,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
 
         public async Task<IEnumerable<PalletMasterModel>> GetList(PalletMasterModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -40,7 +45,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
                 case "PalletCode/Status=Not-Use/WarehouseId":
                     using(client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -51,7 +56,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
                 case "PalletCode/WarehouseID":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -70,13 +75,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STP
 
         public async Task<PalletMasterModel> Update(PalletMasterModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

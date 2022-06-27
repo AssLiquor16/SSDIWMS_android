@@ -15,18 +15,23 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 {
     public class SMSIncomingDetailServices : ISMSIncomingDetailServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SMSIncomingDetailServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<IncomingDetailModel>> GetList(string type, string[] stringfilter, int[] intfilter)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "All":
                     using (client = new HttpClient())
                     {
                         //client.Timeout = TimeSpan.FromSeconds(40);
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -37,7 +42,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 case "PONumber":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -56,6 +61,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
 
         public async Task Update(string type, IncomingDetailModel data)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "Common":
@@ -76,7 +82,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                             DateSync = data.DateSync
                             
                         };
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

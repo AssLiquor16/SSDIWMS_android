@@ -16,17 +16,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.SiteMaster
 
     public class ServerSiteMasterServices : IServerSiteMasterServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerSiteMasterServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<SitesModel>> GetList(string type = null, string[] stringfilter = null, int[] intfilter = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

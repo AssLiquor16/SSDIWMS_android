@@ -14,7 +14,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
 {
     public class SPalletDetailsServices : ISPalletDetailsServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SPalletDetailsServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<PalletDetailsModel> GetFirstOrDefault(PalletDetailsModel obj, string type = null)
@@ -24,12 +28,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
 
         public async Task<IEnumerable<PalletDetailsModel>> GetList(PalletDetailsModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -40,7 +45,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
                 case "PalletCode":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -51,7 +56,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
                 case "PalletCode/ItemCode":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -64,12 +69,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
 
         public async Task<PalletDetailsModel> Insert(PalletDetailsModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -87,12 +93,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPa
 
         public async Task<PalletDetailsModel> Update(PalletDetailsModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

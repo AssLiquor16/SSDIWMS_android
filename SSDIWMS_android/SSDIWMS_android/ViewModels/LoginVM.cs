@@ -31,6 +31,7 @@ namespace SSDIWMS_android.ViewModels
         string _username, _password;
         public string Username { get => _username; set => SetProperty(ref _username, value); }
         public string Password { get => _password; set => SetProperty(ref _password, value); }
+        public AsyncCommand SetIpCommand { get; }
         public AsyncCommand LoginCommand { get; }
         public AsyncCommand RegisterCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -41,6 +42,7 @@ namespace SSDIWMS_android.ViewModels
             serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
             deviceService = DependencyService.Get<IDroidDeviceServices>();
             LoginCommand = new AsyncCommand(Login);
+            SetIpCommand = new AsyncCommand(SetIp);
             RegisterCommand = new AsyncCommand(Register);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
@@ -142,7 +144,8 @@ namespace SSDIWMS_android.ViewModels
             }
         }
         #endregion
-        #region Register device
+        #region Register device and SetIp
+        public async Task SetIp() => await PopupNavigation.Instance.PushAsync(new IPListPopupPage());
         public async Task Register() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminRegDev"));
         #endregion
 

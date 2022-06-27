@@ -14,7 +14,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
 {
     public class SStockCardServices : ISStockCardServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SStockCardServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<StockCardsModel> GetFirstOrDefault(StockCardsModel obj, string type = null)
@@ -24,12 +28,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
 
         public async Task<IEnumerable<StockCardsModel>> GetList(StockCardsModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -40,7 +45,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
                 case "ItemCode/WarehouseLocation":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -53,13 +58,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
 
         public async Task<StockCardsModel> Insert(StockCardsModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
 
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -77,13 +83,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard
 
         public async Task<StockCardsModel> Update(StockCardsModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

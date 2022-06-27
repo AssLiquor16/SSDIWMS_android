@@ -14,17 +14,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseLocationM
 {
     public class ServerWarehouseLocationMasterServices : IServerWarehouseLocationMasterServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerWarehouseLocationMasterServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<WarehouseLocationModel>> GetList(WarehouseLocationModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

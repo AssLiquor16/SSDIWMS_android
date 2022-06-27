@@ -16,17 +16,22 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 {
     public class ServerUserServices : IServerUserServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerUserServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<UsermasterModel>> ReturnList(string type, string[] stringFilter, int[] intFilter)
         {
+            var ip = setup.getIp();
             if(type == "All")
             {
                 using (client = new HttpClient())
                 {
                     client.Timeout = TimeSpan.FromSeconds(40);
-                    client.BaseAddress = new Uri(BaseUrl);
+                    client.BaseAddress = new Uri(ip);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.MaxResponseContentBufferSize = 10000000;
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -43,13 +48,14 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 
         public async Task<UsermasterModel> ReturnModel(string type, string[] stringCredentials, int[] intCredentials)
         {
+            var ip = setup.getIp();
             if (type == "Login")
             {
                 var username = stringCredentials[0];
                 var password = stringCredentials[1];
                 using (client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(BaseUrl);
+                    client.BaseAddress = new Uri(ip);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.MaxResponseContentBufferSize = 10000000;
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -62,7 +68,7 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
             {
                 using (client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri(BaseUrl);
+                    client.BaseAddress = new Uri(ip);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.MaxResponseContentBufferSize = 10000000;
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -79,6 +85,7 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 
         public async Task Update(string type, string[] stringdata, int[] intdata, UsermasterModel user)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "Login":
@@ -100,7 +107,7 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 
                         };
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -130,7 +137,7 @@ namespace SSDIWMS_android.Services.ServerDbServices.Users
 
                         };
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

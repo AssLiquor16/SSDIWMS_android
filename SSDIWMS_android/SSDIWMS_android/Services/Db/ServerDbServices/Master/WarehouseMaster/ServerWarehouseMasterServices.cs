@@ -14,17 +14,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster
 {
     public class ServerWarehouseMasterServices : IServerWarehouseMasterServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerWarehouseMasterServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<WarehouseModel> GetFirstOrDefault(WarehouseModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -39,12 +44,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster
 
         public async Task<IEnumerable<WarehouseModel>> GetList(WarehouseModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case null:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

@@ -15,17 +15,22 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.ArticleMaster
 {
     public class ServerArticleMasterServices : IServerArticleMasterServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerArticleMasterServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public async Task<IEnumerable<ArticleMasterModel>> GetList(string type, string[] stringfilter, int[] intfilter)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 case "All":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

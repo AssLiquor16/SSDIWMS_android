@@ -15,7 +15,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
 {
     public class SPalletHeaderServices : ISPalletHeaderServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public SPalletHeaderServices()
+        {
+            setup = new Setup();
+        }
         HttpClient client;
 
         public Task<PalletHeaderModel> GetFirstOrdefault(PalletHeaderModel obj, string type = null)
@@ -25,12 +29,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
 
         public async Task<IEnumerable<PalletHeaderModel>> GetList(PalletHeaderModel obj = null, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,7 +46,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
                 case "PHeaderRefID":
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -54,7 +59,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
                     using (client = new HttpClient())
                     {
 
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -67,13 +72,14 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
 
         public async Task<PalletHeaderModel> Insert(PalletHeaderModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -91,12 +97,13 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
 
         public async Task<PalletHeaderModel> Update(PalletHeaderModel obj, string type = null)
         {
+            var ip = setup.getIp();
             switch (type)
             {
                 default:
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
