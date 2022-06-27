@@ -14,7 +14,7 @@
             Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
 
-    <Frame HeightRequest="300" 
+    <Frame HeightRequest="450" 
            WidthRequest="300" 
            VerticalOptions="CenterAndExpand" 
            HorizontalOptions="CenterAndExpand"
@@ -26,11 +26,30 @@
                      VerticalOptions="CenterAndExpand">
             <StackLayout HorizontalOptions="FillAndExpand"
                          VerticalOptions="FillAndExpand">
-                <Label Text="Item Details" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
-                <Entry Text="{Binding PassedItem.ItemCode}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" IsEnabled="False"/>
-                <Editor Text="{Binding PassedItem.ItemDesc}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" IsEnabled="False"/>
-                <Entry Text="{Binding Qty}" Placeholder="Username" WidthRequest="250" FontSize="Subtitle" Keyboard="Numeric"/>
-                <DatePicker Date="{Binding ExpiryDate}" FontFamily="FAS" FontSize="Subtitle"/>
+                <Frame Style="{StaticResource Framegrouping1}">
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Item Code:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
+                        <Entry Text="{Binding PassedItem.ItemCode}" Placeholder="Username" WidthRequest="250" FontSize="Small" IsEnabled="False"/>
+                    </StackLayout>
+                </Frame>
+                <Frame Style="{StaticResource Framegrouping1}">
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Item Description:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
+                        <Editor Text="{Binding PassedItem.ItemDesc}" Placeholder="Username" WidthRequest="250" FontSize="Small" IsEnabled="False"/>
+                    </StackLayout>
+                </Frame>
+                <Frame Style="{StaticResource Framegrouping1}">
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Quantity:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
+                        <Entry Text="{Binding Qty}" Placeholder="Quantity" WidthRequest="250" FontSize="Small" Keyboard="Numeric"/>
+                    </StackLayout>
+                </Frame>
+                <Frame Style="{StaticResource Framegrouping1}">
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="Expiration Date:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
+                        <DatePicker Date="{Binding ExpiryDate}" FontFamily="FAS" FontSize="Small" TextColor="{StaticResource TextColor}"/>
+                    </StackLayout>
+                </Frame>
                 <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                     <Button Text="Add" Command="{Binding AddCommand}" CornerRadius="5" BackgroundColor="Green"/>
                 </StackLayout>

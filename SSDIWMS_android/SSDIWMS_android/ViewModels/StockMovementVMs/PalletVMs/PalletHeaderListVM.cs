@@ -39,7 +39,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs
             AddNavCommand = new AsyncCommand(AddNav);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-        private async Task ApiSearch()
+        public async Task ApiSearch()
         {
             var val = ApiSearchCode.ToUpperInvariant();
             if (!string.IsNullOrWhiteSpace(val))

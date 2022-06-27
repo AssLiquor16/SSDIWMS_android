@@ -22,7 +22,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletT
             PutAwayPageNavCommand = new AsyncCommand(PutAwayPageNav);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-        private async Task StockMovementPageNav() => await Shell.Current.GoToAsync($"{nameof(SMPHTrasnferFromPage)}");
+        private async Task StockMovementPageNav() => await Shell.Current.GoToAsync($"{nameof(SMPHTransferFromPage)}");
         private async Task PutAwayPageNav() => await Shell.Current.GoToAsync($"{nameof(PHTransferFromPage)}");
 
         private async Task PageRefresh()

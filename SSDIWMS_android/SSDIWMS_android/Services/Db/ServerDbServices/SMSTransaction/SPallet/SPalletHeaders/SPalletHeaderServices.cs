@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(SPalletHeaderServices))]
@@ -49,13 +50,15 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet
                         return caseA;
                     }
                 case "PalletCode":
+                    var wh = Preferences.Get("PrefWarehouseName", string.Empty);
                     using (client = new HttpClient())
                     {
+
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        var json = await client.GetStringAsync($"api/palletheaders/GetPalletCode/{obj.PalletCode}");
+                        var json = await client.GetStringAsync($"api/palletheaders/GetPalletCode/{obj.PalletCode}/{wh}");
                         var caseB = JsonConvert.DeserializeObject<IEnumerable<PalletHeaderModel>>(json);
                         return caseB;
                     }

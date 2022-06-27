@@ -46,7 +46,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
             TappedCommand = new AsyncCommand(Tapped);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
         }
-        private async Task ApiSearch()
+        public async Task ApiSearch()
         {
             if (!string.IsNullOrWhiteSpace(ApiSearchCode))
             {

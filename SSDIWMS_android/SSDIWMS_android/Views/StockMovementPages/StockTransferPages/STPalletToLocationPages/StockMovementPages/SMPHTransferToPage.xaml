@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletToLocationVMs.StockMovementVMs"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.StockMovementPages.SMPHTransferToPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:SMPHTransferToVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <StackLayout Orientation="Horizontal">
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <BoxView/>
+                    <StackLayout>
+                        <Label Text="{Binding PalletCode}" FontSize="Title" HorizontalOptions="CenterAndExpand"/>
+                        <StackLayout>
+                            <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="FROM:" 
+                                               TextColor="Gray" FontSize="Subtitle" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding .}" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Entry Text="{Binding WarehouseLoc}" 
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               IsEnabled="False"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="Search the code here"
+                                               HorizontalOptions="FillAndExpand"
+                                               FontAttributes="Bold"/>
+                                        </StackLayout>
+                                    </Frame>
+
+                                </StackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="TO      :" 
+                                               TextColor="Gray" FontSize="Subtitle" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                            </Label>
+                                            <Entry Text="{Binding NewWarehouseLoc}" 
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               IsEnabled="False"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="New location"
+                                               HorizontalOptions="FillAndExpand"
+                                               FontAttributes="Bold"/>
+                                        </StackLayout>
+                                    </Frame>
+                                    <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Edit}" 
+                                               TextColor="{StaticResource TextColor}" FontSize="Title" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding WarehouseLocationNavCommand}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </StackLayout>
+                            </Frame>
+                            <CollectionView 
+                                        ItemsSource="{Binding PalletDetailsList}"
+                                        SelectionMode="Single"
+                                        x:Name="PalletMasterColView"
+                                        SelectedItem="{Binding .}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                                <CollectionView.EmptyView>
+                                    <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                        <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                                    </StackLayout>
+                                </CollectionView.EmptyView>
+                                <CollectionView.Header>
+                                    <StackLayout>
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70*"/>
+                                                <ColumnDefinition Width="200*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="Code" 
+                                                           FontSize="Small" 
+                                                           Grid.Column="0"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                            <Label Text="Description" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="1"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           Margin="-10,0,0,0"/>
+
+                                        </Grid>
+
+                                    </StackLayout>
+                                </CollectionView.Header>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Margin="0,0.5">
+                                            <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                                <StackLayout BackgroundColor="Transparent">
+
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="70*"/>
+                                                            <ColumnDefinition Width="200*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackLayout Grid.Column="0">
+                                                            <Label Text="{Binding ItemCode}" 
+                                                                           FontSize="Small" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Grid.Column="1">
+                                                            <Label Text="{Binding ItemDesc}" 
+                                                                       FontSize="Small" />
+                                                        </StackLayout>
+                                                    </Grid>
+
+                                                </StackLayout>
+
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </StackLayout>
+                    <Button Text="Save" Command="{Binding SaveNewLocationCommand}" CornerRadius="5" >
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.Save}"/>
+                        </Button.ImageSource>
+                    </Button>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

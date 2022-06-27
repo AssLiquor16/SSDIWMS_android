@@ -30,7 +30,9 @@ namespace SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.Pa
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     con.ApiSearchCode = result.Text;
+                    await Task.Delay(100);
                     await Navigation.PopAsync();
+                    await con.ApiSearch();
                 });
             };
             await Navigation.PushAsync(scanPage);

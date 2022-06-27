@@ -26,14 +26,16 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
         GroupStockTransferHistory groupstckhistory = new GroupStockTransferHistory();
         GlobalDependencyServices dependencies = new GlobalDependencyServices();
 
+        string _pcode;
         ItemWithQtyModel _selectedItem;
         PalletMasterModel _selectedpalletMaster;
         WarehouseLocationModel _selectedWarehouseLocation;
 
         public PalletMasterModel SelectedpalletMaster { get => _selectedpalletMaster; set => SetProperty(ref _selectedpalletMaster, value); }
         public WarehouseLocationModel SelectedWarehouseLocation { get => _selectedWarehouseLocation; set => SetProperty(ref _selectedWarehouseLocation, value); }
+        string PCode { get => _pcode; set => SetProperty(ref _pcode, value);}
 
-        public ItemWithQtyModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
+    public ItemWithQtyModel SelectedItem { get => _selectedItem; set => SetProperty(ref _selectedItem, value); }
         public ObservableRangeCollection<ItemWithQtyModel> ToBeAddPalletDetailsList { get; set; }
 
         #region Commands
@@ -58,6 +60,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
             MessagingCenter.Subscribe<PalletAddPalletListVM, PalletMasterModel>(this, "SetPallet", (sender, e) =>
               {
                   SelectedpalletMaster = e;
+                  PCode = e.PalletCode;
               });
             MessagingCenter.Subscribe<PalletAddWhLocListVM, WarehouseLocationModel>(this, "SetWarehouseLoc", (sender, e) =>
              {
@@ -169,10 +172,13 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
         #endregion
         #region Save = PalletHeader/PalletDetails/StockCard/StockTransferHistory/PalletMaster/WarehouseLocation
         private async Task SavePalletDetails()
-        {await dependencies.notifService.LoadingProcess("Begin", "Saving...");
-            if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to insert this pallet header?", "Ok", "Cancel") == true)
-            {if(!string.IsNullOrWhiteSpace(SelectedpalletMaster.PalletCode) && !string.IsNullOrWhiteSpace(SelectedWarehouseLocation.Final_Location))
-                {if (ToBeAddPalletDetailsList.Count > 0)
+        {
+            await dependencies.notifService.LoadingProcess("Begin", "Saving...");
+            if(!string.IsNullOrWhiteSpace(PCode))
+            {
+                if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to insert this pallet header?", "Ok", "Cancel") == true)
+                {
+                    if (ToBeAddPalletDetailsList.Count > 0)
                     {   var transdate = DateTime.Now;
                         var deviceSerial = dependencies.droidService.GetDeviceInfo("Serial").ToUpperInvariant();
                         PalletHeaderModel palletHeaderData = new PalletHeaderModel
@@ -633,11 +639,18 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
                             await Shell.Current.GoToAsync($"..");
                         } catch { await dependencies.notifService.StaticToastNotif("Error", "Cannot connect to server."); }
                     }else{ await dependencies.notifService.StaticToastNotif("Error", "No item(s) added.");}
-            }else{ await dependencies.notifService.StaticToastNotif("Error", "Missing  entry."); }
-            }await dependencies.notifService.LoadingProcess("End");
+                }
+                else{ }
+                }
+            else
+            {
+                await dependencies.notifService.StaticToastNotif("Error", "Missing Entry.");
+            }
+            await dependencies.notifService.LoadingProcess("End");
         }
         #endregion
     }
+    
 }
 #region Comments
 /*

@@ -92,8 +92,11 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(STTPalletToLocTransactionTypePage), typeof(STTPalletToLocTransactionTypePage));
             Routing.RegisterRoute(nameof(PHTransferFromPage), typeof(PHTransferFromPage));
             Routing.RegisterRoute(nameof(PHTransferToPage), typeof(PHTransferToPage));
-            Routing.RegisterRoute(nameof(SMPHTrasnferFromPage), typeof(SMPHTrasnferFromPage));
+            Routing.RegisterRoute(nameof(SMPHTransferFromPage), typeof(SMPHTransferFromPage));
+            Routing.RegisterRoute(nameof(SMPHTransferToPage), typeof(SMPHTransferToPage));
             
+
+
              Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);

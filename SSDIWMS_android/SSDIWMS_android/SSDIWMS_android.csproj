@@ -163,10 +163,13 @@
     <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\PutAwayPages\PHTransferToPupSubPages\WhLocListPupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\StockMovementPages\SMPHTrasnferFromPage.xaml">
+    <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\StockMovementPages\SMPHTransferFromPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\StockMovementPages\SMPHTrasnferFromToPage.xaml">
+    <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\StockMovementPages\SMPHTransferToPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\StockMovementPages\SMPHTransferToPopSubPages\SMWhLocListPupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\StockTransferPages\STPalletToLocationPages\STTPalletToLocTransactionTypePage.xaml">

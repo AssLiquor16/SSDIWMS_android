@@ -142,7 +142,6 @@ namespace SSDIWMS_android.ViewModels
             }
         }
         #endregion
-
         #region Register device
         public async Task Register() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminRegDev"));
         #endregion

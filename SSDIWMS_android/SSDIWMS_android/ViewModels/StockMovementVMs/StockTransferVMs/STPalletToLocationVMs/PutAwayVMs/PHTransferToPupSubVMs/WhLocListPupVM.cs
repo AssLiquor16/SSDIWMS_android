@@ -64,7 +64,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletT
                 }
                 catch
                 {
-                    await App.Current.MainPage.DisplayAlert("Alert", "Cannot connect to server, please try again?", "Ok");
+                    await App.Current.MainPage.DisplayAlert("Alert", "Cannot connect to server, please try again.", "Ok");
                     await PopupNavigation.Instance.PopAllAsync(true);
                 }
                 await dependencies.notifService.LoadingProcess("End");

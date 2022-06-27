@@ -16,7 +16,12 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
 {
     public class ServerDeviceServices : IServerDeviceServices
     {
-        string BaseUrl = Ip_Conf.baseUrl;
+        Setup setup { get; set; }
+        public ServerDeviceServices()
+        {
+            setup = new Setup();
+        }
+        string BaseUrl = Setup.baseIp;
         HttpClient client;
 
         public async Task<int> ReturnInt(string type, string[] stringdata, int[] intdata)
@@ -24,10 +29,11 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.Devices
             switch (type)
             {
                 case "DeviceCount":
+                    var ip = setup.getIp();
                     var serial = stringdata[0];
                     using (client = new HttpClient())
                     {
-                        client.BaseAddress = new Uri(BaseUrl);
+                        client.BaseAddress = new Uri(ip);
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.MaxResponseContentBufferSize = 10000000;
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

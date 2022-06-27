@@ -54,7 +54,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletT
                 await dependencies.notifService.LoadingProcess("End");
             }
         }
-        private async Task ApiSearch()
+        public async Task ApiSearch()
         {
             if (!string.IsNullOrWhiteSpace(SearchCode))
             {

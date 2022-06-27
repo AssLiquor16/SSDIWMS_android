@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                  xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+                  xmlns:fontAwsome="clr-namespace:FontAwesome"
+                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.StockTransferVMs.STPalletToLocationVMs.StockMovementVMs.SMPHTransferToPopSubVMs" 
+                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                  x:Class="SSDIWMS_android.Views.StockMovementPages.StockTransferPages.STPalletToLocationPages.StockMovementPages.SMPHTransferToPopSubPages.SMWhLocListPupPage">
+    <popup:PopupPage.BindingContext>
+        <viewmodels:SMWhLocListPupVM/>
+    </popup:PopupPage.BindingContext>
+    <popup:PopupPage.Behaviors>
+        <xct:EventToCommandBehavior
+            EventName="Appearing"
+            Command="{Binding PageRefreshCommand}"/>
+    </popup:PopupPage.Behaviors>
+
+    <Frame HeightRequest="480" 
+           WidthRequest="300" 
+           VerticalOptions="CenterAndExpand" 
+           HorizontalOptions="CenterAndExpand"
+           BackgroundColor="White"
+           CornerRadius="10"
+           >
+        <StackLayout HorizontalOptions="FillAndExpand" 
+                     VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <StackLayout>
+                        <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Horizontal">
+                                <Frame BackgroundColor="{StaticResource MySecondary}" Padding="10,1" HorizontalOptions="FillAndExpand">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Camera}" 
+                                               TextColor="Gray" FontSize="Subtitle" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                        </Label>
+                                        <Entry Text="{Binding SearchCode}" 
+                                               FontSize="Subtitle" 
+                                               FontFamily="FAS"
+                                               PlaceholderColor="Gray"
+                                               Placeholder="New location"
+                                               HorizontalOptions="FillAndExpand"
+                                               FontAttributes="Bold"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
+                                               TextColor="{StaticResource TextColor}" FontSize="Title" 
+                                               VerticalOptions="CenterAndExpand" 
+                                               HorizontalOptions="Start">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ApiSearchCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                        </Frame>
+                        <CollectionView 
+                                        ItemsSource="{Binding WarehouseLocList}"
+                                        SelectionMode="Single"
+                                        x:Name="PalletMasterColView"
+                                        SelectedItem="{Binding SelectedItem}"
+                                        SelectionChangedCommand ="{Binding TappedCommand}"
+                                        RemainingItemsThreshold="1"
+                                        Margin="7,15">
+                            <CollectionView.EmptyView>
+                                <StackLayout VerticalOptions="CenterAndExpand" 
+                                                         HorizontalOptions="CenterAndExpand"
+                                                         Padding="0,100"
+                                                         >
+
+                                    <Label Text="Nothing to show." 
+                                                       VerticalOptions="CenterAndExpand" 
+                                                       HorizontalOptions="CenterAndExpand" 
+                                                       FontAttributes="Bold"
+                                                       FontSize="Subtitle"/>
+
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                            <CollectionView.Header>
+                                <StackLayout>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70*"/>
+                                            <ColumnDefinition Width="200*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="Max Pallet" 
+                                                           FontSize="Small" 
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="0"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}"/>
+                                        <Label Text="Location" 
+                                                           FontSize="Small"
+                                                           VerticalOptions="Center"
+                                                           Grid.Column="1"
+                                                           HorizontalTextAlignment="Start"
+                                                           TextColor="{StaticResource HeaderFooterTextCollor}" 
+                                                           Margin="-10,0,0,0"/>
+
+                                    </Grid>
+
+                                </StackLayout>
+                            </CollectionView.Header>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Margin="0,0.5">
+                                        <Frame Style="{StaticResource Framegrouping1}" BackgroundColor="#f2f2f2" CornerRadius="0">
+
+                                            <StackLayout BackgroundColor="Transparent">
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50*"/>
+                                                        <ColumnDefinition Width="175*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackLayout Grid.Column="0">
+                                                        <Label Text="{Binding MaxPallet}" 
+                                                                           FontSize="Subtitle" 
+                                                                           FontFamily="FAS" 
+                                                                           FontAttributes="Bold"/>
+                                                    </StackLayout>
+                                                    <StackLayout Orientation="Horizontal" Grid.Column="1">
+                                                        <Label Text="{Binding Final_Location}" 
+                                                                       FontSize="Small" 
+                                                                       HorizontalOptions="StartAndExpand"/>
+                                                    </StackLayout>
+                                                </Grid>
+
+                                            </StackLayout>
+
+                                        </Frame>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</popup:PopupPage>
