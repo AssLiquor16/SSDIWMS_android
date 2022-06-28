@@ -17,7 +17,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
 {
     public class FormPopupVM : ViewModelBase
     {
-        GlobalDependencyServices dependencies { get; } = new GlobalDependencyServices();
+        GlobalDependencyServices dependencies = new GlobalDependencyServices();
         IMainServices mainService;
         IToastNotifService notifService;
         IDroidDeviceServices deviceService;
@@ -61,6 +61,9 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         break;
                     case "AdminSearchEnable":
                         await EnableSearch();
+                        break;
+                    case "AdminSetIp":
+                        await SetIp();
                         break;
                     default:
                         break;
@@ -216,7 +219,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(string.Empty));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(3000);
+                await Task.Delay(2000);
 
                 try
                 {
@@ -247,6 +250,44 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                 await notifService.StaticToastNotif("Error", "Missing entry.");
             }
             await con.CloseAll();
+        }
+        private async Task SetIp()
+        {
+            await dependencies.notifService.LoadingProcess("Begin", "Verifying...");
+            if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
+            {
+                await Task.Delay(2000);
+
+                try
+                {
+                    var returnval = await serverDbUserService.ReturnModel("Login", new string[] { Username, Password }, null);
+                    if (returnval != null)
+                    {
+                        if (returnval.UserStatus == "Active" && returnval.UserRole == "Admin")
+                        {
+                            await PopupNavigation.Instance.PopAsync(true);
+                            await PopupNavigation.Instance.PushAsync(new IPListPopupPage());
+                        }
+                        else
+                        {
+                            await notifService.StaticToastNotif("Error", "Credentials are incorrect.");
+                        }
+                    }
+                    else
+                    {
+                        await notifService.StaticToastNotif("Error", "User doesnt exist.");
+                    }
+                }
+                catch (Exception)
+                {
+                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
+                }
+            }
+            else
+            {
+                await notifService.StaticToastNotif("Error", "Missing entry.");
+            }
+            await dependencies.notifService.LoadingProcess("End");
         }
     }
 }

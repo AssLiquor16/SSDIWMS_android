@@ -46,7 +46,7 @@
                 </Frame>
                 <Frame Style="{StaticResource Framegrouping1}">
                     <StackLayout Orientation="Vertical">
-                        <Label Text="Expiration Date:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
+                        <Label Text="Device:" FontSize="Micro" TextColor="{StaticResource DisableColor}" />
                         <DatePicker Date="{Binding ExpiryDate}" FontFamily="FAS" FontSize="Small" TextColor="{StaticResource TextColor}"/>
                     </StackLayout>
                 </Frame>

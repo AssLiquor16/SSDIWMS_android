@@ -44,7 +44,7 @@
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <StackLayout Margin="0,0.5">
-                                <Frame BackgroundColor="#f2f2f2" CornerRadius="0">
+                                <Frame BackgroundColor="#f2f2f2" CornerRadius="5" Margin="3,5">
                                     <StackLayout BackgroundColor="Transparent">
                                         <Grid Padding="2,5">
                                             <Grid.ColumnDefinitions>
@@ -67,8 +67,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <StackLayout Orientation="Horizontal">
-                <Button Text="Add" Command="{Binding AddIpCommand}" HorizontalOptions="FillAndExpand"/>
+            <StackLayout Orientation="Horizontal" Margin="3,5">
+                <Button Text="Add" Command="{Binding AddIpCommand}" HorizontalOptions="FillAndExpand" CornerRadius="5"/>
             </StackLayout>
         </StackLayout>
     </Frame>

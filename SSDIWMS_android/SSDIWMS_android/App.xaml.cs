@@ -15,10 +15,10 @@ namespace SSDIWMS_android
 {
     public partial class App : Application
     {
+        Setup setup = new Setup();
         ILIPServices ipService;
         IDateVerifierServices dateService;
         IMainServices mainService;
-        Setup setup { get; set; }
 
         public App()
         {
@@ -32,7 +32,7 @@ namespace SSDIWMS_android
 
         protected override async void OnStart()
         {
-            await CreateIP();
+            await setup.CreateIP();
             await mainService.OnstartSetDefaulPreferences();
             await dateService.DatetimeValidate();
             await mainService.TimerCheckUser();
@@ -45,25 +45,6 @@ namespace SSDIWMS_android
 
         protected override void OnResume()
         {
-        }
-
-        private async Task CreateIP()
-        {
-            List<IPAddressModel> IpList = new List<IPAddressModel>();
-            var defaultIp = new IPAddressModel
-            {
-                Ip_Id = 1,
-                Ip_Address = "http://192.168.1.217:80/",
-                Is_Used = true
-            };
-            IpList.Add(defaultIp);
-            if (await ipService.GetFirstorDefault(defaultIp) == null)
-            {
-                foreach (var ip in IpList)
-                {
-                    await ipService.Insert(ip);
-                }
-            }
         }
 
     }

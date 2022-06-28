@@ -33,15 +33,27 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
         private async Task Delete(IPAddressModel obj)
         {
             if(obj != null) 
-            { 
-                if(obj.Ip_Id != 1)
+            {
+                if(await App.Current.MainPage.DisplayAlert("Alert", "Are you sure you want to delete the selected ip?", "Yes", "No") == true)
                 {
-                    await dependencies.localDbIpServices.Delete(obj, "Single");
-                    await PageRefresh();
-                }
-                else
-                {
-                    await App.Current.MainPage.DisplayAlert("Alert", "Default ip cannot be deleted?", "Ok");
+                    if (obj.Ip_Id != 1)
+                    {
+                        if (obj.Is_Used == true)
+                        {
+                            IPList.Where(x => x.Ip_Id == 1).FirstOrDefault().Is_Used = true;
+                            IPList.Where(x => x.Ip_Id != 1).ToList().ForEach(x => { x.Is_Used = false; });
+                            foreach (var ip in IPList)
+                            {
+                                await dependencies.localDbIpServices.Update(ip);
+                            }
+                        }
+                        await dependencies.localDbIpServices.Delete(obj, "Single");
+                        await PageRefresh();
+                    }
+                    else
+                    {
+                        await App.Current.MainPage.DisplayAlert("Alert", "Default ip cannot be deleted", "Ok");
+                    }
                 }
                 
             }
@@ -77,7 +89,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                         await dependencies.localDbIpServices.Update(selectedIps);
                     }
                 }
-                await App.Current.MainPage.DisplayAlert("Alert", "Ip set succesfully?", "Ok");
+                await App.Current.MainPage.DisplayAlert("Alert", "Ip set succesfully.", "Ok");
                 await Task.Delay(100);
                 System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
             }
