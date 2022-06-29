@@ -84,6 +84,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(""));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
+                await Task.Delay(1000);
                 try
                 {
                     string[] uandp = { Username, Password };
@@ -136,7 +137,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(3000);
+                await Task.Delay(1000);
 
                 try
                 {
@@ -178,7 +179,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage("Clear"));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(3000);
+                await Task.Delay(1000);
 
                 try
                 {
@@ -219,7 +220,7 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await PopupNavigation.Instance.PushAsync(new LoadingPopupPage(string.Empty));
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(2000);
+                await Task.Delay(1000);
 
                 try
                 {
@@ -256,32 +257,13 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
             await dependencies.notifService.LoadingProcess("Begin", "Verifying...");
             if (!string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password))
             {
-                await Task.Delay(2000);
-
-                try
+                await Task.Delay(1000);
+                if(Username == "deviceadmin" && Password == "p@ssw0rd")
                 {
-                    var returnval = await serverDbUserService.ReturnModel("Login", new string[] { Username, Password }, null);
-                    if (returnval != null)
-                    {
-                        if (returnval.UserStatus == "Active" && returnval.UserRole == "Admin")
-                        {
-                            await PopupNavigation.Instance.PopAsync(true);
-                            await PopupNavigation.Instance.PushAsync(new IPListPopupPage());
-                        }
-                        else
-                        {
-                            await notifService.StaticToastNotif("Error", "Credentials are incorrect.");
-                        }
-                    }
-                    else
-                    {
-                        await notifService.StaticToastNotif("Error", "User doesnt exist.");
-                    }
-                }
-                catch (Exception)
-                {
-                    await notifService.StaticToastNotif("Error", "Cannot connect to server.");
-                }
+                    await PopupNavigation.Instance.PopAsync(true);
+                    await Task.Delay(500);
+                    await PopupNavigation.Instance.PushAsync(new IPListPopupPage());
+                } else { await App.Current.MainPage.DisplayAlert("Alert", "Incorrect Username/Password.", "Ok"); }
             }
             else
             {

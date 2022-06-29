@@ -145,7 +145,7 @@ namespace SSDIWMS_android.ViewModels
         }
         #endregion
         #region Register device and SetIp
-        public async Task SetIp() => await PopupNavigation.Instance.PushAsync(new IPListPopupPage());
+        public async Task SetIp() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminSetIp"));
         public async Task Register() => await PopupNavigation.Instance.PushAsync(new FormPopupPage("AdminRegDev"));
         #endregion
 

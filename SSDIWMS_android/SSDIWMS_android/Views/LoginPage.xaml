@@ -19,7 +19,7 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Wifi}" HorizontalOptions="End" Padding="10">
+            <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Tools}" HorizontalOptions="End" Padding="10">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding SetIpCommand}"/>
                 </Label.GestureRecognizers>
