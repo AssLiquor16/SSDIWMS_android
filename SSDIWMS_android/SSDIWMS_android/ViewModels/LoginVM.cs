@@ -69,13 +69,13 @@ namespace SSDIWMS_android.ViewModels
 
                             if (returnval.UserStatus == "Active" && string.IsNullOrWhiteSpace(returnval.LoginStatus))
                             {
+                                await SetStagingLocation(returnval.WarehouseAssignedId); // sets staging warehouselocation for adding palletheader
                                 await serverDbUserService.Update("Login", strignarray, null, returnval);
                                 Preferences.Set("PrefUserFullname", returnval.UserFullName);
                                 Preferences.Set("PrefUserId", returnval.UserId);
                                 Preferences.Set("PrefUserRole", returnval.UserRole);
                                 Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
                                 Preferences.Set("PrefLoggedIn", true);
-                                await SetStagingLocation(returnval.WarehouseAssignedId); // sets staging warehouselocation for adding palletheader
                                 MessagingCenter.Send(this, "FromLoginToShell", "Go");
                                 var route = $"//{nameof(DashBoardPage)}";
                                 await Shell.Current.GoToAsync(route);
