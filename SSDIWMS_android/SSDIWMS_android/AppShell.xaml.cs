@@ -8,7 +8,6 @@ using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages;
@@ -75,14 +74,11 @@ namespace SSDIWMS_android
             serverDbUserService = DependencyService.Get<IServerUserServices>();
             notifService = DependencyService.Get<IToastNotifService>();
             mainService = DependencyService.Get<IMainServices>();
-
+            Routing.RegisterRoute(nameof(IncomingTypesPage), typeof(IncomingTypesPage));
             Routing.RegisterRoute(nameof(IncomingHeaderPage), typeof(IncomingHeaderPage));
             Routing.RegisterRoute(nameof(IncomingDetailListPage), typeof(IncomingDetailListPage));
-            Routing.RegisterRoute(nameof(AddDetailModulePage), typeof(AddDetailModulePage));
             Routing.RegisterRoute(nameof(AddDetailModule2Page), typeof(AddDetailModule2Page));
             Routing.RegisterRoute(nameof(EditDetailModulePages), typeof(EditDetailModulePages));
-            Routing.RegisterRoute(nameof(PalletMasterListDetailSubModulePage), typeof(PalletMasterListDetailSubModulePage));
-            Routing.RegisterRoute(nameof(WhLocMListDetSubModPage), typeof(WhLocMListDetSubModPage));
             Routing.RegisterRoute(nameof(PalletHeaderListPage), typeof(PalletHeaderListPage));
             Routing.RegisterRoute(nameof(PalletAddPage), typeof(PalletAddPage));
             Routing.RegisterRoute(nameof(PalletAddPalletListPage), typeof(PalletAddPalletListPage));

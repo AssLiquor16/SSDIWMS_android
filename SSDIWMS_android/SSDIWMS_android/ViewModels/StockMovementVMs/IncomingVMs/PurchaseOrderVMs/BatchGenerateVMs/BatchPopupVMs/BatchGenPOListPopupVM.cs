@@ -149,12 +149,14 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
                     {
                         await mainTransactionSync.UpdateAllTransactions("Batch");
                         await mainTransactionSync.UpdateSpecificTransactions("IncomingHeader");
+                        
                         await notifService.StaticToastNotif("Success", "Batch generated.");
                     }
                     catch(Exception ex)
                     {
                         await notifService.StaticToastNotif("Error", ex.Message);
                     }
+                    MessagingCenter.Send(this, "RefreshIncomingHeaderList", string.Empty);
                     await PageRefresh();
                     await notifService.LoadingProcess("End");
                 }
@@ -172,6 +174,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.BatchGenerateV
         private async Task ColViewRefresh()
         {
             await PageRefresh();
+            IsRefreshing = false;
         }
         private async Task PageRefresh()
         {

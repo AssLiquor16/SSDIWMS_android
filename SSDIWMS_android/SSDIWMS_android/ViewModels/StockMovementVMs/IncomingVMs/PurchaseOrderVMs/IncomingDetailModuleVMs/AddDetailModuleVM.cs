@@ -7,8 +7,6 @@ using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LInco
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.NotificationServices;
-using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs.IncomingDetailSubModuleVMs;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -56,7 +54,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public ObservableRangeCollection<ItemMasterModel> MultipleItemMasterList { get; set; }
 
         public AsyncCommand TappedCommand { get; }
-        public AsyncCommand NavPalletListCommand { get; }
         public AsyncCommand CancelCommand { get; }
         public AsyncCommand AddDetailCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -73,16 +70,10 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             MultipleItemMasterList = new ObservableRangeCollection<ItemMasterModel>();
 
             TappedCommand = new AsyncCommand(Tapped);
-            NavPalletListCommand = new AsyncCommand(NavPalletList);
             AddDetailCommand = new AsyncCommand(AddDetail);
             CancelCommand = new AsyncCommand(Cancel);
             PageRefreshCommand = new AsyncCommand(PageRefresh);
 
-
-            MessagingCenter.Subscribe<PalletMasterListDetailSubModuleVM, string>(this, "FromPalletListToAdd", (page, e) =>
-            {
-                PalletCode = e;
-            });
 
         }
         private async Task Tapped()
@@ -108,12 +99,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
                 await App.Current.MainPage.DisplayAlert("Alert", "Selected item is null.", "Ok");
                 await Cancel();
             }
-        }
-        private async Task NavPalletList()
-        {
-
-            var route = $"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=AddDetail";
-            await Shell.Current.GoToAsync(route);
         }
         private async Task Cancel() => await Shell.Current.GoToAsync("..");
         private async Task AddDetail()

@@ -270,6 +270,6 @@ namespace SSDIWMS_android.ViewModels.PopUpVMs
                 await notifService.StaticToastNotif("Error", "Missing entry.");
             }
             await dependencies.notifService.LoadingProcess("End");
-        }
+        }   
     }
 }

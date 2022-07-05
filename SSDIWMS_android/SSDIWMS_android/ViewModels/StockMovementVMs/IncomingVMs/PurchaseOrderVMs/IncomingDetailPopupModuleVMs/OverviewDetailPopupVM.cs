@@ -11,7 +11,7 @@ using SSDIWMS_android.Services.NotificationServices;
 using SSDIWMS_android.Updater.SMTransactions;
 using SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.PurchaseOrderPages.IncomingDetailPopupModulePages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,7 +88,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         {
             if (SelectedItem != null)
             {
-                await PopupNavigation.Instance.PushAsync(new PartialDetailListPopupPage(SelectedItem));
+                await PopupNavigation.Instance.PushAsync(new PartialDetListPopupPage(SelectedItem));
                 SelectedItem = null;
             }
         }

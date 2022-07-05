@@ -27,16 +27,17 @@ namespace SSDIWMS_android
             ipService = DependencyService.Get<ILIPServices>();
             dateService = DependencyService.Get<IDateVerifierServices>();
             mainService = DependencyService.Get<IMainServices>();
-            setup = new Setup();
         }
 
         protected override async void OnStart()
         {
+            await Task.Delay(100);
             await setup.CreateIP();
+            setup.SetIp();
             await mainService.OnstartSetDefaulPreferences();
             await dateService.DatetimeValidate();
             await mainService.TimerCheckUser();
-            setup.SetIp();
+            
         }
 
         protected override void OnSleep()

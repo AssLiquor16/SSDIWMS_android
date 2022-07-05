@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages
+namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.PurchaseOrderPages.IncomingDetailPopupModulePages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PartialDetailListPopupPage : Rg.Plugins.Popup.Pages.PopupPage
+    public partial class PartialDetListPopupPage : Rg.Plugins.Popup.Pages.PopupPage
     {
-        public PartialDetailListPopupPage(IncomingDetailModel item)
+        public PartialDetListPopupPage(IncomingDetailModel item)
         {
             InitializeComponent();
             var myVM = BindingContext as PartialDetailListPopupVM;

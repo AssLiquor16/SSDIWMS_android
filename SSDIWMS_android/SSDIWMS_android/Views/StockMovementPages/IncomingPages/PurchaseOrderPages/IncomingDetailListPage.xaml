@@ -48,14 +48,14 @@
                         </Label>
                     </StackLayout>
                     <BoxView/>
-                    <StackLayout Orientation="Vertical" 
+                    <StackLayout 
                                  VerticalOptions="StartAndExpand" 
                                  HorizontalOptions="FillAndExpand" 
                                  Margin="0,2">
                         <StackLayout HorizontalOptions="CenterAndExpand">
-                            <Label Text="{Binding PONumber}" FontSize="Title"/>
+                            <Label Text="{Binding PONumber}" FontSize="Subtitle"/>
                         </StackLayout>
-                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3">
+                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3" HorizontalOptions="Fill">
                             <StackLayout Orientation="Horizontal">
                                 <StackLayout Orientation="Vertical">
                                     <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" 
@@ -64,13 +64,14 @@
                                            HorizontalOptions="Start">
                                     </Label>
                                 </StackLayout>
-                                <StackLayout BackgroundColor="Transparent">
+                                <StackLayout BackgroundColor="Transparent" HorizontalOptions="Fill">
                                     <Entry TextChanged="Entry_TextChanged"
                                                FontSize="Subtitle" 
                                                FontFamily="FAS"
+                                               HorizontalOptions="End"
+                                               WidthRequest="260"
                                                PlaceholderColor="Gray"
                                                Placeholder="Search the code here"
-                                               WidthRequest="280"
                                                FontAttributes="Bold"/>
                                 </StackLayout>
 

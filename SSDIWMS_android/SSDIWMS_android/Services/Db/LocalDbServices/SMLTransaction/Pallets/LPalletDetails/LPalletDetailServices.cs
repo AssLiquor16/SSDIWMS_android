@@ -17,15 +17,13 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.Pallets.LPa
         SQLiteAsyncConnection db_;
         async Task Init()
         {
-
-            var LocDbAddress = Preferences.Get("PrefLocalAddress", "SSDIWMSLoc.db");
             if (db_ != null)
             {
                 return;
             }
             else
             {
-                var DbPath = Path.Combine(FileSystem.AppDataDirectory, LocDbAddress);
+                var DbPath = Path.Combine(FileSystem.AppDataDirectory, Setup.baseLocalAddress);
                 db_ = new SQLiteAsyncConnection(DbPath);
                 await db_.CreateTableAsync<PalletDetailsModel>();
             }

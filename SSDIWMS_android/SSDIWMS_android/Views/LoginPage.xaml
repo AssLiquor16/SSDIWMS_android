@@ -9,11 +9,11 @@
              Shell.FlyoutBehavior="Disabled"
              BackgroundColor="{StaticResource BackgroundColor}"
              x:Class="SSDIWMS_android.Views.LoginPage">
-    <d:ContentPage.Behaviors>
-        <xct:EventToCommandBehavior
-            EventName="Appearing"
-            Command="{Binding PageRefreshCommand}"/>
-    </d:ContentPage.Behaviors>
+        <d:ContentPage.Behaviors>
+            <xct:EventToCommandBehavior
+                EventName="Appearing"
+                Command="{Binding PageRefreshCommand}"/>
+        </d:ContentPage.Behaviors>
     <ContentPage.BindingContext>
         <viewmodels:LoginVM/>
     </ContentPage.BindingContext>

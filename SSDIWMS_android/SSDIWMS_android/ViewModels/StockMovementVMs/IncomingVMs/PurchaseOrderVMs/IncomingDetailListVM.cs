@@ -127,15 +127,6 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
             Preferences.Remove("PrefAddPartialDetail2InitialRefresh");
             await Shell.Current.GoToAsync($"{nameof(AddDetailModule2Page)}");
         }
-        public async Task AddPopupNav(string scannedCode)
-        {
-            /*
-             *  string[] datas = { PONumber, scannedCode };
-            await PopupNavigation.Instance.PushAsync(new AddDetailPopupPage(datas));
-            */
-            var route = $"{nameof(AddDetailModulePage)}?PONumber={PONumber}&ScannedCode={scannedCode}";
-            await Shell.Current.GoToAsync(route);
-        }
         public async Task PageRefresh()
         {
             Role = Preferences.Get("PrefUserRole", "");

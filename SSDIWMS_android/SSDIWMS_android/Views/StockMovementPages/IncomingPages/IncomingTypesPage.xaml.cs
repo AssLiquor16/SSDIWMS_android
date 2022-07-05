@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages
+namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AddDetailModulePage : ContentPage
+    public partial class IncomingTypesPage : ContentPage
     {
-        public AddDetailModulePage()
+        public IncomingTypesPage()
         {
             InitializeComponent();
         }

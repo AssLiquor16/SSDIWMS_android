@@ -69,16 +69,25 @@ namespace SSDIWMS_android.ViewModels
 
                             if (returnval.UserStatus == "Active" && string.IsNullOrWhiteSpace(returnval.LoginStatus))
                             {
-                                await SetStagingLocation(returnval.WarehouseAssignedId); // sets staging warehouselocation for adding palletheader
-                                await serverDbUserService.Update("Login", strignarray, null, returnval);
-                                Preferences.Set("PrefUserFullname", returnval.UserFullName);
-                                Preferences.Set("PrefUserId", returnval.UserId);
-                                Preferences.Set("PrefUserRole", returnval.UserRole);
-                                Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
-                                Preferences.Set("PrefLoggedIn", true);
-                                MessagingCenter.Send(this, "FromLoginToShell", "Go");
-                                var route = $"//{nameof(DashBoardPage)}";
-                                await Shell.Current.GoToAsync(route);
+
+                                var issuccess = await SetStagingLocation(returnval.WarehouseAssignedId); // sets staging warehouselocation for adding palletheader
+                                if (issuccess == true)
+                                {
+                                    await serverDbUserService.Update("Login", strignarray, null, returnval);
+                                    Preferences.Set("PrefUserFullname", returnval.UserFullName);
+                                    Preferences.Set("PrefUserId", returnval.UserId);
+                                    Preferences.Set("PrefUserRole", returnval.UserRole);
+                                    Preferences.Set("PrefUserWarehouseAssignedId", returnval.WarehouseAssignedId);
+                                    Preferences.Set("PrefLoggedIn", true);
+                                    MessagingCenter.Send(this, "FromLoginToShell", "Go");
+                                    var route = $"//{nameof(DashBoardPage)}";
+                                    await Shell.Current.GoToAsync(route);
+                                }
+                                else
+                                {
+                                    await App.Current.MainPage.DisplayAlert("Alert", "Cannot login, no staging area found in this users assigned warehouse.", "Ok");
+                                }
+                                
                             }
                             else
                             {
@@ -108,7 +117,7 @@ namespace SSDIWMS_android.ViewModels
             }
 
         }
-        private async Task SetStagingLocation(int warehouseAsignedId)
+        private async Task<bool> SetStagingLocation(int warehouseAsignedId)
         {
             try
             {
@@ -136,11 +145,16 @@ namespace SSDIWMS_android.ViewModels
                         IsBlockStock = dPHeaderLoc.IsBlockStock,
                         MaxPallet = dPHeaderLoc.MaxPallet,
                     });
+                    return true;
+                }else
+                {
+                    
+                    return false;
                 }
             }
             catch
             {
-                await dependencies.notifService.StaticToastNotif("Error", "Cannot find the warehouse.");
+                return false;
             }
         }
         #endregion

@@ -47,8 +47,7 @@
                     </StackLayout>
                     <BoxView/>
                     <StackLayout>
-                        <Frame>
-                            <StackLayout Padding="0,5">
+                        <StackLayout Padding="0,5">
                                 <RefreshView IsRefreshing="{Binding IsRefreshing}" 
                                              Command="{Binding ColViewRefreshCommand}" RefreshColor="Red">
                                     <CollectionView 
@@ -112,7 +111,7 @@
                                                                           IsVisible="{Binding AllowGenBCode}"/>
                                                                 </StackLayout>
                                                                 <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand">
-                                                                    <Label Text="{Binding PONumber}" FontSize="Subtitle"/>
+                                                                    <Label Text="{Binding PONumber}" FontSize="Micro"/>
                                                                     <StackLayout>
                                                                         <StackLayout Orientation="Horizontal">
                                                                             <Label Text="BillDoc:" FontSize="Micro"/>
@@ -129,7 +128,7 @@
                                                                     </StackLayout>
                                                                 </StackLayout>
                                                                 <StackLayout Grid.Column="2">
-                                                                    <Label Text="{Binding BatchCode}" FontSize="Subtitle"/>
+                                                                    <Label Text="{Binding BatchCode}" FontSize="Micro"/>
                                                                 </StackLayout>
 
                                                             </Grid>
@@ -143,7 +142,6 @@
                                     </CollectionView>
                                 </RefreshView>
                             </StackLayout>
-                        </Frame>
                     </StackLayout>
                     <StackLayout HorizontalOptions="FillAndExpand">
                         <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">

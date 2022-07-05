@@ -16,10 +16,15 @@ namespace SSDIWMS_android
         {
             ipServices = DependencyService.Get<ILIPServices>();
         }
-
+        public static string baseLocalAddress = "WMSLocalDb.db";
         public static string PalletSaveMethod = "Online";
         public static string baseIp;
         public static string transactionSyncRef = "TimesUpdated"; // TimesUpdated or DateSync
+
+        public string getLocal()
+        {
+            return baseLocalAddress;
+        }
         public string getIp()
         {
             return baseIp;

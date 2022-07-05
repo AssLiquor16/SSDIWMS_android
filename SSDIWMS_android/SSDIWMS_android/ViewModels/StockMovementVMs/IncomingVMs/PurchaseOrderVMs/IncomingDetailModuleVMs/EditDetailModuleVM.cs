@@ -3,8 +3,6 @@ using SSDIWMS_android.Models.SMTransactionModel.Incoming;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingDetail;
 using SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.LIncomingPartialDetail;
 using SSDIWMS_android.Services.NotificationServices;
-using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailModuleVMs.IncomingDetailSubModuleVMs;
-using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages.IncomingDetailSubModulePages;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -48,9 +46,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
         public bool ParQtyEditEnable { get => _parQtyEditEnable; set => SetProperty(ref _parQtyEditEnable, value); }
         public bool LocationVisible { get => _locationVisible; set => SetProperty(ref _locationVisible, value); }
         public bool CheckerVisible { get => _checkerVisible; set => SetProperty(ref _checkerVisible, value); }
-        
-        public AsyncCommand NavWarehouseLocationListCommand { get; }
-        public AsyncCommand NavPalletListCommand { get; }
+
         public AsyncCommand EditDetailCommand { get; }
         public AsyncCommand CancelCommand { get; }
         public AsyncCommand PageRefreshCommand { get; }
@@ -62,24 +58,9 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetail
             notifyService = DependencyService.Get<IToastNotifService>();
             PageRefreshCommand = new AsyncCommand(PageRefresh);
             CancelCommand = new AsyncCommand(Cancel);
-            NavWarehouseLocationListCommand = new AsyncCommand(NavWarehouseLocationList);
-            NavPalletListCommand = new AsyncCommand(NavPalletList);
             EditDetailCommand = new AsyncCommand(EditDetail);
-            MessagingCenter.Subscribe<WarehouseLocationMasterListDetailSubModuleVM, string>(this, "FromWarehouseLocationListToEdit", (page, e) =>
-              {
-                  WarehouseLocation = e;
-              });
-            MessagingCenter.Subscribe<PalletMasterListDetailSubModuleVM, string>(this, "FromPalletListToEdit", (page, e) =>
-            {
-                PalletCode = e;
-            });
         }
 
-        private async Task NavWarehouseLocationList() => 
-            await Shell.Current.GoToAsync($"{nameof(WhLocMListDetSubModPage)}?PageCameFrom=EditDetail");
-
-        private async Task NavPalletList() => 
-            await Shell.Current.GoToAsync($"{nameof(PalletMasterListDetailSubModulePage)}?PageCameFrom=EditDetail");
         private async Task PageRefresh()
         {
             if (Preferences.Get("PrefIncomingInitialRefresh", false) == false)

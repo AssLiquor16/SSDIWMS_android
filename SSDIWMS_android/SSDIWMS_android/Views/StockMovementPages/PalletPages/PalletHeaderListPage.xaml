@@ -52,7 +52,7 @@
                             <StackLayout>
                                 <Frame BackgroundColor="{StaticResource DisableColor}" Padding="5" HorizontalOptions="FillAndExpand">
                                     <StackLayout Orientation="Horizontal">
-                                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,3" Padding="5,3" HorizontalOptions="FillAndExpand">
+                                        <Frame BackgroundColor="{StaticResource MySecondary}" Margin="5,1" Padding="3,1" HorizontalOptions="FillAndExpand">
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Pallet}" 
                                                TextColor="Gray" FontSize="Title" 
@@ -63,7 +63,6 @@
                                                FontFamily="FAS"
                                                PlaceholderColor="Gray"
                                                Placeholder="Search the code here"
-                                               WidthRequest="225"
                                                HorizontalOptions="FillAndExpand"
                                                FontAttributes="Bold"/>
                                                 <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Search}" FontSize="Title" VerticalOptions="CenterAndExpand">

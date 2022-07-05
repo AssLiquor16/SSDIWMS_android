@@ -1,20 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<popup:PopupPage  xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-                  xmlns="http://xamarin.com/schemas/2014/forms"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-                  xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
-                  xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs.IncomingDetailSubPopupModuleVMs"
-                  x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailPopupModulePages.IncomingDetailSubPopupModulePages.PartialDetailListPopupPage">
+<popup:PopupPage  
+    xmlns:popup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.IncomingDetailPopupModuleVMs.IncomingDetailSubPopupModuleVMs" 
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.PurchaseOrderPages.IncomingDetailPopupModulePages.PartialDetListPopupPage">
     <popup:PopupPage.BindingContext>
         <viewmodels:PartialDetailListPopupVM/>
     </popup:PopupPage.BindingContext>
     <popup:PopupPage.Behaviors>
-        <xct:EventToCommandBehavior
-            EventName="Appearing"
-            Command="{Binding PageRefreshCommand}"/>
+        <xct:EventToCommandBehavior EventName="Appearing" Command="{Binding PageRefreshCommand}"/>
     </popup:PopupPage.Behaviors>
-
-
     <Frame HeightRequest="500" 
            WidthRequest="300" 
            VerticalOptions="CenterAndExpand" 

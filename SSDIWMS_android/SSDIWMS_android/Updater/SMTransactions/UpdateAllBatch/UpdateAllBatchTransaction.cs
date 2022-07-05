@@ -60,7 +60,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
             foreach(var lbatchHeader in lbatchHeaders)
             {
                 await TimesUpdateUpdateDetails(lbatchHeader);
-                var sbatchHeader = sbatchHeaders.Where(x=>x.BatchLocalID == lbatchHeader.BatchLocalID && x.DateCreated == lbatchHeader.DateCreated).FirstOrDefault();
+                var sbatchHeader = sbatchHeaders.Where(x=>x.BatchCode == lbatchHeader.BatchCode && x.Remarks == lbatchHeader.Remarks && x.DateCreated == lbatchHeader.DateCreated).FirstOrDefault();
                 if(sbatchHeader == null)
                 {
                     var sret = await serverDbBatchHeaderService.Insert(lbatchHeader, "ReturnInsertedItem");
@@ -100,7 +100,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllBatch
             var lbatchDetails = await localDbBatchDetailsService.GetList(obj, "BatchCode");
             foreach(var lbatchDetail in lbatchDetails)
             {
-                var sbatchDetail = sbatchDetails.Where(x=>x.BatchLocalID == lbatchDetail.BatchLocalID && x.DateAdded == lbatchDetail.DateAdded).FirstOrDefault();
+                var sbatchDetail = sbatchDetails.Where(x=>x.ItemCode == lbatchDetail.ItemCode && x.BatchCode == lbatchDetail.BatchCode && x.ItemDesc == lbatchDetail.ItemDesc && x.DateAdded == lbatchDetail.DateAdded).FirstOrDefault();
                 if(sbatchDetail == null)
                 {
                     var rets = await serverDbBatchDetailsService.Insert(lbatchDetail, "ReturnInsertedItem");

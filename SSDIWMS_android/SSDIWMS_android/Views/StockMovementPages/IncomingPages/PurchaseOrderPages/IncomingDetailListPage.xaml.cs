@@ -21,32 +21,6 @@ namespace SSDIWMS_android.Views.StockMovementPages.IncomingPages
             InitializeComponent();
         }
 
-        private async void ToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            
-            scanPage = new ZXingScannerPage();
-            var con = BindingContext as IncomingDetailListVM;
-            if(con.Role == "Check")
-            {
-                scanPage.OnScanResult += (result) =>
-                {
-                    scanPage.IsScanning = false;
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Navigation.PopAsync();
-                        await con.AddPopupNav(result.Text);
-
-                    });
-
-                };
-                await Navigation.PushAsync(scanPage);
-            }
-            else
-            {
-
-            }
-            
-        }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {

@@ -35,8 +35,7 @@ namespace SSDIWMS_android.ViewModels
 
         private async Task IncomingNavigation()
         {
-            var route = $"{nameof(IncomingHeaderPage)}";
-            Preferences.Remove("PrefIncomingHeaderPagepartialRefresh");
+            var route = $"{nameof(IncomingTypesPage)}";
             await Shell.Current.GoToAsync(route);
         }
         private async Task PageRefresh()

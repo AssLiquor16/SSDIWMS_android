@@ -91,7 +91,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs
                 Preferences.Set("PrefIncomingHeaderPagepartialRefresh", false);
                 await PageRefresh();
             });
-            MessagingCenter.Subscribe<BatchGenPOListPopupVM>(this, "RefreshIncomingHeaderList", async (page) =>
+            MessagingCenter.Subscribe<BatchGenPOListPopupVM, string>(this, "RefreshIncomingHeaderList", async (page,e) =>
             {
                 Preferences.Set("PrefIncomingHeaderPagepartialRefresh", false);
                 await PageRefresh();

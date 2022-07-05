@@ -44,8 +44,8 @@
                         <StackLayout>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="110"/>
+                                    <ColumnDefinition Width="210"/>
+                                    <ColumnDefinition Width="90"/>
                                 </Grid.ColumnDefinitions>
                                 <StackLayout Grid.Column="0">
                                     <StackLayout Margin="5">
@@ -165,7 +165,7 @@
                                         <Frame Style="{StaticResource Framegrouping}" Padding="5" WidthRequest="80">
                                             <StackLayout HorizontalOptions="Center">
                                                 <StackLayout Orientation="Horizontal">
-                                                    <Label Text="All" FontSize="Micro"/>
+                                                    <Label Text="All" FontSize="Micro" VerticalOptions="Center"/>
                                                 </StackLayout>
                                                 <Label Text="{x:Static fontAwsome:FontAwesomeIcons.Trash}" TextColor="Red" FontSize="Title" HorizontalOptions="Center">
                                                 </Label>

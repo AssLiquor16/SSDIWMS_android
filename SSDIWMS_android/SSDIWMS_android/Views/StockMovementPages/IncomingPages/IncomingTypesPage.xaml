@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:d="http://xamarin.com/schemas/2014/forms" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:fontAwsome="clr-namespace:FontAwesome"
+             xmlns:viewmodels="clr-namespace:SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs"
+             Title="Incoming Types"
+             x:Class="SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingTypesPage">
+    <d:ContentPage.Behaviors>
+        <xct:EventToCommandBehavior EventName="Appearing" Command="{Binding PageRefreshCommand}"/>
+    </d:ContentPage.Behaviors>
+    <ContentPage.BindingContext>
+        <viewmodels:IncomingTypesVM/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout Padding="7">
+            <Frame HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="15">
+                    <StackLayout Orientation="Horizontal">
+                        <Label FontSize="Subtitle">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.Calendar}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.LiveDate}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label FontSize="Subtitle" HorizontalOptions="EndAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{x:Static fontAwsome:FontAwesomeIcons.User}"/>
+                                    <Span Text=" "/>
+                                    <Span Text="{Binding livetime.UserFullName}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                    <BoxView/>
+                    <StackLayout >
+
+                        <Frame Style="{StaticResource Framegrouping1}">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Purchase Order" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                <Button
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60"
+                                            Command="{Binding PurchaseOrderNavCommand}" >
+                                    <Button.ImageSource>
+                                        <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                    </Button.ImageSource>
+                                </Button>
+
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Style="{StaticResource Framegrouping1}">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Bad stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                <Button
+                                            Command="{Binding BadStocksNavCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                    <Button.ImageSource>
+                                        <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                    </Button.ImageSource>
+                                </Button>
+
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Style="{StaticResource Framegrouping1}">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Return good stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                <Button
+                                            Command="{Binding ReturnGoodStocksNavCommand}"
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60">
+                                    <Button.ImageSource>
+                                        <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                    </Button.ImageSource>
+                                </Button>
+
+                            </StackLayout>
+                        </Frame>
+
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
