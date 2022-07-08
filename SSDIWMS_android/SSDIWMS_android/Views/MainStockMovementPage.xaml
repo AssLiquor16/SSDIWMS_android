@@ -52,6 +52,23 @@
                         <ScrollView>
 
                             <StackLayout  IsVisible="{Binding ProceedEnable}">
+
+                                <Frame Style="{StaticResource Framegrouping1}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Incoming Stocks" FontSize="Title" VerticalOptions="CenterAndExpand"/>
+                                        <Button
+                                            HorizontalOptions="EndAndExpand"
+                                            CornerRadius="5" 
+                                            WidthRequest="60"
+                                            Command="{Binding NewIncomingNavCommand}" >
+                                            <Button.ImageSource>
+                                                <FontImageSource FontFamily="FAS" 
+                                                             Glyph="{x:Static fontAwsome:FontAwesomeIcons.ChevronRight}"/>
+                                            </Button.ImageSource>
+                                        </Button>
+
+                                    </StackLayout>
+                                </Frame>
                                 
                                 <Frame Style="{StaticResource Framegrouping1}">
                                     <StackLayout Orientation="Horizontal">

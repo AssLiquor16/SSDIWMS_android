@@ -10,6 +10,7 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
     {
         Task<IncomingDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter);
         Task<IEnumerable<IncomingDetailModel>> GetList(string type, string[] stringfilter, int[] intfilter);
+        Task<IEnumerable<IncomingDetailModel>> NewGetList(IncomingDetailModel obj = null, string type = null);
         Task Update(string type, IncomingDetailModel data);
     }
 }

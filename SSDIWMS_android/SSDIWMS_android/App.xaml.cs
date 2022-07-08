@@ -3,6 +3,8 @@ using SSDIWMS_android.Services;
 using SSDIWMS_android.Services.Db.LocalDbServices.Defaults.IP;
 using SSDIWMS_android.Services.MainServices;
 using SSDIWMS_android.Services.MainServices.SubMainServices.BackgroundWorkerServices.Date;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.PurchaseOrderVMs2;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.PurchaseOrderVMs2.BillDocDetSubVMs.PageVMs;
 using SSDIWMS_android.Views;
 using System;
 using System.Collections.Generic;
@@ -37,7 +39,7 @@ namespace SSDIWMS_android
             await mainService.OnstartSetDefaulPreferences();
             await dateService.DatetimeValidate();
             await mainService.TimerCheckUser();
-            
+            BillDocAddDetVM.StaticListInitialize();
         }
 
         protected override void OnSleep()

@@ -142,7 +142,7 @@
                                                             </Grid.ColumnDefinitions>
                                                             <StackLayout Grid.Column="0">
                                                                 <Label Text="{Binding PalletCode}" 
-                                                                           FontSize="Subtitle" 
+                                                                           FontSize="Small" 
                                                                            FontFamily="FAS" 
                                                                            FontAttributes="Bold"/>
                                                             </StackLayout>

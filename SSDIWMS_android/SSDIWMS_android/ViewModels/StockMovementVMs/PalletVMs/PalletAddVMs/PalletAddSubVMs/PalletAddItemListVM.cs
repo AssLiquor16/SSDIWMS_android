@@ -20,6 +20,7 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
         GlobalDependencyServices dependencies = new GlobalDependencyServices();
         ItemMasterModel _selectedItem;
         string _searchCode;
+        private static bool isDoneRefresh;
         public string SearchCode
         {
             get => _searchCode;
@@ -63,18 +64,31 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs.Pal
             val = val.ToLowerInvariant();
             if (!string.IsNullOrWhiteSpace(val))
             {
+                ItemList.Clear();
                 ItemList.ReplaceRange(MainItemList.Where(x => x.ItemCode == val || x.CaseCode == val).ToList());
+                var e = ItemList.Count();
             }
             else
             {
+                ItemList.Clear();
                 ItemList.ReplaceRange(MainItemList);
+                var e = ItemList.Count();
             }
         }
         private async Task PageRefresh()
         {
-            MainItemList.Clear();
-            MainItemList.AddRange(await dependencies.localDbArticleMasterService.GetList("All", null, null));
-            ItemList.ReplaceRange(MainItemList);
+            if(isDoneRefresh == false)
+            {
+                MainItemList.Clear();
+                MainItemList.AddRange(await dependencies.localDbArticleMasterService.GetList("All", null, null));
+                ItemList.ReplaceRange(MainItemList);
+                isDoneRefresh = true;
+            }
+            
+        }
+        public void setRefresh(bool initialRef)
+        {
+            isDoneRefresh = initialRef;
         }
     }
 }

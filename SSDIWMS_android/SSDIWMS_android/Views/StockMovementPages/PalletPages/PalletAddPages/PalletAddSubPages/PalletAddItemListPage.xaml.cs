@@ -29,6 +29,7 @@ namespace SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.Pa
                 scanPage.IsScanning = false;
                 Device.BeginInvokeOnMainThread(async () =>
                 {
+                    con.setRefresh(true);
                     con.SearchCode = result.Text;
                     await Navigation.PopAsync();
                 });

@@ -26,5 +26,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public DateTime ExpiryDate { get; set; }
         public string WarehouseLocation { get; set; }
         public DateTime DateSync { get; set; }
+        public string BillDoc { get; set; }
     }
 }

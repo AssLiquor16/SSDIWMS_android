@@ -53,6 +53,26 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 default: return null;
             }
         }
+        public async Task<IEnumerable<IncomingDetailModel>> NewGetList(IncomingDetailModel obj = null, string type = null)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(setup.getIp());
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.MaxResponseContentBufferSize = 100000;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            switch (type)
+            {
+                default: 
+                    var jsondefault = await client.GetStringAsync($"/api/Incomingdetails");
+                    var caseDefault = JsonConvert.DeserializeObject<IEnumerable<IncomingDetailModel>>(jsondefault);
+                    return caseDefault;
+                case "BillDoc":
+                    var jsoncaseA = await client.GetStringAsync($"/api/Incomingdetails/GetBillDoc/{obj.BillDoc}");
+                    var caseA = JsonConvert.DeserializeObject<IEnumerable<IncomingDetailModel>>(jsoncaseA);
+                    return caseA;
+            }
+        }
 
         public Task<IncomingDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter)
         {

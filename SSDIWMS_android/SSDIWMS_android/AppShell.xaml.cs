@@ -8,6 +8,8 @@ using SSDIWMS_android.Views.PopUpPages;
 using SSDIWMS_android.Views.StockMovementPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages;
 using SSDIWMS_android.Views.StockMovementPages.IncomingPages.IncomingDetailModulePages;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.PurchaseOrderPages2;
+using SSDIWMS_android.Views.StockMovementPages.IncomingPages.PurchaseOrderPages2.BillDocDetSubPages.Pages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages;
 using SSDIWMS_android.Views.StockMovementPages.PalletPages.PalletAddPages.PalletAddSubPages;
@@ -90,9 +92,10 @@ namespace SSDIWMS_android
             Routing.RegisterRoute(nameof(PHTransferToPage), typeof(PHTransferToPage));
             Routing.RegisterRoute(nameof(SMPHTransferFromPage), typeof(SMPHTransferFromPage));
             Routing.RegisterRoute(nameof(SMPHTransferToPage), typeof(SMPHTransferToPage));
+            Routing.RegisterRoute(nameof(BillDocListPage), typeof(BillDocListPage));
+            Routing.RegisterRoute(nameof(BillDocDetailListPage), typeof(BillDocDetailListPage));
+            Routing.RegisterRoute(nameof(BillDocAddDetPage), typeof(BillDocAddDetPage));
             
-
-
              Fullname = Preferences.Get("PrefUserFullname", string.Empty);
             Role = Preferences.Get("PrefUserRole", string.Empty);
             SetView(Role);

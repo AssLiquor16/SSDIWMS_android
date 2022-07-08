@@ -86,6 +86,7 @@ namespace SSDIWMS_android.Updater.SMTransactions.UpdateAllIncoming
                 var lHeader = await localDbIncomingHeaderService.GetModel("INCId&PO", y, x, null);
                 string[] sfilter = { sHeader.PONumber };
                 await TimesUpdateUpdateDetail(sfilter);
+
                 if (lHeader == null)
                 {
                     // insert to local

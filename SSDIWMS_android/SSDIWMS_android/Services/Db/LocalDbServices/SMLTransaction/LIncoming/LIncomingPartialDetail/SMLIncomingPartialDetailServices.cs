@@ -49,7 +49,7 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                 case "PONumber":
                     var POFilter = Preferences.Get("PrefPONumber", "");
                     var h = await db_.Table<IncomingPartialDetailModel>().ToListAsync();
-                    var PO = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.POHeaderNumber == POFilter).ToListAsync();
+                    var PO = await db_.Table<IncomingPartialDetailModel>().Where(x => x.POHeaderNumber == POFilter).ToListAsync();
                     return PO;
                 case "PONumber&UserId":
                     var POFilter3 = Preferences.Get("PrefPONumber", "");
@@ -92,13 +92,13 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                 case "RefId&DateCreated":
                     DateTime datecreated = datefilter[0];
                     var refId = stringfilter[0];
-                    var filtereddata = await db_.Table<IncomingPartialDetailModel>().Where(x=>x.RefId == refId && x.DateCreated == datecreated).FirstOrDefaultAsync();
+                    var filtereddata = await db_.Table<IncomingPartialDetailModel>().Where(x => x.RefId == refId && x.DateCreated == datecreated).FirstOrDefaultAsync();
                     return filtereddata;
                 case "INCParDetId&RefId&DateCreated":
                     var iNCParDetId1 = intfilter[0];
                     var rEfId = stringfilter[0];
                     var dCreated = datefilter[0];
-                    var data1 = await db_.Table<IncomingPartialDetailModel>().Where(x =>x.INCParDetId == iNCParDetId1 &&  x.RefId == rEfId && x.DateCreated == dCreated).FirstOrDefaultAsync();
+                    var data1 = await db_.Table<IncomingPartialDetailModel>().Where(x => x.INCParDetId == iNCParDetId1 && x.RefId == rEfId && x.DateCreated == dCreated).FirstOrDefaultAsync();
                     return data1;
                 default: return null;
             }
@@ -122,8 +122,8 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     var siteSubInitial = siteInitial.Substring(0, 3);
 
                     var refId = siteSubInitial + $"{item.INCHeaderId}" + $"{item.INCHeaderId}" + datec1;
-                    var initialData = new IncomingPartialDetailModel 
-                    { 
+                    var initialData = new IncomingPartialDetailModel
+                    {
                         DateCreated = DateTime.Now,
                         RefId = refId,
                         INCDetId = item.INCDetId,
@@ -143,6 +143,18 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.SMLTransaction.LIncoming.L
                     };
                     await db_.InsertAsync(initialData);
                     break;
+            }
+        }
+
+        public async Task<IncomingPartialDetailModel> NewInsert(IncomingPartialDetailModel obj, string type = null)
+        {
+            await Init();
+            switch (type)
+            {
+                default:
+                    var data = obj;
+                    await db_.InsertAsync(data);
+                    return data;
             }
         }
         /*case "INCParDetId&RefId&DCreated":

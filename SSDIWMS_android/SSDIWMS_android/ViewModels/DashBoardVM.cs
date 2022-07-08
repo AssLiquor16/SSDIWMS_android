@@ -1,6 +1,7 @@
 ﻿using MvvmHelpers.Commands;
 using SSDIWMS_android.Helpers;
 using SSDIWMS_android.Models.SMTransactionModel.Incoming;
+using SSDIWMS_android.ViewModels.StockMovementVMs.IncomingVMs.PurchaseOrderVMs2;
 using SSDIWMS_android.Views;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,16 @@ namespace SSDIWMS_android.ViewModels
                 var route = $"//{nameof(LoginPage)}";
                 await Shell.Current.GoToAsync(route);
             }
+            else
+            {
+                var userId = Preferences.Get("PrefUserId", 0);
+                var role = Preferences.Get("PrefUserRole", string.Empty);
+                var whid = Preferences.Get("PrefUserWarehouseAssignedId", 0);
+                POStaticDatas.setUserId(userId);
+                POStaticDatas.SetUserRole(role);
+                POStaticDatas.SetWarehouseId(whid);
+            }
             await livetime.LiveTimer();
-
         }
         public IncomingDetailModel model1 = new IncomingDetailModel();
         public IncomingPartialDetailModel model = new IncomingPartialDetailModel();
@@ -41,8 +50,5 @@ namespace SSDIWMS_android.ViewModels
         public string PassVal1 { get => _passval1; set => SetProperty(ref _passval1, value); }
         public string Passval2 { get => _passval2; set => SetProperty(ref _passval2, value); }
 
-       
-
-        
     }
 }

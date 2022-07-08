@@ -22,5 +22,6 @@ namespace SSDIWMS_android.Models.SMTransactionModel.Incoming
         public string Color { get; set; }
         public bool Show { get; set; }
         public DateTime DateSync { get; set; }
+        public string BillDoc { get; set; }
     }
 }

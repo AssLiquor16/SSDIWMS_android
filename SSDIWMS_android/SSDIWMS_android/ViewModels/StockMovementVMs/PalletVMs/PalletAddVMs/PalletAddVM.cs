@@ -121,7 +121,12 @@ namespace SSDIWMS_android.ViewModels.StockMovementVMs.PalletVMs.PalletAddVMs
         #region Navigations To Sub Pages/PopupPages
         private async Task PalletListNav() => await Shell.Current.GoToAsync($"{nameof(PalletAddPalletListPage)}");
         private async Task WarehouseListNav() => await Shell.Current.GoToAsync($"{nameof(PalletAddWhLocListPage)}");
-        private async Task ItemListNav() => await Shell.Current.GoToAsync($"{nameof(PalletAddItemListPage)}");
+        private async Task ItemListNav()
+        {
+            var con = new PalletAddItemListVM();
+            con.setRefresh(false);
+            await Shell.Current.GoToAsync($"{nameof(PalletAddItemListPage)}");
+        }
         private async Task Tapped()
         {
             if (SelectedItem != null)

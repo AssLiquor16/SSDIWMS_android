@@ -47,7 +47,6 @@ namespace SSDIWMS_android.Services.Db.LocalDbServices.ArticleMaster
                 default: return null;
             }
         }
-
         public async Task<ItemMasterModel> GetModel(string type, string[] stringfilter, int[] intfilter)
         {
             await Init();

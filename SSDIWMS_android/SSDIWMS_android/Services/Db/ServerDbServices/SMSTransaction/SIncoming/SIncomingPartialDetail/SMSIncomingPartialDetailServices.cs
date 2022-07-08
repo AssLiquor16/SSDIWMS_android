@@ -52,6 +52,25 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
                 default: return null;
             }
         }
+        public async Task<IEnumerable<IncomingPartialDetailModel>> NewGetList(IncomingPartialDetailModel obj = null, string type = null)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(setup.getIp());
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.MaxResponseContentBufferSize = 10000000;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            switch (type)
+            {
+                default:
+                    var jsonDefault = await client.GetStringAsync($"api/IncomingPartialDetails");
+                    var caseDefault = JsonConvert.DeserializeObject<IEnumerable<IncomingPartialDetailModel>>(jsonDefault);
+                    return caseDefault;
+                case "BillDoc":
+                    var jasonA = await client.GetStringAsync($"api/IncomingPartialDetails/GetBillDoc/{obj.BillDoc}");
+                    var caseA = JsonConvert.DeserializeObject<IEnumerable<IncomingPartialDetailModel>>(jasonA);
+                    return caseA;
+            }
+        }
 
         public Task<IncomingPartialDetailModel> GetModel(string type, string[] stringfilter, int[] intfilter)
         {
@@ -61,6 +80,26 @@ namespace SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.
         public Task Insert(string type, IncomingPartialDetailModel item)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IncomingPartialDetailModel> NewInsert(IncomingPartialDetailModel obj, string type = null)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri(setup.getIp());
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.MaxResponseContentBufferSize = 10000000;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            switch (type)
+            {
+                default:
+                    var jsonDefault = JsonConvert.SerializeObject(obj);
+                    var content = new StringContent(jsonDefault, Encoding.UTF8, "application/json");
+                    var r = await client.PostAsync("api/IncomingPartialDetails/", content);
+                    var ret = r.Content.ReadAsStringAsync().Result;
+                    var res = r.StatusCode.ToString();
+                    var n = JsonConvert.DeserializeObject<IncomingPartialDetailModel>(ret);
+                    return n;
+            }
         }
 
         public async Task<IncomingPartialDetailModel> SpecialCaseInsert(string type, IncomingPartialDetailModel item)

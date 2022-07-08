@@ -16,6 +16,9 @@ using SSDIWMS_android.Services.Db.ServerDbServices.Master.WarehouseMaster;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.SPalletDetails;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.Pallet.STPalletMaster;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingDetail;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingHeader;
+using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SIncoming.SIncomingPartialDetail;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.SStockCard.SStockTransferHistories;
 using SSDIWMS_android.Services.Db.ServerDbServices.SMSTransaction.STWarehouseLocation;
@@ -34,19 +37,28 @@ namespace SSDIWMS_android.Helpers
     public class GlobalDependencyServices : ViewModelBase
     {
         public IDroidDeviceServices droidService { get; }
-        public ILocalWarehouseMasterServices localDbWarehouseService { get; }
-        public ILocalWarehouseLocationMasterServices localDbWarehouseLocationService { get; }
-        public ILocalPalletMasterServices localDbPalletMasterService { get; }
-        public IServerDeviceServices serverDbDeviceService { get; }
         public IDateVerifierServices dateServices { get; }
         public IToastNotifService notifService { get; }
         public IMainServices mainService { get; }
+
+
+        public ILocalWarehouseMasterServices localDbWarehouseService { get; }
+        public ILocalWarehouseLocationMasterServices localDbWarehouseLocationService { get; }
+        public ILocalPalletMasterServices localDbPalletMasterService { get; }
         public ILocalArticleMasterServices localDbArticleMasterService { get; }
         public ISMLIncomingHeaderServices localDbIncomingHeaderService { get; }
         public ISMLIncomingDetailServices localDbIncomingDetailService { get; }
         public ISMLIncomingPartialDetailServices localDbIncomingParDetailService { get; }
         public ILPalletHeaderServices localDbPalletHeaderService { get; }
         public ILPalletDetailServices localDbPalletDetailsService { get; }
+        public ILTransferTypesServices localDbTransferTypesService { get; }
+        public ILIPServices localDbIpServices { get; }
+
+
+        public ISMSIncomingHeaderServices serverDbIncomingHeaderService { get; }
+        public ISMSIncomingDetailServices serverDbIncomingdetailService { get; }
+        public ISMSIncomingPartialDetailServices serverDbIncomingPartialDetailService { get; }
+        public IServerDeviceServices serverDbDeviceService { get; }
         public ISPalletHeaderServices serverDbPalletHeaderService { get; }
         public ISPalletDetailsServices serverDbPalletDetailsService { get; }
         public ISTPalletMasterServices serverDbTPalletMasterService { get; }
@@ -56,13 +68,14 @@ namespace SSDIWMS_android.Helpers
         public IStagingWarehouseLocationServices localDbStagingWarehouseLocationService { get; }
         public ISStockTransferHistoriesServices serverDbStockTransferHistoriesService { get; }
         public ISTransferTypesServices serverDbTransferTypesService { get; }
-        public ILTransferTypesServices localDbTransferTypesService { get; }
-        public ILIPServices localDbIpServices { get; }
+
+
+        
 
         public GlobalDependencyServices()
         {
             droidService = DependencyService.Get<IDroidDeviceServices>();
-            serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
+            
             dateServices = DependencyService.Get<IDateVerifierServices>();
             notifService = DependencyService.Get<IToastNotifService>();
             mainService = DependencyService.Get<IMainServices>();
@@ -78,6 +91,13 @@ namespace SSDIWMS_android.Helpers
             localDbIncomingParDetailService = DependencyService.Get<ISMLIncomingPartialDetailServices>();
             localDbPalletHeaderService = DependencyService.Get<ILPalletHeaderServices>();
             localDbPalletDetailsService = DependencyService.Get<ILPalletDetailServices>();
+            
+            localDbTransferTypesService = DependencyService.Get<ILTransferTypesServices>();
+            localDbIpServices = DependencyService.Get<ILIPServices>();
+
+            serverDbIncomingHeaderService = DependencyService.Get<ISMSIncomingHeaderServices>();
+            serverDbIncomingdetailService = DependencyService.Get<ISMSIncomingDetailServices>();
+            serverDbIncomingPartialDetailService = DependencyService.Get<ISMSIncomingPartialDetailServices>();
             serverDbPalletHeaderService = DependencyService.Get<ISPalletHeaderServices>();
             serverDbPalletDetailsService = DependencyService.Get<ISPalletDetailsServices>();
             serverDbTPalletMasterService = DependencyService.Get<ISTPalletMasterServices>();
@@ -86,8 +106,7 @@ namespace SSDIWMS_android.Helpers
             serverDbWarehouseService = DependencyService.Get<IServerWarehouseMasterServices>();
             serverDbStockTransferHistoriesService = DependencyService.Get<ISStockTransferHistoriesServices>();
             serverDbTransferTypesService = DependencyService.Get<ISTransferTypesServices>();
-            localDbTransferTypesService = DependencyService.Get<ILTransferTypesServices>();
-            localDbIpServices = DependencyService.Get<ILIPServices>();
+            serverDbDeviceService = DependencyService.Get<IServerDeviceServices>();
         }
     }
 }

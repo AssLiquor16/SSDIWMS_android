@@ -43,7 +43,9 @@
   <ItemGroup>
     <Folder Include="Services\Db\LocalDbServices\SMLTransaction\LStockCard\" />
     <Folder Include="Services\StockMovementServices\" />
+    <Folder Include="ViewModels\StockMovementVMs\IncomingVMs\PurchaseOrderVMs2\BillDocDetSubVMs\PopupVMs\" />
     <Folder Include="Views\StockMovementPages\IncomingPages\BadStocks\" />
+    <Folder Include="Views\StockMovementPages\IncomingPages\PurchaseOrderPages2\BillDocDetSubPages\Popups\" />
     <Folder Include="Views\StockMovementPages\IncomingPages\ReturnGoodStocks\" />
   </ItemGroup>
 
@@ -97,6 +99,15 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\SettingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\PurchaseOrderPages2\BillDocDetailListPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\PurchaseOrderPages2\BillDocDetSubPages\Pages\BillDocAddDetPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\PurchaseOrderPages2\BillDocListPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StockMovementPages\IncomingPages\PurchaseOrderPages\BatchGeneratePages\BatchPopupPages\BatchGenPOListPopupPage.xaml">
